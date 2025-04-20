@@ -1,2 +1,2 @@
 # ToplikeFE
- for toplike frontend 
+For the front end of Toplike.
