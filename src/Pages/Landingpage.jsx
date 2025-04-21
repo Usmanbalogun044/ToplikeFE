@@ -218,7 +218,7 @@ const Landingpage = () => {
           <div className="mb-10 lg:mb-0 lg:w-1/2 lg:pr-10">
             <h1 className="text-4xl font-bold text-gray-900 mb-6 md:text-5xl">
               Show Your Talent. Win{" "}
-              <span className="text-purple-600">₦50,000</span> Weekly!
+              <span className="text-purple-600">₦100,000</span> Weekly!
             </h1>
             <p className="text-lg text-gray-700 mb-8">
               Join thousands of Nigerians competing in our weekly challenges.
