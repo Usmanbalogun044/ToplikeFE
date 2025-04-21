@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-import Routing from './Router/routing';
+import Routing from './Router/Routing';
 
 function App() {
 
