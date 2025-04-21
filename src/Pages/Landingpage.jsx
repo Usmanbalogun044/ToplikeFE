@@ -7,6 +7,12 @@ import {
   FiAward,
   FiHeart,
 } from "react-icons/fi";
+import {
+  FaFacebookF,
+  FaTwitter,
+  FaInstagram,
+  FaLinkedinIn,
+} from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 
 const Landingpage = () => {
@@ -107,7 +113,7 @@ const Landingpage = () => {
           <div className="flex justify-between items-center container mx-auto px-4 lg:px-20">
             <a
               href="#hero"
-              className="text-2xl font-extrabold text-purple-600"
+              className="text-2xl font-extrabold text-purple-700"
               onClick={(e) => handleSmoothScroll(e, "hero")}
             >
               TopLike
@@ -144,7 +150,7 @@ const Landingpage = () => {
               </NavLink>
               <NavLink
                 to="/signup"
-                className="bg-purple-600 text-white px-6 py-2 rounded-full font-semibold transition hover:bg-purple-700"
+                className="bg-purple-700 text-white px-6 py-2 rounded-full font-semibold transition hover:bg-purple-800"
               >
                 Sign Up
               </NavLink>
@@ -207,7 +213,7 @@ const Landingpage = () => {
         {/* Hero Section */}
         <section
           id="hero"
-          className="pt-36 flex flex-col px-4 py-20 bg-gradient-to-r from-gray-50 to-blue-100 lg:flex-row lg:px-20"
+          className="pt-36 flex flex-col px-4 py-20 bg-gradient-to-r from-gray-50 to-purple-50 lg:flex-row lg:px-20"
         >
           <div className="mb-10 lg:mb-0 lg:w-1/2 lg:pr-10">
             <h1 className="text-4xl font-bold text-gray-900 mb-6 md:text-5xl">
@@ -294,7 +300,7 @@ const Landingpage = () => {
             ].map((step) => (
               <div
                 key={step.number}
-                className="flex-1 bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition"
+                className="flex-1 bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition"
               >
                 <div
                   className="w-16 h-16 font-bold mx-auto mb-6 bg-purple-100 text-purple-600 text-2xl rounded-full flex items-center
@@ -337,42 +343,92 @@ const Landingpage = () => {
         </section>
 
         {/* CTA Section */}
-        <section
-          id="faq"
-          className="px-4 py-20 lg:px-20 bg-purple-600 text-center text-white"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+        <section id="faq" className="px-4 py-20 lg:px-20 bg-white text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-800">
             Ready to Showcase Your Talent?
           </h2>
-          <p className="text-xl mb-8">
+          <p className="text-xl mb-8 text-gray-700">
             Join thousands of creatives competing and winning every week
           </p>
           <NavLink
             to="/signup"
-            className="inline-block bg-white text-purple-600 font-semibold py-3 px-10 rounded-full text-lg transition transform hover:scale-105 hover:bg-gray-100"
+            className="inline-block text-white bg-purple-700 font-semibold py-3 px-10 rounded-full text-lg transition transform hover:scale-105 hover:bg-purple-800 shadowe-md"
           >
             Sign Up Now
           </NavLink>
         </section>
 
-        {/* Footer */}
-        <footer className="px-4 py-8 lg:px-20 bg-gray-900 text-white">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="text-2xl font-extrabold mb-4 md:mb-0">TopLike</div>
-            <div className="flex space-x-6">
-              <a href="#" className="hover:text-purple-400">
-                Terms
-              </a>
-              <a href="#" className="hover:text-purple-400">
-                Privacy
-              </a>
-              <a href="#" className="hover:text-purple-400">
-                Contact
-              </a>
+        <footer className="bg-gray-900 text-gray-200 px-6 py-10 lg:px-20">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Branding */}
+            <div>
+              <h2 className="text-3xl font-bold text-purple-700 mb-4">
+                TopLike
+              </h2>
+              <p className="text-sm text-gray-400">
+                Bringing top-tier experiences to your fingertips.
+              </p>
+            </div>
+
+            {/* Navigation Links */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Links</h3>
+              <ul className="space-y-2">
+                <li>
+                  <a href="#" className="hover:text-purple-300 transition">
+                    Terms & Conditions
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-purple-300 transition">
+                    Privacy Policy
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-purple-300 transition">
+                    Contact Us
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Social Media */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
+              <div className="flex space-x-4 text-xl">
+                <a href="#" className="hover:text-purple-300 transition">
+                  <FaFacebookF />
+                </a>
+                <a href="#" className="hover:text-purple-300 transition">
+                  <FaTwitter />
+                </a>
+                <a href="#" className="hover:text-purple-300 transition">
+                  <FaInstagram />
+                </a>
+                <a href="#" className="hover:text-purple-300 transition">
+                  <FaLinkedinIn />
+                </a>
+              </div>
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
-            © {new Date().getFullYear()} TopLike. All rights reserved.
+
+          {/* Footer Bottom */}
+          <div className="mt-10 pt-6 border-t border-gray-700 flex flex-col space-y-4 justify-between text-sm text-gray-500 md:flex-row
+           md:space-y-0">
+            <p className="">
+              © {new Date().getFullYear()} TopLike. All rights reserved.
+            </p>
+            <div className="flex items-center space-x-5">
+              <a className="text-gray-500 hover:text-purple-300" href="coming-soon">
+                Privacy policy
+              </a>
+              <a className="text-gray-500 hover:text-purple-300" href="coming-soon">
+                Terms of Service
+              </a>
+              <a className="text-gray-500 hover:text-purple-300" href="coming-soon">
+                Cookies
+              </a>
+            </div>
           </div>
         </footer>
       </main>
