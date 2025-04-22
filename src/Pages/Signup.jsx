@@ -8,6 +8,7 @@ import {
   FiArrowRight,
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [step, setStep] = useState(1); // Now only 1-2 steps
@@ -29,6 +30,7 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -100,7 +102,7 @@ const Signup = () => {
     return acceptedTerms && verificationCode.every((digit) => digit);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (step === 1 && !validateStep1()) return;
@@ -109,14 +111,41 @@ const Signup = () => {
     if (step === 1) {
       setStep(2);
     } else {
-      // Final submission
-      console.log("Signup complete:", {
-        ...formData,
-        verificationCode: verificationCode.join(""),
-      });
-      // Here you would typically call your API for registration
+      try {
+        const response = await fetch(
+          "https://toplike.up.railway.app/api/signup",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: formData.email,
+              name: formData.mname,
+              username: formData.username,
+              password: formData.password,
+              verificationCode: verificationCode.join(""),
+            }),
+          }
+        );
+
+        const data = await response.json();
+
+        if (response.ok) {
+          console.log("Signup successful:", data);
+          navigate("/login"); // ✅ This is the correct place for redirection
+        } else {
+          console.error("Signup failed:", data);
+          alert(data.message || "Signup failed. Please try again.");
+        }
+      } catch (error) {
+        console.error("Network error:", error);
+        alert("An error occurred. Please try again later.");
+      }
     }
   };
+
+
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-4 sm:px-6 lg:py-8 lg:px-8">
