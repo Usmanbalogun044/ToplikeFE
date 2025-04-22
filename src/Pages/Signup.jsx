@@ -118,6 +118,7 @@ const Signup = () => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              "Accept": "application/json",
             },
             body: JSON.stringify({
               email: formData.email,
