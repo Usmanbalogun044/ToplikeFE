@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Landingpage from "../Pages/Landingpage";
-import Signup from "../Pages/Sigup";
+import Signup from "../Pages/Signup";
 
 const Routing = () => {
   return (
