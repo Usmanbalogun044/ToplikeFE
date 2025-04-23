@@ -39,7 +39,7 @@ const Login = () => {
     try {
       setLoading(true);
 
-      const url = "http://toplike.up.railway.app/api/signin";
+      const url = "https://toplike.up.railway.app/api/signin";
       const options = {
         method: "POST",
         headers: {
