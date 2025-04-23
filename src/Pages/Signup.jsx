@@ -99,7 +99,7 @@ const Signup = () => {
         setStep(2); // Move to verification message
       } else {
         setErrors({
-          submit: data.errors,
+          submit: data.errors || "Signup failed. Please try again.",
         });
       }
     } catch (error) {
