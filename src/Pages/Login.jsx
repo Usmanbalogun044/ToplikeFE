@@ -62,7 +62,7 @@ const Login = () => {
         navigate("/dashboard");
       } else {
         // Show error message from API
-        setError(data.errors || "Login failed");
+        setError(data.errors || data.message);
       }
     } catch (err) {
       setError("Something went wrong. Please try again.");
