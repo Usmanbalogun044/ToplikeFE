@@ -39,7 +39,7 @@ const Login = () => {
     try {
       setLoading(true);
 
-      const url = "http://toplike.up.railway.app/api/signin";
+      const loginUrl = "http://toplike.up.railway.app/api/signin";
       const options = {
         method: "POST",
         headers: {
@@ -52,7 +52,7 @@ const Login = () => {
         }),
       };
 
-      const response = await fetch(url, options);
+      const response = await fetch(loginUrl, options);
       const data = await response.json();
 
       if (response.ok) {

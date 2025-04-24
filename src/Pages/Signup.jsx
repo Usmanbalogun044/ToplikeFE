@@ -14,9 +14,9 @@ const Signup = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     email: "",
-    mname: "",
+    name: "",
     password: "",
-    verifyPassword: "",
+    password_confirmation: "",
     username: "",
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -30,12 +30,12 @@ const Signup = () => {
     return (
       formData.email &&
       /^\S+@\S+\.\S+$/.test(formData.email) &&
-      formData.mname &&
+      formData.name &&
       formData.username &&
       formData.password &&
-      formData.password.length >= 6 &&
-      formData.verifyPassword &&
-      formData.password === formData.verifyPassword &&
+      formData.password.length >= 8 &&
+      formData.password_confirmation &&
+      formData.password === formData.password_confirmation &&
       acceptedTerms
     );
   };
@@ -54,15 +54,15 @@ const Signup = () => {
     if (!formData.email) newErrors.email = "Email is required";
     else if (!/^\S+@\S+\.\S+$/.test(formData.email))
       newErrors.email = "Invalid email format";
-    if (!formData.mname) newErrors.mname = "Name is required";
+    if (!formData.name) newErrors.name = "Name is required";
     if (!formData.username) newErrors.username = "Username is required";
     if (!formData.password) newErrors.password = "Password is required";
-    else if (formData.password.length < 6)
-      newErrors.password = "Password must be at least 6 characters";
-    if (!formData.verifyPassword)
-      newErrors.verifyPassword = "Please re-enter your password";
-    else if (formData.password !== formData.verifyPassword)
-      newErrors.verifyPassword = "Passwords don't match";
+    else if (formData.password.length < 8)
+      newErrors.password = "Password must be at least 8 characters";
+    if (!formData.password_confirmation)
+      newErrors.password_confirmation = "Please re-enter your password";
+    else if (formData.password !== formData.password_confirmation)
+      newErrors.password_confirmation = "Passwords don't match";
     if (!acceptedTerms) newErrors.terms = "You must accept the terms";
 
     setErrors(newErrors);
@@ -74,24 +74,24 @@ const Signup = () => {
 
     if (!validateStep1()) return;
 
+    const signupUrl = "https://toplike.up.railway.app/api/signup";
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        email: formData.email,
+        name: formData.name,
+        username: formData.username,
+        password: formData.password,
+        password_confirmation: formData.password_confirmation,
+      }),
+    };
     setIsSubmitting(true);
     try {
-      const response = await fetch(
-        "https://toplike.up.railway.app/api/signup",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            email: formData.email,
-            name: formData.mname,
-            username: formData.username,
-            password: formData.password,
-          }),
-        }
-      );
+      const response = await fetch(signupUrl, options);
 
       const data = await response.json();
 
@@ -181,7 +181,7 @@ const Signup = () => {
 
                 <div>
                   <label
-                    htmlFor="mname"
+                    htmlFor="name"
                     className="block text-sm font-medium text-gray-700"
                   >
                     Full Name
@@ -191,17 +191,17 @@ const Signup = () => {
                       <FiUser className="h-5 w-5 text-gray-400" />
                     </div>
                     <input
-                      id="mname"
-                      name="mname"
+                      id="name"
+                      name="name"
                       type="text"
                       required
-                      value={formData.mname}
+                      value={formData.name}
                       onChange={handleChange}
                       className="py-2 pl-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                     />
                   </div>
-                  {errors.mname && (
-                    <p className="mt-1 text-sm text-red-500">{errors.mname}</p>
+                  {errors.name && (
+                    <p className="mt-1 text-sm text-red-500">{errors.name}</p>
                   )}
                 </div>
 
@@ -298,9 +298,9 @@ const Signup = () => {
                   <div className="mt-1 h-1 w-full bg-gray-200 rounded-full">
                     <div
                       className={`h-1 rounded-full ${
-                        formData.password.length > 8
+                        formData.password.length > 12
                           ? "bg-green-500"
-                          : formData.password.length > 5
+                          : formData.password.length > 8
                           ? "bg-yellow-500"
                           : formData.password.length > 0
                           ? "bg-red-500"
@@ -308,7 +308,7 @@ const Signup = () => {
                       }`}
                       style={{
                         width: `${Math.min(
-                          formData.password.length * 10,
+                          (formData.password.length / 12) * 100,
                           100
                         )}%`,
                       }}
@@ -323,7 +323,7 @@ const Signup = () => {
 
                 <div>
                   <label
-                    htmlFor="verifyPassword"
+                    htmlFor="password_confirmation"
                     className="block text-sm font-medium text-gray-700"
                   >
                     Confirm Password
@@ -333,11 +333,11 @@ const Signup = () => {
                       <FiLock className="h-5 w-5 text-gray-400" />
                     </div>
                     <input
-                      id="verifyPassword"
-                      name="verifyPassword"
+                      id="password_confirmation"
+                      name="password_confirmation"
                       type={showPassword ? "text" : "password"}
                       required
-                      value={formData.verifyPassword}
+                      value={formData.password_confirmation}
                       onChange={handleChange}
                       className="py-2 pl-10 pr-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                     />
@@ -355,9 +355,9 @@ const Signup = () => {
                       </button>
                     </div>
                   </div>
-                  {errors.verifyPassword && (
+                  {errors.password_confirmation && (
                     <p className="mt-1 text-sm text-red-500">
-                      {errors.verifyPassword}
+                      {errors.password_confirmation}
                     </p>
                   )}
                 </div>
