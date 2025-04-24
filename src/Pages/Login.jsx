@@ -40,6 +40,7 @@ const Login = () => {
       setLoading(true);
 
       const loginUrl = "http://toplike.up.railway.app/api/signin";
+
       const options = {
         method: "POST",
         headers: {
@@ -62,7 +63,7 @@ const Login = () => {
         navigate("/dashboard");
       } else {
         // Show error message from API
-        setError(data.message || "Login failed");
+        setError(data.errors || data.message);
       }
     } catch (err) {
       setError("Something went wrong. Please try again.");
