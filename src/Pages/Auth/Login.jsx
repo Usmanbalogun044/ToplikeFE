@@ -94,7 +94,8 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+      {/* Header */}
+      <header className="sm:mx-auto sm:w-full sm:max-w-md">
         <Link to="/">
           <h2 className="text-center text-3xl font-extrabold text-purple-600">
             TopLike
@@ -103,9 +104,10 @@ const Login = () => {
         <h2 className="mt-6 text-center text-2xl font-bold text-gray-900">
           Sign in to your account
         </h2>
-      </div>
+      </header>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+      {/* Main content */}
+      <main className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           {error && (
             <div className="mb-4 bg-red-50 border-l-4 border-red-500 p-4">
@@ -273,7 +275,7 @@ const Login = () => {
             </p>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 };
