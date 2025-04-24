@@ -151,7 +151,7 @@ const LoginForm = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="text-gray-400 hover:text-gray-500"
+                className="text-gray-400 hover:text-gray-500 cursor-pointer"
               >
                 {showPassword ? (
                   <FiEyeOff className="h-5 w-5" />
@@ -171,7 +171,7 @@ const LoginForm = () => {
               type="checkbox"
               checked={formData.remember}
               onChange={handleChange}
-              className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+              className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded cursor-pointer"
             />
             <label
               htmlFor="remember-me"
