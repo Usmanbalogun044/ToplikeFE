@@ -19,10 +19,13 @@ const Login = () => {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
+    if (error) setError(""); // clear error message on input change
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Clear previous errors
     setError("");
 
     // Basic validation
@@ -39,7 +42,7 @@ const Login = () => {
     try {
       setLoading(true);
 
-      const loginUrl = "http://toplike.up.railway.app/api/signin";
+      const loginUrl = "https://toplike.up.railway.app/api/signin";
 
       const options = {
         method: "POST",
@@ -56,17 +59,34 @@ const Login = () => {
       const response = await fetch(loginUrl, options);
       const data = await response.json();
 
-      if (response.ok) {
-        // Save token (you might store in localStorage or context)
-        localStorage.setItem("token", data.token);
-        // Navigate to dashboard
-        navigate("/dashboard");
-      } else {
-        // Show error message from API
-        setError(data.errors || data.message);
+      if (!response.ok) {
+        // Handle different error cases
+        if (data.errors) {
+          // If the API returns field-specific errors
+          setError(Object.values(data.errors).join(", "));
+        } else if (data.message) {
+          // If the API returns a general message
+          setError(data.message);
+        } else {
+          setError("Login failed. Please try again.");
+        }
+        return;
       }
+
+      // Successful login
+      localStorage.setItem("token", data.token);
+
+      // Store remember me preference
+      if (formData.remember) {
+        localStorage.setItem("rememberMe", "true");
+      } else {
+        localStorage.removeItem("rememberMe");
+      }
+
+      navigate("/dashboard");
     } catch (err) {
-      setError("Something went wrong. Please try again.");
+      console.error("Login error:", err);
+      setError("Network error. Please check your connection and try again.");
     } finally {
       setLoading(false);
     }
