@@ -44,7 +44,7 @@ const Dashboard = () => {
         {/* Header - Only shown on mobile */}
         <header className="md:hidden bg-white shadow-sm py-3 px-4">
           <div className="flex justify-between items-center">
-            <h1 className="text-xl font-bold text-purple-600">TopLike</h1>
+            <h1 className="text-2xl font-extrabold text-purple-700">TopLike</h1>
             <button className="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 relative">
               <FiBell className="h-5 w-5" />
               {notifications.some((n) => !n.read) && (
