@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import SignupForm from "../../Components/Auth/SignupForm";
 
 const Signup = () => {
-  const[step, setStep] = useState(1);
+  const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     email: "",
     name: "",
@@ -154,16 +154,6 @@ const Signup = () => {
                   </button>
                   .
                 </p>
-              </div>
-
-              <div className="mt-6">
-                <button
-                  type="button"
-                  onClick={() => navigate("/login")}
-                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-                >
-                  Continue to Login
-                </button>
               </div>
             </div>
           )}

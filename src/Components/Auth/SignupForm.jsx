@@ -28,7 +28,7 @@ const SignupForm = ({
                   <path
                     fillRule="evenodd"
                     d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1
-                        .293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    .293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
                     clipRule="evenodd"
                   />
                 </svg>
@@ -59,7 +59,7 @@ const SignupForm = ({
               value={formData.name}
               onChange={handleChange}
               className="py-2 pl-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500
-                   focus:border-purple-500"
+            focus:border-purple-500"
             />
           </div>
           {errors.name && (
@@ -86,7 +86,7 @@ const SignupForm = ({
               value={formData.username}
               onChange={handleChange}
               className="py-2 pl-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500
-                   focus:border-purple-500"
+            focus:border-purple-500"
             />
           </div>
           {errors.username && (
@@ -141,7 +141,8 @@ const SignupForm = ({
               required
               value={formData.password}
               onChange={handleChange}
-              className="py-2 pl-10 pr-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+              className="py-2 pl-10 pr-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 
+              focus:border-purple-500"
             />
             <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
               <button
@@ -199,7 +200,8 @@ const SignupForm = ({
               required
               value={formData.password_confirmation}
               onChange={handleChange}
-              className="py-2 pl-10 pr-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+              className="py-2 pl-10 pr-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 
+              focus:border-purple-500"
             />
             <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
               <button
@@ -255,12 +257,12 @@ const SignupForm = ({
             type="submit"
             disabled={!isFormValid() || isSubmitting}
             className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-md cursor-pointer shadow-sm text-sm 
-                font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2
-                    focus:ring-purple-500 ${
-                      !isFormValid() || isSubmitting
-                        ? "opacity-50 cursor-not-allowed"
-                        : ""
-                    }`}
+            font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2
+                focus:ring-purple-500 ${
+                  !isFormValid() || isSubmitting
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
+                }`}
           >
             {isSubmitting ? (
               <>

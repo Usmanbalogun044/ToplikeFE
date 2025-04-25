@@ -10,6 +10,7 @@ import { FaNairaSign } from "react-icons/fa6";
 import { Link, Outlet } from "react-router-dom";
 import Sidebar from "../../Components/Sharedd/Sidebar";
 import Bottomnav from "../../Components/Sharedd/Bottomnav";
+import Postlist from "../Post/Postlist";
 
 const Home = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -39,6 +40,7 @@ const Home = () => {
 
         {/* Main Content Area */}
         <div className="flex-1 transition-all duration-300 pb-16 md:pb-0">
+            <Postlist />
           {/* Header - Only shown on mobile */}
           <header className="md:hidden bg-white shadow-sm py-3 px-4">
             <div className="flex justify-between items-center">
