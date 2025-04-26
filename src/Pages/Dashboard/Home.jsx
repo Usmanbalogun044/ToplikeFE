@@ -39,8 +39,12 @@ const Home = () => {
         />
 
         {/* Main Content Area */}
-        <div className="flex-1 transition-all duration-300 pb-16 md:pb-0">
-            <Postlist />
+        <div
+          className={`flex-1 transition-all duration-300 pb-16 md:pb-0 ${
+            sidebarCollapsed ? "md:ml-20" : "md:ml-64"
+          }`}
+        >
+          {/* <Postlist /> post list */}
           {/* Header - Only shown on mobile */}
           <header className="md:hidden bg-white shadow-sm py-3 px-4">
             <div className="flex justify-between items-center">
@@ -210,7 +214,7 @@ const Home = () => {
               </div>
             </div>
           </main>
-          
+
           <Bottomnav />
         </div>
       </div>
