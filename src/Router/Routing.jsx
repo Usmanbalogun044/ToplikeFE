@@ -5,6 +5,7 @@ import Signup from "../Pages/Auth/Signup";
 import Login from "../Pages/Auth/Login";
 import Home from "../Pages/Dashboard/Home";
 import CreatepostPage from "../Pages/Post/CreatepostPage";
+import Walletpage from "../Pages/Wallet/Walletpage";
 
 const Routing = () => {
   return (
@@ -16,6 +17,8 @@ const Routing = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Home />} />
           <Route path="/posts/create" element={<CreatepostPage />} />
+          <Route path="/wallet" element={<Walletpage />} />
+          {/* Add more routes as needed */}
         </Routes>
       </BrowserRouter>
     </>

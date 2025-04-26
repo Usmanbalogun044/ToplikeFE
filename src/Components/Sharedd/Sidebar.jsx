@@ -34,12 +34,12 @@ const Sidebar = ({
         )}
         <button
           onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-          className="p-2 rounded-md text-gray-500 hover:text-purple-600 hover:bg-gray-100"
+          className="p-2 rounded-md text-gray- cursor-pointer hover:text-purple-600 hover:bg-gray-100"
         >
           {sidebarCollapsed ? (
-            <LuPanelRightClose className="h-5 w-5 cursor-pointer" />
+            <LuPanelRightClose className="h-5 w-5" />
           ) : (
-            <LuPanelLeftClose className="h-5 w-5 cursor-pointer" />
+            <LuPanelLeftClose className="h-5 w-5" />
           )}
         </button>
       </div>
