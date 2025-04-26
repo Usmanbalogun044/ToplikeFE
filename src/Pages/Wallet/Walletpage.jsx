@@ -38,7 +38,7 @@ const Walletpage = () => {
         const balanceData = await balanceRes.json();
 
         setWalletData({
-          balance: parseFloat(balanceData.wallet) || 0,
+          balance: parseFloat(balanceData.wallet.balance) || 0,
           loading: false,
           error: null,
         });
