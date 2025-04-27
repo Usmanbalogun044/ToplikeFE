@@ -53,7 +53,7 @@ const Createmodal = ({ onSubmit, loading, paymentInitiated }) => {
           <label className="block text-sm font-medium mb-1">Caption*</label>
           <input
             type="text"
-            className={`w-full p-3 border rounded-lg ${
+            className={`w-full p-3 border rounded-lg focus:outline-none ${
               errors.caption ? "border-red-500" : "border-gray-300"
             }`}
             value={formData.caption}

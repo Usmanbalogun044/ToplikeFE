@@ -2,15 +2,12 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiDollarSign } from "react-icons/fi";
 import Createmodal from "../../Components/Post/Createmodal";
-import Sidebar from "../../Components/Sharedd/Sidebar";
-import Bottomnav from "../../Components/Sharedd/Bottomnav";
 
 const CreatepostPage = () => {
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [paymentInitiated, setPaymentInitiated] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   // Check if user already posted
   useEffect(() => {
@@ -27,11 +24,10 @@ const CreatepostPage = () => {
         };
         const res = await fetch(url, options);
 
-        
         const data = await res.json();
         if (data.hasPosted) navigate("/posts");
       } catch (error) {
-        console.error( error);
+        console.error(error);
         // Optionally show error to user or handle differently
       }
     };
@@ -125,56 +121,39 @@ const CreatepostPage = () => {
     }
   };
   return (
-    <div className="flex flex-col min-h-screen md:flex-row">
-      <Sidebar
-        sidebarCollapsed={sidebarCollapsed}
-        setSidebarCollapsed={setSidebarCollapsed}
-      />
+    <>
+      {/* Mobile Header */}
+      <header className="md:hidden bg-white shadow-sm py-3 px-4">
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-extrabold text-purple-700">TopLike</h1>
+        </div>
+      </header>
 
-      {/* Main Content Area */}
-      <div
-        className={`flex-1 transition-all duration-300 pb-16 md:pb-0 ${
-          sidebarCollapsed ? "md:ml-20" : "md:ml-64"
-        }`}
-      >
-        {/* Mobile Header */}
-        <header className="md:hidden bg-white shadow-sm py-3 px-4">
-          <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-extrabold text-purple-700">TopLike</h1>
-          </div>
-        </header>
+      {/* Main Content */}
+      <main className="flex-1">
+        <div className="max-w-2xl mx-auto p-4 md:p-6">
+          <h1 className="text-2xl font-bold mb-6">Create Submission</h1>
 
-        {/* Main Content */}
-        <main className="flex-1">
-          <div className="max-w-2xl mx-auto p-4 md:p-6">
-            <h1 className="text-2xl font-bold mb-6">Create Submission</h1>
+          <Createmodal
+            onSubmit={handleSubmit}
+            loading={loading}
+            paymentInitiated={paymentInitiated}
+          />
 
-            <Createmodal
-              onSubmit={handleSubmit}
-              loading={loading}
-              paymentInitiated={paymentInitiated}
-            />
-
-            {/* Payment Info */}
-            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-6">
-              <div className="flex items-center">
-                <FiDollarSign className="h-5 w-5 text-yellow-600 mr-2" />
-                <p className="font-medium">Entry Fee: ₦500</p>
-              </div>
-              <p className="text-sm text-yellow-700 mt-1">
-                You'll be redirected to Paystack for payment after form
-                validation
-              </p>
+          {/* Payment Info */}
+          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-6">
+            <div className="flex items-center">
+              <FiDollarSign className="h-5 w-5 text-yellow-600 mr-2" />
+              <p className="font-medium">Entry Fee: ₦500</p>
             </div>
+            <p className="text-sm text-yellow-700 mt-1">
+              You'll be redirected to Paystack for payment after form validation
+            </p>
           </div>
-        </main>
-
-        {/* Bottom Navigation - Mobile Only */}
-        <Bottomnav />
-      </div>
-    </div>
+        </div>
+      </main>
+    </>
   );
 };
-
 
 export default CreatepostPage;

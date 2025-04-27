@@ -31,20 +31,21 @@ const Withdrawmodal = ({ currentBalance, onClose, onWithdrawSuccess }) => {
 
     setLoading(true);
 
+    const url = "https://toplike.up.railway.app/api/withdraw";
+    const option = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({
+        amount: withdrawalAmount,
+      }),
+    };
+
     try {
-      const response = await fetch(
-        "https://toplike.up.railway.app/api/withdraw",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          body: JSON.stringify({
-            amount: withdrawalAmount,
-          }),
-        }
-      );
+      const response = await fetch(url, option);
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -76,7 +77,7 @@ const Withdrawmodal = ({ currentBalance, onClose, onWithdrawSuccess }) => {
           </p>
           <button
             onClick={onClose}
-            className="w-full bg-purple-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-purple-700"
+            className="w-full bg-purple-600 text-white px-4 py-2 rounded-lg cursor-pointer font-medium hover:bg-purple-700"
           >
             Close
           </button>
@@ -92,7 +93,7 @@ const Withdrawmodal = ({ currentBalance, onClose, onWithdrawSuccess }) => {
           <h3 className="font-bold text-lg">Withdraw Funds</h3>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-gray-500 cursor-pointer hover:text-gray-700"
           >
             <FiX size={24} />
           </button>
@@ -134,7 +135,7 @@ const Withdrawmodal = ({ currentBalance, onClose, onWithdrawSuccess }) => {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+              className="px-4 py-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50"
               disabled={loading}
             >
               Cancel
@@ -142,7 +143,7 @@ const Withdrawmodal = ({ currentBalance, onClose, onWithdrawSuccess }) => {
             <button
               type="submit"
               disabled={loading}
-              className="bg-purple-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-purple-700 disabled:opacity-50"
+              className="bg-purple-600 text-white px-6 py-2 rounded-lg cursor-pointer font-medium hover:bg-purple-700 disabled:opacity-50"
             >
               {loading ? "Processing..." : "Withdraw"}
             </button>

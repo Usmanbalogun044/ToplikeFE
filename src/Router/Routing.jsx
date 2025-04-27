@@ -6,19 +6,26 @@ import Login from "../Pages/Auth/Login";
 import Home from "../Pages/Dashboard/Home";
 import CreatepostPage from "../Pages/Post/CreatepostPage";
 import Walletpage from "../Pages/Wallet/Walletpage";
+import CreateAccount from "../Pages/Bank/CreateAccount";
+import Layout from "../Pages/Dashboard/Layout";
 
 const Routing = () => {
   return (
     <>
       <BrowserRouter>
         <Routes>
+          {/* Public Routes */}
           <Route path="/" element={<Landingpage />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Home />} />
-          <Route path="/posts/create" element={<CreatepostPage />} />
-          <Route path="/wallet" element={<Walletpage />} />
-          {/* Add more routes as needed */}
+
+          {/* Protected Routes with Layout */}
+          <Route element={<Layout />}>
+            <Route path="/dashboard" element={<Home />} />
+            <Route path="/posts/create" element={<CreatepostPage />} />
+            <Route path="/wallet" element={<Walletpage />} />
+            <Route path="/create-account" element={<CreateAccount />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </>
