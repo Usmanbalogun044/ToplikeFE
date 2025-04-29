@@ -223,7 +223,7 @@ const Profilepage = () => {
                   id="username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                   required
                   minLength={3}
                   maxLength={30}
@@ -234,7 +234,7 @@ const Profilepage = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-colors disabled:opacity-70"
+                  className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg cursor-pointer font-medium hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-colors disabled:opacity-70"
                 >
                   <FiSave className="mr-2" />
                   {loading ? "Saving..." : "Save Changes"}
