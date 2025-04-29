@@ -8,6 +8,7 @@ import CreatepostPage from "../Pages/Post/CreatepostPage";
 import Walletpage from "../Pages/Wallet/Walletpage";
 import CreateAccount from "../Pages/Bank/CreateAccount";
 import Layout from "../Pages/Dashboard/Layout";
+import Profilepage from "../Pages/Profile/Profilepage";
 
 const Routing = () => {
   return (
@@ -25,6 +26,7 @@ const Routing = () => {
             <Route path="/posts/create" element={<CreatepostPage />} />
             <Route path="/wallet" element={<Walletpage />} />
             <Route path="/create-account" element={<CreateAccount />} />
+            <Route path="/profile" element={<Profilepage />} />
           </Route>
         </Routes>
       </BrowserRouter>

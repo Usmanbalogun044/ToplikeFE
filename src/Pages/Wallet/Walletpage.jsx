@@ -13,7 +13,6 @@ const Walletpage = () => {
   const [hasBankAccount, setHasBankAccount] = useState(false);
 
   const fetchBalance = async () => {
-
     // Fetch the user's wallet balance
     const url = "https://toplike.up.railway.app/api/wallet";
     const option = {
@@ -43,10 +42,9 @@ const Walletpage = () => {
     }
   };
 
-
   const fetchBankAccount = async () => {
 
-    // Fetch the user's bank account information
+    // Fetch the user's bank account details
     const url = "https://toplike.up.railway.app/api/bankaccount";
     const option = {
       method: "GET",
@@ -58,20 +56,27 @@ const Walletpage = () => {
     };
 
     try {
-      setLoading(true); // Add loading state
       const res = await fetch(url, option);
+
+      if (res.status === 404) {
+        // Bank account doesn't exist
+        setHasBankAccount(false);
+        setBankAccountExists(false);
+        return;
+      }
 
       if (!res.ok) throw new Error("Failed to fetch bank account");
 
       const data = await res.json();
       setHasBankAccount(!!data.bank_account);
-      setBankAccountExists(!!data.bank_account); 
+      setBankAccountExists(!!data.bank_account);
     } catch (error) {
-      console.error(error.message);
-      setHasBankAccount(false);
-      setBankAccountExists(false); 
-    } finally {
-      setLoading(false); // Ensure loading ends
+      console.error("Bank account fetch error:", error);
+      // Don't redirect on network errors - only on confirmed missing account
+      if (error.message.includes("404")) {
+        setHasBankAccount(false);
+        setBankAccountExists(false);
+      }
     }
   };
 
@@ -91,7 +96,8 @@ const Walletpage = () => {
 
   useEffect(() => {
     if (bankAccountExists === false) {
-      // Redirect to Create Account Page
+      // Only redirect if we're certain the account doesn't exist
+      // and not just because of a network error
       navigate("/create-account");
     }
   }, [bankAccountExists, navigate]);
