@@ -9,6 +9,7 @@ import {
   FiBarChart2,
   FiArrowLeft,
   FiMail,
+  FiUpload,
 } from "react-icons/fi";
 
 const Profilepage = () => {
@@ -20,7 +21,11 @@ const Profilepage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [editMode, setEditMode] = useState(false);
-  const [username, setUsername] = useState("");
+  const [formData, setFormData] = useState({
+    username: "",
+    avatar: null,
+    avatarPreview: "",
+  });
 
   // Fetch profile data with caching
   const fetchProfile = async () => {
@@ -36,7 +41,11 @@ const Profilepage = () => {
       if (cachedProfile) {
         const data = JSON.parse(cachedProfile);
         setProfile(data);
-        setUsername(data.user.username || "");
+        setFormData({
+          username: data.user.username || "",
+          avatar: null,
+          avatarPreview: data.user.avatar || "",
+        });
         setInitialLoad(false);
         setLoading(false);
         return;
@@ -62,7 +71,11 @@ const Profilepage = () => {
 
       const data = await response.json();
       setProfile(data);
-      setUsername(data.user.username || "");
+      setFormData({
+        username: data.user.username || "",
+        avatar: null,
+        avatarPreview: data.user.avatar || "",
+      });
       sessionStorage.setItem(cacheKey, JSON.stringify(data));
     } catch (err) {
       setError(err.message);
@@ -76,11 +89,28 @@ const Profilepage = () => {
     fetchProfile();
   }, [id, isCurrentUser, navigate]);
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData((prev) => ({
+        ...prev,
+        avatar: file,
+        avatarPreview: URL.createObjectURL(file),
+      }));
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
+
+      const formPayload = new FormData();
+      formPayload.append("username", formData.username);
+      if (formData.avatar) {
+        formPayload.append("avatar", formData.avatar);
+      }
 
       const response = await fetch(
         "https://toplike.up.railway.app/api/user/update",
@@ -88,9 +118,8 @@ const Profilepage = () => {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
           },
-          body: JSON.stringify({ username }),
+          body: formPayload,
         }
       );
 
@@ -102,6 +131,7 @@ const Profilepage = () => {
         user: {
           ...prev.user,
           username: updatedData.user.username,
+          avatar: updatedData.user.avatar || prev.user.avatar,
         },
       }));
 
@@ -113,6 +143,7 @@ const Profilepage = () => {
       cachedData.user = {
         ...cachedData.user,
         username: updatedData.user.username,
+        avatar: updatedData.user.avatar || cachedData.user.avatar,
       };
       sessionStorage.setItem(cacheKey, JSON.stringify(cachedData));
 
@@ -122,6 +153,46 @@ const Profilepage = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Avatar display component
+  const AvatarDisplay = ({ src, editable = false, size = "lg" }) => {
+    const sizeClasses = size === "lg" ? "w-32 h-32" : "w-24 h-24";
+
+    return (
+      <div
+        className={`relative ${sizeClasses} rounded-full bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center border-4 border-white shadow-lg`}
+      >
+        {src ? (
+          <img
+            src={src}
+            alt="Profile"
+            className="w-full h-full rounded-full object-cover"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "";
+            }}
+          />
+        ) : (
+          <FiUser className="text-purple-400 w-16 h-16" />
+        )}
+
+        {editable && (
+          <label className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 rounded-full opacity-0 hover:opacity-100 transition-opacity cursor-pointer">
+            <div className="text-white text-center p-2">
+              <FiUpload className="mx-auto mb-1" />
+              <span className="text-xs">Change Photo</span>
+            </div>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="hidden"
+            />
+          </label>
+        )}
+      </div>
+    );
   };
 
   // Skeleton loader during initial load
@@ -203,10 +274,16 @@ const Profilepage = () => {
 
       {/* Profile Header */}
       <div className="flex flex-col md:flex-row items-start md:items-center gap-6 mb-8 bg-white rounded-xl p-6 shadow-sm">
-        {/* User Icon */}
-        <div className="flex items-center justify-center w-24 h-24 md:w-32 md:h-32 rounded-full bg-purple-100 text-purple-600">
-          <FiUser className="w-12 h-12" />
-        </div>
+        {/* Avatar Display */}
+        {editMode ? (
+          <AvatarDisplay
+            src={formData.avatarPreview || profile.user.avatar}
+            editable={true}
+            size="lg"
+          />
+        ) : (
+          <AvatarDisplay src={profile.user.avatar} size="lg" />
+        )}
 
         <div className="flex-1">
           {editMode ? (
@@ -221,8 +298,10 @@ const Profilepage = () => {
                 <input
                   type="text"
                   id="username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  value={formData.username}
+                  onChange={(e) =>
+                    setFormData({ ...formData, username: e.target.value })
+                  }
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                   required
                   minLength={3}
@@ -242,8 +321,7 @@ const Profilepage = () => {
                 <button
                   type="button"
                   onClick={() => setEditMode(false)}
-                  className="px-4 py-2 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 
-                  focus:ring-gray-500 focus:ring-offset-2 transition-colors"
+                  className="px-4 py-2 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
                 >
                   Cancel
                 </button>
@@ -325,10 +403,7 @@ const Profilepage = () => {
                     />
                   )}
                 </div>
-                <div
-                  className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity 
-                flex items-end p-4"
-                >
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
                   <div className="text-white">
                     <h3 className="font-medium truncate">{post.title}</h3>
                     <p className="text-sm flex items-center">

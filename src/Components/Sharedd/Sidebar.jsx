@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { FiUser, FiHome } from "react-icons/fi";
 import { FaRegSquarePlus } from "react-icons/fa6";
 import { FaRegCircleUser } from "react-icons/fa6";
@@ -12,35 +11,6 @@ const Sidebar = ({
   setSidebarCollapsed,
 }) => {
   const location = useLocation();
-  const [username, setUsername] = useState("");
-
-  // Fetch username when component mounts
-  useEffect(() => {
-    const fetchUsername = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) return;
-
-        const response = await fetch(
-          "https://toplike.up.railway.app/api/myprofile",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-          setUsername(data.user?.username || "");
-        }
-      } catch (error) {
-        console.error("Failed to fetch username:", error);
-      }
-    };
-
-    fetchUsername();
-  }, []);
 
   // Helper function to check if path matches
   const isActive = (path) => {
@@ -145,7 +115,7 @@ const Sidebar = ({
           />
           {!sidebarCollapsed && (
             <span className="whitespace-nowrap transition-opacity duration-300">
-              {username || "Profile"}
+              Profile
             </span>
           )}
         </Link>

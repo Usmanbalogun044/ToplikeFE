@@ -1,184 +1,251 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Withdrawmodal from "./Withdrawmodal";
 import WalletTransactions from "./WalletTransaction";
 
 const Walletpage = () => {
   const [balance, setBalance] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState({
+    balance: true,
+    bankAccount: true,
+  });
+  const [errors, setErrors] = useState({
+    balance: null,
+    bankAccount: null,
+  });
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
-  const [bankAccountExists, setBankAccountExists] = useState(null);
-  const navigate = useNavigate(); // for redirect
-  const [hasBankAccount, setHasBankAccount] = useState(false);
+  const [hasBankAccount, setHasBankAccount] = useState(null);
+  const navigate = useNavigate();
 
-  const fetchBalance = async () => {
-    // Fetch the user's wallet balance
-    const url = "https://toplike.up.railway.app/api/wallet";
-    const option = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    };
-
+  // Function to fetch with retry logic
+  const fetchWithRetry = async (url, options, retries = 3, delay = 1000) => {
     try {
-      setLoading(true);
-      setError(null);
-
-      const res = await fetch(url, option);
-
-      if (!res.ok) throw new Error("Failed to fetch balance");
-
-      const data = await res.json();
-      setBalance(parseFloat(data.wallet?.balance) || 0);
-    } catch (err) {
-      setError(err.message);
-      setBalance(0);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchBankAccount = async () => {
-
-    // Fetch the user's bank account details
-    const url = "https://toplike.up.railway.app/api/bankaccount";
-    const option = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    };
-
-    try {
-      const res = await fetch(url, option);
-
-      if (res.status === 404) {
-        // Bank account doesn't exist
-        setHasBankAccount(false);
-        setBankAccountExists(false);
-        return;
-      }
-
-      if (!res.ok) throw new Error("Failed to fetch bank account");
-
-      const data = await res.json();
-      setHasBankAccount(!!data.bank_account);
-      setBankAccountExists(!!data.bank_account);
+      const response = await fetch(url, options);
+      if (!response.ok)
+        throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
     } catch (error) {
-      console.error("Bank account fetch error:", error);
-      // Don't redirect on network errors - only on confirmed missing account
-      if (error.message.includes("404")) {
-        setHasBankAccount(false);
-        setBankAccountExists(false);
+      if (retries > 0) {
+        await new Promise((resolve) => setTimeout(resolve, delay));
+        return fetchWithRetry(url, options, retries - 1, delay * 2);
       }
+      throw error;
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        await Promise.all([fetchBalance(), fetchBankAccount()]);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
+  const fetchBalance = useCallback(async () => {
+    const url = "https://toplike.up.railway.app/api/wallet";
+    try {
+      const data = await fetchWithRetry(url, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      setBalance(parseFloat(data.wallet?.balance) || 0);
+      sessionStorage.setItem("walletBalance", data.wallet?.balance);
+      setErrors((prev) => ({ ...prev, balance: null }));
+      return true;
+    } catch (err) {
+      console.error("Balance fetch error:", err);
+      setErrors((prev) => ({
+        ...prev,
+        balance: err.message || "Network error",
+      }));
+
+      // Try to use cached balance if available
+      const cachedBalance = sessionStorage.getItem("walletBalance");
+      if (cachedBalance) {
+        setBalance(parseFloat(cachedBalance));
+      } else {
+        setBalance(0);
       }
-    };
-    fetchData();
+      return false;
+    } finally {
+      setLoading((prev) => ({ ...prev, balance: false }));
+    }
   }, []);
 
+  const fetchBankAccount = useCallback(async () => {
+    const url = "https://toplike.up.railway.app/api/bankaccount";
+    try {
+      const data = await fetchWithRetry(url, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      const hasAccount = !!data.bank_account;
+      setHasBankAccount(hasAccount);
+      sessionStorage.setItem("hasBankAccount", hasAccount.toString());
+      setErrors((prev) => ({ ...prev, bankAccount: null }));
+      return hasAccount;
+    } catch (err) {
+      console.error("Bank account fetch error:", err);
+      setErrors((prev) => ({
+        ...prev,
+        bankAccount: err.message || "Network error",
+      }));
+
+      if (err.message.includes("404")) {
+        setHasBankAccount(false);
+        return false;
+      }
+
+      // Use cached value if available
+      const cachedBankAccount = sessionStorage.getItem("hasBankAccount");
+      if (cachedBankAccount !== null) {
+        setHasBankAccount(cachedBankAccount === "true");
+        return cachedBankAccount === "true";
+      }
+      return null;
+    } finally {
+      setLoading((prev) => ({ ...prev, bankAccount: false }));
+    }
+  }, []);
+
+  // Initial data fetch
   useEffect(() => {
-    if (bankAccountExists === false) {
-      // Only redirect if we're certain the account doesn't exist
-      // and not just because of a network error
+    // Load cached data immediately
+    const cachedBalance = sessionStorage.getItem("walletBalance");
+    const cachedBankAccount = sessionStorage.getItem("hasBankAccount");
+
+    if (cachedBalance) {
+      setBalance(parseFloat(cachedBalance));
+      setLoading((prev) => ({ ...prev, balance: false }));
+    }
+
+    if (cachedBankAccount !== null) {
+      setHasBankAccount(cachedBankAccount === "true");
+      setLoading((prev) => ({ ...prev, bankAccount: false }));
+    }
+
+    // Fetch fresh data
+    fetchBalance();
+    fetchBankAccount();
+
+    // Set up network event listeners
+    const handleOnline = () => {
+      if (errors.balance || errors.bankAccount) {
+        fetchBalance();
+        fetchBankAccount();
+      }
+    };
+
+    window.addEventListener("online", handleOnline);
+    return () => window.removeEventListener("online", handleOnline);
+  }, [fetchBalance, fetchBankAccount, errors]);
+
+  // Handle bank account redirect
+  useEffect(() => {
+    if (hasBankAccount === false && !loading.bankAccount) {
       navigate("/create-account");
     }
-  }, [bankAccountExists, navigate]);
+  }, [hasBankAccount, loading.bankAccount, navigate]);
 
-  const handleWithdrawSuccess = () => {
+  const handleWithdrawSuccess = useCallback(() => {
     fetchBalance();
-  };
+  }, [fetchBalance]);
 
-  if (bankAccountExists === null) {
-    // Show loading until we know if user has bank account
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
-      </div>
-    );
-  }
+  const isLoading = loading.balance || loading.bankAccount;
+  const hasErrors = errors.balance || errors.bankAccount;
 
   return (
-    <>
-      {/* Main Content - Loading state only here */}
-
-      <div className="max-w-4xl mx-auto p-4 md:p-6">
-        {loading ? (
-          <div className="flex justify-center items-center min-h-[50vh]">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+    <div className="max-w-4xl mx-auto p-4 md:p-6">
+      {isLoading ? (
+        <div className="space-y-8">
+          <div className="bg-gray-200 animate-pulse rounded-xl h-32"></div>
+          <div className="space-y-4">
+            <div className="h-6 w-1/4 bg-gray-200 animate-pulse rounded"></div>
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={i}
+                className="h-16 bg-gray-100 animate-pulse rounded"
+              ></div>
+            ))}
           </div>
-        ) : error ? (
-          <div className="bg-red-50 border-l-4 border-red-500 p-4 my-6">
-            <p className="text-red-700">{error}</p>
-            <button
-              onClick={fetchBalance}
-              className="mt-2 text-sm text-red-600 font-medium"
-            >
-              Retry
-            </button>
-          </div>
-        ) : (
-          <>
-            <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl shadow-lg p-6 text-white mb-8">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h2 className="text-lg font-medium">Available Balance</h2>
-                  <p className="text-3xl font-bold mt-2">
-                    ₦{balance.toLocaleString("en-NG")}
-                  </p>
-                </div>
-                <button
-                  onClick={() => {
-                    if (hasBankAccount) {
-                      setShowWithdrawModal(true);
-                    } else {
-                      // Redirect them to create account page
-                      navigate("/createaccount"); // Or show a toast/message if you want
-                    }
-                  }}
-                  className="bg-white text-purple-600 px-4 py-2 rounded-lg font-medium cursor-pointer hover:bg-gray-100 transition"
-                  disabled={balance < 1000}
-                >
-                  Withdraw
-                </button>
-              </div>
-              {balance < 1000 && (
-                <p className="text-sm text-purple-200 mt-3">
-                  Minimum withdrawal amount is ₦1,000
-                </p>
-              )}
+        </div>
+      ) : (
+        <>
+          {/* Error banners that don't block the UI */}
+          {errors.balance && (
+            <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-4">
+              <p className="text-yellow-700">
+                Balance data might be outdated: {errors.balance}
+              </p>
+              <button
+                onClick={fetchBalance}
+                className="mt-2 text-sm text-yellow-600 font-medium"
+              >
+                Retry
+              </button>
             </div>
+          )}
 
-            <WalletTransactions />
+          {errors.bankAccount && (
+            <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-4">
+              <p className="text-yellow-700">
+                Bank account verification failed: {errors.bankAccount}
+              </p>
+              <button
+                onClick={fetchBankAccount}
+                className="mt-2 text-sm text-yellow-600 font-medium"
+              >
+                Retry
+              </button>
+            </div>
+          )}
 
-            {showWithdrawModal && (
-              <Withdrawmodal
-                currentBalance={balance}
-                onClose={() => setShowWithdrawModal(false)}
-                onWithdrawSuccess={handleWithdrawSuccess}
-              />
+          {/* Main content */}
+          <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl shadow-lg p-6 text-white mb-8">
+            <div className="flex justify-between items-start">
+              <div>
+                <h2 className="text-lg font-medium">Available Balance</h2>
+                <p className="text-3xl font-bold mt-2">
+                  ₦{balance.toLocaleString("en-NG")}
+                </p>
+                {errors.balance && (
+                  <p className="text-xs text-purple-200 mt-1">
+                    Showing cached data
+                  </p>
+                )}
+              </div>
+              <button
+                onClick={() => {
+                  if (hasBankAccount) {
+                    setShowWithdrawModal(true);
+                  }
+                }}
+                className="bg-white text-purple-600 px-4 py-2 rounded-lg font-medium cursor-pointer hover:bg-gray-100 transition"
+                disabled={balance < 1000 || !hasBankAccount}
+              >
+                Withdraw
+              </button>
+            </div>
+            {balance < 1000 && (
+              <p className="text-sm text-purple-200 mt-3">
+                Minimum withdrawal amount is ₦1,000
+              </p>
             )}
-          </>
-        )}
-      </div>
-    </>
+            {hasBankAccount === false && (
+              <p className="text-sm text-purple-200 mt-3">
+                Please add a bank account to withdraw
+              </p>
+            )}
+          </div>
+
+          <WalletTransactions />
+
+          {showWithdrawModal && (
+            <Withdrawmodal
+              currentBalance={balance}
+              onClose={() => setShowWithdrawModal(false)}
+              onWithdrawSuccess={handleWithdrawSuccess}
+            />
+          )}
+        </>
+      )}
+    </div>
   );
 };
 
