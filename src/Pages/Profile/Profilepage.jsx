@@ -102,15 +102,6 @@ const Profilepage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const url = "https://toplike.up.railway.app/api/user/update";
-    const options = {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formPayload,
-    };
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
@@ -121,7 +112,16 @@ const Profilepage = () => {
         formPayload.append("avatar", formData.avatar);
       }
 
-      const response = await fetch(url, options);
+      const response = await fetch(
+        "https://toplike.up.railway.app/api/user/update",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formPayload,
+        }
+      );
 
       if (!response.ok) throw new Error("Update failed");
 
