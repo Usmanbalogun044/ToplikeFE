@@ -18,7 +18,7 @@ const Header = () => {
       read: true,
     },
   ]);
-  
+
   return (
     <>
       <header className="sticky w-full top-0 bg-white shadow-sm py-3 px-4 md:hidden">

@@ -1,37 +1,14 @@
-import { useState } from "react";
 import { FiAward, FiUser, FiBell, FiBarChart2, FiHeart } from "react-icons/fi";
 import { FaNairaSign } from "react-icons/fa6";
 import { Link, Outlet } from "react-router-dom";
+import Header from "../../Components/Sharedd/Header";
 
 const Home = () => {
-  const [notifications] = useState([
-    {
-      id: 1,
-      text: "Your submission got 50 new votes!",
-      time: "2h ago",
-      read: false,
-    },
-    {
-      id: 2,
-      text: "New contest starts in 3 hours",
-      time: "5h ago",
-      read: true,
-    },
-  ]);
+  
   return (
     <>
       {/* Header - Only shown on mobile */}
-      <header className="md:hidden sticky w-full z-50 top-0 bg-white shadow-sm py-3 px-4">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-extrabold text-purple-700">TopLike</h1>
-          <button className="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 relative">
-            <FiBell className="h-5 w-5" />
-            {notifications.some((n) => !n.read) && (
-              <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
-            )}
-          </button>
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
       <main className="flex-1">

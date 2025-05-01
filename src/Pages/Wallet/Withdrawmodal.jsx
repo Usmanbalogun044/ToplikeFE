@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { FiX, FiDollarSign, FiCheck, FiAlertCircle } from "react-icons/fi";
+import { FiX, FiCheck, FiAlertCircle } from "react-icons/fi";
+import { FaNairaSign } from "react-icons/fa6";
 
 const Withdrawmodal = ({ currentBalance, onClose, onWithdrawSuccess }) => {
   const [amount, setAmount] = useState("");
@@ -107,7 +108,7 @@ const Withdrawmodal = ({ currentBalance, onClose, onWithdrawSuccess }) => {
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FiDollarSign className="text-gray-400" />
+                <FaNairaSign className="text-gray-400" />
               </div>
               <input
                 type="number"
