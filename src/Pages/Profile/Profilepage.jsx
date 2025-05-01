@@ -102,6 +102,15 @@ const Profilepage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const url = "https://toplike.up.railway.app/api/user/update";
+    const options = {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formPayload,
+    };
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
@@ -112,16 +121,7 @@ const Profilepage = () => {
         formPayload.append("avatar", formData.avatar);
       }
 
-      const response = await fetch(
-        "https://toplike.up.railway.app/api/user/update",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formPayload,
-        }
-      );
+      const response = await fetch(url, options);
 
       if (!response.ok) throw new Error("Update failed");
 
@@ -321,7 +321,8 @@ const Profilepage = () => {
                 <button
                   type="button"
                   onClick={() => setEditMode(false)}
-                  className="px-4 py-2 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
+                  className="px-4 py-2 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 
+                  focus:ring-gray-500 focus:ring-offset-2 transition-colors"
                 >
                   Cancel
                 </button>

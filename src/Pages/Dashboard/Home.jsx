@@ -2,7 +2,6 @@ import { useState } from "react";
 import { FiAward, FiUser, FiBell, FiBarChart2, FiHeart } from "react-icons/fi";
 import { FaNairaSign } from "react-icons/fa6";
 import { Link, Outlet } from "react-router-dom";
-import Postlist from "../Post/Postlist";
 
 const Home = () => {
   const [notifications] = useState([
@@ -21,11 +20,8 @@ const Home = () => {
   ]);
   return (
     <>
-      {/* Main Content Area */}
-
-      {/* <Postlist /> post list */}
       {/* Header - Only shown on mobile */}
-      <header className="md:hidden bg-white shadow-sm py-3 px-4">
+      <header className="md:hidden sticky w-full z-50 top-0 bg-white shadow-sm py-3 px-4">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-extrabold text-purple-700">TopLike</h1>
           <button className="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 relative">
