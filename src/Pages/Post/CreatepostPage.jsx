@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiDollarSign } from "react-icons/fi";
 import Createmodal from "../../Components/Post/Createmodal";
+import Header from "../../Components/Sharedd/Header";
 
 const CreatepostPage = () => {
   const navigate = useNavigate();
@@ -123,16 +124,12 @@ const CreatepostPage = () => {
   return (
     <>
       {/* Mobile Header */}
-      <header className="md:hidden bg-white shadow-sm py-3 px-4">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-extrabold text-purple-700">TopLike</h1>
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
       <main className="flex-1">
         <div className="max-w-2xl mx-auto p-4 md:p-6">
-          <h1 className="text-2xl font-bold mb-6">Create Submission</h1>
+          <h1 className="text-2xl font-bold mb-6">Create Post</h1>
 
           <Createmodal
             onSubmit={handleSubmit}

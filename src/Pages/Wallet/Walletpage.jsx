@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Withdrawmodal from "./Withdrawmodal";
 import WalletTransactions from "./WalletTransaction";
+import Header from "../../Components/Sharedd/Header";
 
 const Walletpage = () => {
   const [balance, setBalance] = useState(0);
@@ -151,101 +152,105 @@ const Walletpage = () => {
   const hasErrors = errors.balance || errors.bankAccount;
 
   return (
-    <div className="max-w-4xl mx-auto p-4 md:p-6">
-      {isLoading ? (
-        <div className="space-y-8">
-          <div className="bg-gray-200 animate-pulse rounded-xl h-32"></div>
-          <div className="space-y-4">
-            <div className="h-6 w-1/4 bg-gray-200 animate-pulse rounded"></div>
-            {[...Array(5)].map((_, i) => (
-              <div
-                key={i}
-                className="h-16 bg-gray-100 animate-pulse rounded"
-              ></div>
-            ))}
+    <>
+      {" "}
+      <Header />
+      <div className="max-w-4xl mx-auto p-4 md:p-6">
+        {isLoading ? (
+          <div className="space-y-8">
+            <div className="bg-gray-200 animate-pulse rounded-xl h-32"></div>
+            <div className="space-y-4">
+              <div className="h-6 w-1/4 bg-gray-200 animate-pulse rounded"></div>
+              {[...Array(5)].map((_, i) => (
+                <div
+                  key={i}
+                  className="h-16 bg-gray-100 animate-pulse rounded"
+                ></div>
+              ))}
+            </div>
           </div>
-        </div>
-      ) : (
-        <>
-          {/* Error banners that don't block the UI */}
-          {errors.balance && (
-            <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-4">
-              <p className="text-yellow-700">
-                Balance data might be outdated: {errors.balance}
-              </p>
-              <button
-                onClick={fetchBalance}
-                className="mt-2 text-sm text-yellow-600 font-medium"
-              >
-                Retry
-              </button>
-            </div>
-          )}
-
-          {errors.bankAccount && (
-            <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-4">
-              <p className="text-yellow-700">
-                Bank account verification failed: {errors.bankAccount}
-              </p>
-              <button
-                onClick={fetchBankAccount}
-                className="mt-2 text-sm text-yellow-600 font-medium"
-              >
-                Retry
-              </button>
-            </div>
-          )}
-
-          {/* Main content */}
-          <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl shadow-lg p-6 text-white mb-8">
-            <div className="flex justify-between items-start">
-              <div>
-                <h2 className="text-lg font-medium">Available Balance</h2>
-                <p className="text-3xl font-bold mt-2">
-                  ₦{balance.toLocaleString("en-NG")}
+        ) : (
+          <>
+            {/* Error banners that don't block the UI */}
+            {errors.balance && (
+              <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-4">
+                <p className="text-yellow-700">
+                  Balance data might be outdated: {errors.balance}
                 </p>
-                {errors.balance && (
-                  <p className="text-xs text-purple-200 mt-1">
-                    Showing cached data
-                  </p>
-                )}
+                <button
+                  onClick={fetchBalance}
+                  className="mt-2 text-sm text-yellow-600 font-medium"
+                >
+                  Retry
+                </button>
               </div>
-              <button
-                onClick={() => {
-                  if (hasBankAccount) {
-                    setShowWithdrawModal(true);
-                  }
-                }}
-                className="bg-white text-purple-600 px-4 py-2 rounded-lg font-medium cursor-pointer hover:bg-gray-100 transition"
-                disabled={balance < 1000 || !hasBankAccount}
-              >
-                Withdraw
-              </button>
+            )}
+
+            {errors.bankAccount && (
+              <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-4">
+                <p className="text-yellow-700">
+                  Bank account verification failed: {errors.bankAccount}
+                </p>
+                <button
+                  onClick={fetchBankAccount}
+                  className="mt-2 text-sm text-yellow-600 font-medium"
+                >
+                  Retry
+                </button>
+              </div>
+            )}
+
+            {/* Main content */}
+            <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl shadow-lg p-6 text-white mb-8">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h2 className="text-lg font-medium">Available Balance</h2>
+                  <p className="text-3xl font-bold mt-2">
+                    ₦{balance.toLocaleString("en-NG")}
+                  </p>
+                  {errors.balance && (
+                    <p className="text-xs text-purple-200 mt-1">
+                      Showing cached data
+                    </p>
+                  )}
+                </div>
+                <button
+                  onClick={() => {
+                    if (hasBankAccount) {
+                      setShowWithdrawModal(true);
+                    }
+                  }}
+                  className="bg-white text-purple-600 px-4 py-2 rounded-lg font-medium cursor-pointer hover:bg-gray-100 transition"
+                  disabled={balance < 1000 || !hasBankAccount}
+                >
+                  Withdraw
+                </button>
+              </div>
+              {balance < 1000 && (
+                <p className="text-sm text-purple-200 mt-3">
+                  Minimum withdrawal amount is ₦1,000
+                </p>
+              )}
+              {hasBankAccount === false && (
+                <p className="text-sm text-purple-200 mt-3">
+                  Please add a bank account to withdraw
+                </p>
+              )}
             </div>
-            {balance < 1000 && (
-              <p className="text-sm text-purple-200 mt-3">
-                Minimum withdrawal amount is ₦1,000
-              </p>
-            )}
-            {hasBankAccount === false && (
-              <p className="text-sm text-purple-200 mt-3">
-                Please add a bank account to withdraw
-              </p>
-            )}
-          </div>
 
-          <WalletTransactions />
+            <WalletTransactions />
 
-          {showWithdrawModal && (
-            <Withdrawmodal
-              currentBalance={balance}
-              onClose={() => setShowWithdrawModal(false)}
-              onWithdrawSuccess={handleWithdrawSuccess}
-            />
-          )}
-        </>
-      )}
-    </div>
+            {showWithdrawModal && (
+              <Withdrawmodal
+                currentBalance={balance}
+                onClose={() => setShowWithdrawModal(false)}
+                onWithdrawSuccess={handleWithdrawSuccess}
+              />
+            )}
+          </>
+        )}
+      </div>
+    </>
   );
 };
 
