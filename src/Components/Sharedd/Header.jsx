@@ -62,7 +62,7 @@ const Header = () => {
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
-    <header className="ticky w-full top-0 bg-white shadow-sm py-3 px-4 z-50 flex justify-between items-center">
+    <header className="sticky w-full top-0 bg-white shadow-sm py-3 px-4 z-50 flex justify-between items-center">
       {/* Logo: only visible on mobile */}
       <h1 className="text-2xl font-extrabold text-purple-700 md:hidden">
         TopLike

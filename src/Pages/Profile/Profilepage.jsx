@@ -106,6 +106,10 @@ const Profilepage = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
 
       const formPayload = new FormData();
       formPayload.append("username", formData.username);
@@ -124,7 +128,10 @@ const Profilepage = () => {
         }
       );
 
-      if (!response.ok) throw new Error("Update failed");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Update failed");
+      }
 
       const updatedData = await response.json();
       setProfile((prev) => ({
@@ -154,6 +161,17 @@ const Profilepage = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleLogout = () => {
+    // Clear authentication tokens
+    localStorage.removeItem("token");
+
+    // Clear cached profile data
+    sessionStorage.removeItem("currentUserProfile");
+
+    // Redirect to login page
+    navigate("/login");
   };
 
   // Avatar display component
@@ -288,7 +306,7 @@ const Profilepage = () => {
             <AvatarDisplay src={profile.user.avatar} size="lg" />
           )}
 
-          <div className="flex-1">
+          <div className="flex-1 w-full">
             {editMode ? (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
@@ -312,7 +330,7 @@ const Profilepage = () => {
                   />
                 </div>
 
-                <div className="flex space-x-3">
+                <div className="flex flex-wrap gap-3">
                   <button
                     type="submit"
                     disabled={loading}
@@ -323,9 +341,16 @@ const Profilepage = () => {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setEditMode(false)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 
-                  focus:ring-gray-500 focus:ring-offset-2 transition-colors"
+                    onClick={() => {
+                      setEditMode(false);
+                      setFormData({
+                        username: profile.user.username,
+                        avatar: null,
+                        avatarPreview: profile.user.avatar,
+                      });
+                    }}
+                    className="px-4 py-2 border border-gray-300 rounded-lg font-medium cursor-pointer hover:bg-gray-50 focus:outline-none 
+                    focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
                   >
                     Cancel
                   </button>
@@ -333,8 +358,8 @@ const Profilepage = () => {
               </form>
             ) : (
               <>
-                <div className="flex items-start justify-between">
-                  <div>
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                  <div className="flex-1">
                     <h1 className="text-2xl font-bold text-gray-900">
                       {profile.user.username}
                     </h1>
@@ -346,17 +371,26 @@ const Profilepage = () => {
                       </div>
                     )}
                   </div>
+
                   {isCurrentUser && (
-                    <button
-                      onClick={() => setEditMode(true)}
-                      className="flex items-center text-purple-600 cursor-pointer hover:text-purple-800 transition-colors"
-                    >
-                      <FiEdit className="mr-1" /> Edit
-                    </button>
+                    <div className="flex flex-wrap gap-2 sm:gap-3">
+                      <button
+                        onClick={() => setEditMode(true)}
+                        className="flex items-center text-purple-600 cursor-pointer hover:text-purple-800 transition-colors whitespace-nowrap"
+                      >
+                        <FiEdit className="mr-1" /> Edit
+                      </button>
+                      <button
+                        onClick={handleLogout}
+                        className="flex items-center text-red-600 cursor-pointer hover:text-red-800 transition-colors whitespace-nowrap"
+                      >
+                        <FiX className="mr-1" /> Logout
+                      </button>
+                    </div>
                   )}
                 </div>
 
-                <div className="flex space-x-6 mt-6">
+                <div className="flex flex-wrap gap-3 mt-6">
                   <div className="flex items-center bg-purple-50 px-4 py-2 rounded-lg">
                     <FiAward className="text-purple-600 mr-2" />
                     <span className="font-medium">
