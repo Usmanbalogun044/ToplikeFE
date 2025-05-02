@@ -170,8 +170,8 @@ const Profilepage = () => {
     // Clear cached profile data
     sessionStorage.removeItem("currentUserProfile");
 
-    // Redirect to login page
-    navigate("/login");
+    // Redirect to landing page
+    navigate("/");
   };
 
   // Avatar display component
