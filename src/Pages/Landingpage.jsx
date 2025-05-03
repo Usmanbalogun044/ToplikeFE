@@ -14,8 +14,14 @@ import {
   FaLinkedinIn,
 } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const Landingpage = () => {
+  useEffect(() => {
+    AOS.init({ duration: 1000 });
+  }, []);
+
   const [timeLeft, setTimeLeft] = useState({
     days: 2,
     hours: 4,
@@ -215,7 +221,10 @@ const Landingpage = () => {
           id="hero"
           className="pt-36 flex flex-col px-4 py-20 bg-gradient-to-r from-gray-50 to-purple-50 lg:flex-row lg:px-20"
         >
-          <div className="mb-10 lg:mb-0 lg:w-1/2 lg:pr-10">
+          <div
+            className="mb-10 lg:mb-0 lg:w-1/2 lg:pr-10"
+            data-aos="fade-left"
+          >
             <h1 className="text-4xl font-bold text-gray-900 mb-6 md:text-5xl">
               Show Your Talent. Win{" "}
               <span className="text-purple-600">₦100,000</span> Weekly!
@@ -249,7 +258,7 @@ const Landingpage = () => {
               </div>
             </div>
           </div>
-          <div className="lg:w-1/2 relative">
+          <div className="lg:w-1/2 relative" data-aos="fade-right">
             <div className="bg-white p-2 rounded-2xl shadow-2xl transform rotate-1">
               <div className="bg-gray-200 rounded-xl h-64 lg:h-96 flex items-center justify-center overflow-hidden">
                 {/* Placeholder for hero image/video */}
@@ -272,7 +281,11 @@ const Landingpage = () => {
         </section>
 
         {/* How It Works */}
-        <section id="how-it-works" className="px-4 py-20 lg:px-20 text-center">
+        <section
+          id="how-it-works"
+          className="px-4 py-20 lg:px-20 text-center"
+          data-aos="fade-up"
+        >
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
             How TopLike Works
           </h2>
@@ -316,16 +329,21 @@ const Landingpage = () => {
         </section>
 
         {/* Past Winners */}
-        <section id="winners" className="px-4 py-20 bg-gray-100 lg:px-20">
+        <section
+          id="winners"
+          className="px-4 py-20 bg-gray-100 lg:px-20"
+          data-aos="fade-up"
+        >
           <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
             Meet Our Recent Winners
           </h2>
 
-          <div className="flex overflow-x-auto pb-6 space-x-6 scrollbar-hide">
+          <div className="flex justify-evenly overflow-x-auto pb-6 space-x-6 scrollbar-hide">
             {winners.map((winner) => (
               <div
                 key={winner.id}
-                className="flex-shrink-0 w-72 bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition"
+                className="flex-shrink-0 w-80 bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition"
+                data-aos="zoom-in"
               >
                 <div className="h-48 bg-gray-300 flex items-center justify-center">
                   <span className="text-gray-500">Winner Photo</span>
@@ -343,7 +361,11 @@ const Landingpage = () => {
         </section>
 
         {/* CTA Section */}
-        <section id="faq" className="px-4 py-20 lg:px-20 bg-white text-center">
+        <section
+          id="faq"
+          className="px-4 py-20 lg:px-20 bg-white text-center"
+          data-aos="fade-up"
+        >
           <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-800">
             Ready to Showcase Your Talent?
           </h2>
@@ -413,19 +435,30 @@ const Landingpage = () => {
           </div>
 
           {/* Footer Bottom */}
-          <div className="mt-10 pt-6 border-t border-gray-700 flex flex-col space-y-4 justify-between text-sm text-gray-500 md:flex-row
-           md:space-y-0">
+          <div
+            className="mt-10 pt-6 border-t border-gray-700 flex flex-col space-y-4 justify-between text-sm text-gray-500 md:flex-row
+           md:space-y-0"
+          >
             <p className="">
               © {new Date().getFullYear()} TopLike. All rights reserved.
             </p>
             <div className="flex items-center space-x-5">
-              <a className="text-gray-500 hover:text-purple-300" href="coming-soon">
+              <a
+                className="text-gray-500 hover:text-purple-300"
+                href="coming-soon"
+              >
                 Privacy policy
               </a>
-              <a className="text-gray-500 hover:text-purple-300" href="coming-soon">
+              <a
+                className="text-gray-500 hover:text-purple-300"
+                href="coming-soon"
+              >
                 Terms of Service
               </a>
-              <a className="text-gray-500 hover:text-purple-300" href="coming-soon">
+              <a
+                className="text-gray-500 hover:text-purple-300"
+                href="coming-soon"
+              >
                 Cookies
               </a>
             </div>
