@@ -75,7 +75,7 @@ const Profilepage = () => {
       setFormData({
         username: data.user.username || "",
         avatar: null,
-        avatarPreview: data.user.avatar || "",
+        avatarPreview: data.user.profile_picture || "",
       });
       sessionStorage.setItem(cacheKey, JSON.stringify(data));
     } catch (err) {
