@@ -44,8 +44,8 @@ const Profilepage = () => {
         setProfile(data);
         setFormData({
           username: data.user.username || "",
-          avatar: null,
-          avatarPreview: data.user.avatar || "",
+          avatar:  data.user.profile_picture || "",
+          avatarPreview: data.user.profile_picture || "",
         });
         setInitialLoad(false);
         setLoading(false);
@@ -151,7 +151,7 @@ const Profilepage = () => {
       cachedData.user = {
         ...cachedData.user,
         username: updatedData.user.username,
-        avatar: updatedData.user.avatar || cachedData.user.avatar,
+        avatar: updatedData.user.profile_picture || cachedData.user.profile_picture,
       };
       sessionStorage.setItem(cacheKey, JSON.stringify(cachedData));
 
