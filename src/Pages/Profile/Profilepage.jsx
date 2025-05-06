@@ -298,7 +298,7 @@ const Profilepage = () => {
           {/* Avatar Display */}
           {editMode ? (
             <AvatarDisplay
-              src={formData.avatarPreview || profile.user.avatar}
+              src={formData.profile_picture || profile.user.profile_picture}
               editable={true}
               size="lg"
             />
