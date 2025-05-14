@@ -82,7 +82,7 @@ const Landingpage = () => {
   const winners = [
     {
       id: 1,
-      username: "@CreativeChioma",
+      username: "@CreativeChiom",
       prize: "₦100,000",
       category: "Fashion Design",
       testimonial:
