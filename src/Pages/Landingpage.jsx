@@ -86,7 +86,7 @@ const Landingpage = () => {
       prize: "₦100,000",
       category: "Fashion Design",
       testimonial:
-        "Weekly Wins changed my life! I used the money to start my small business.",
+        "Weekly Wins changed my life! I used the money to start my small busines.",
       image: "/winner1.jpg",
     },
     {
