@@ -18,7 +18,6 @@ const Walletpage = () => {
   const [hasBankAccount, setHasBankAccount] = useState(null);
   const navigate = useNavigate();
 
-  // Function to fetch with retry logic
   const fetchWithRetry = async (url, options, retries = 3, delay = 1000) => {
     try {
       const response = await fetch(url, options);
@@ -153,8 +152,10 @@ const Walletpage = () => {
 
   return (
     <>
-      {" "}
+      {/* Mobile header */}
       <Header />
+
+      
       <div className="max-w-4xl mx-auto p-4 md:p-6">
         {isLoading ? (
           <div className="space-y-8">

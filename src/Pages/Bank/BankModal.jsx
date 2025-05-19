@@ -17,7 +17,7 @@ const BankModal = ({ onAddAccount, onClose }) => {
 
   const fetchBanks = async () => {
     
-    // Fetch the list of banks from the API
+    // Fetchs the list of banks from the API
     const url = "https://toplike.up.railway.app/api/banks/list";
     const option = {
       method: "GET",

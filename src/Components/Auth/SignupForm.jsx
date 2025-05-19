@@ -15,6 +15,7 @@ const SignupForm = ({
 }) => {
   return (
     <>
+      {/* Signup Form */}
       <form className="space-y-6" onSubmit={onSubmit}>
         {errors.submit && (
           <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
@@ -58,8 +59,7 @@ const SignupForm = ({
               required
               value={formData.name}
               onChange={handleChange}
-              className="py-2 pl-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500
-            focus:border-purple-500"
+              className="py-2 pl-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500"
             />
           </div>
           {errors.name && (
@@ -85,8 +85,7 @@ const SignupForm = ({
               required
               value={formData.username}
               onChange={handleChange}
-              className="py-2 pl-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500
-            focus:border-purple-500"
+              className="py-2 pl-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500"
             />
           </div>
           {errors.username && (
@@ -113,8 +112,7 @@ const SignupForm = ({
               required
               value={formData.email}
               onChange={handleChange}
-              className="py-2 pl-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500
-                   focus:border-purple-500"
+              className="py-2 pl-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500"
             />
           </div>
           {errors.email && (
@@ -141,8 +139,8 @@ const SignupForm = ({
               required
               value={formData.password}
               onChange={handleChange}
-              className="py-2 pl-10 pr-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 
-              focus:border-purple-500"
+              className="py-2 pl-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 
+              pr-10"
             />
             <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
               <button
@@ -200,8 +198,8 @@ const SignupForm = ({
               required
               value={formData.password_confirmation}
               onChange={handleChange}
-              className="py-2 pl-10 pr-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 
-              focus:border-purple-500"
+              className="py-2 pl-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 
+              pr-10"
             />
             <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
               <button
@@ -253,16 +251,15 @@ const SignupForm = ({
         </div>
 
         <div>
+          {/* Create Account Button */}
           <button
             type="submit"
             disabled={!isFormValid() || isSubmitting}
-            className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-md cursor-pointer shadow-sm text-sm 
-            font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2
-                focus:ring-purple-500 ${
-                  !isFormValid() || isSubmitting
-                    ? "opacity-50 cursor-not-allowed"
-                    : ""
-                }`}
+            className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-md cursor-pointer shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 ${
+              !isFormValid() || isSubmitting
+                ? "opacity-50 cursor-not-allowed"
+                : ""
+            }`}
           >
             {isSubmitting ? (
               <>

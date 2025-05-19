@@ -94,6 +94,7 @@ const LoginForm = () => {
   };
   return (
     <>
+    {/* Login Form */}
       <form className="space-y-6" onSubmit={handleSubmit}>
         {error && (
           <div className="mb-4 bg-red-50 border-l-4 border-red-500 p-4 text-red-700 text-sm rounded">
@@ -119,8 +120,7 @@ const LoginForm = () => {
               required
               value={formData.email}
               onChange={handleChange}
-              className="py-2 pl-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500
-                   focus:border-purple-500"
+              className="py-2 pl-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500"
             />
           </div>
         </div>
@@ -144,8 +144,8 @@ const LoginForm = () => {
               required
               value={formData.password}
               onChange={handleChange}
-              className="py-2 pl-10 pr-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500
-               focus:border-purple-500"
+              className="py-2 pl-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 
+              pr-10"
             />
             <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
               <button
@@ -192,6 +192,7 @@ const LoginForm = () => {
         </div>
 
         <div>
+          {/* Sign in Button */}
           <button
             type="submit"
             disabled={loading}

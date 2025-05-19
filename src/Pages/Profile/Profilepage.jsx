@@ -44,7 +44,7 @@ const Profilepage = () => {
         setProfile(data);
         setFormData({
           username: data.user.username || "",
-          avatar:  data.user.profile_picture || "",
+          avatar: data.user.profile_picture || "",
           avatarPreview: data.user.profile_picture || "",
         });
         setInitialLoad(false);
@@ -151,7 +151,8 @@ const Profilepage = () => {
       cachedData.user = {
         ...cachedData.user,
         username: updatedData.user.username,
-        avatar: updatedData.user.profile_picture || cachedData.user.profile_picture,
+        avatar:
+          updatedData.user.profile_picture || cachedData.user.profile_picture,
       };
       sessionStorage.setItem(cacheKey, JSON.stringify(cachedData));
 
@@ -282,7 +283,10 @@ const Profilepage = () => {
 
   return (
     <>
+      {/* Mobile header */}
       <Header />
+
+      
       <div className="max-w-4xl mx-auto p-4 md:p-6">
         {!isCurrentUser && (
           <button
