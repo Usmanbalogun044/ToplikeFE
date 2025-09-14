@@ -116,50 +116,62 @@ const Landingpage = () => {
             scrolled ? "py-3 bg-white shadow-lg top-0" : "py-5 bg-white"
           }`}
         >
-          <div className="flex justify-between items-center container mx-auto px-4 lg:px-20">
-            <a
-              href="#hero"
-              className="text-2xl font-extrabold text-purple-700"
-              onClick={(e) => handleSmoothScroll(e, "hero")}
-            >
-              TopLike
-            </a>
+          <ul className="flex justify-between items-center container mx-auto px-4 lg:px-20">
+            <li>
+              <a
+                href="#hero"
+                className="text-2xl font-extrabold text-purple-700"
+                onClick={(e) => handleSmoothScroll(e, "hero")}
+              >
+                TopLike
+              </a>
+            </li>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex space-x-8 items-center">
-              <a
-                href="#how-it-works"
-                className="font-semibold text-gray-800 hover:text-purple-600"
-                onClick={(e) => handleSmoothScroll(e, "how-it-works")}
-              >
-                How It Works
-              </a>
-              <a
-                href="#winners"
-                className="font-semibold text-gray-800 hover:text-purple-600"
-                onClick={(e) => handleSmoothScroll(e, "winners")}
-              >
-                Past Winners
-              </a>
-              <a
-                href="#faq"
-                className="font-semibold text-gray-800 hover:text-purple-600"
-                onClick={(e) => handleSmoothScroll(e, "faq")}
-              >
-                FAQ
-              </a>
-              <NavLink
-                to="/login"
-                className="font-semibold text-gray-800 hover:text-purple-600"
-              >
-                Login
-              </NavLink>
-              <NavLink
-                to="/signup"
-                className="bg-purple-700 text-white px-6 py-2 rounded-full font-semibold transition hover:bg-purple-800"
-              >
-                Sign Up
-              </NavLink>
+              <li>
+                <a
+                  href="#how-it-works"
+                  className="font-semibold text-gray-800 hover:text-purple-600"
+                  onClick={(e) => handleSmoothScroll(e, "how-it-works")}
+                >
+                  How It Works
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#winners"
+                  className="font-semibold text-gray-800 hover:text-purple-600"
+                  onClick={(e) => handleSmoothScroll(e, "winners")}
+                >
+                  Past Winners
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#faq"
+                  className="font-semibold text-gray-800 hover:text-purple-600"
+                  onClick={(e) => handleSmoothScroll(e, "faq")}
+                >
+                  FAQ
+                </a>
+              </li>
+              <li>
+                <NavLink
+                  to="/login"
+                  className="font-semibold text-gray-800 hover:text-purple-600"
+                >
+                  Login
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/signup"
+                  className="bg-purple-700 text-white px-6 py-2 rounded-full font-semibold transition hover:bg-purple-800"
+                >
+                  Sign Up
+                </NavLink>
+              </li>
             </div>
 
             {/* Mobile Menu Button */}
@@ -170,7 +182,7 @@ const Landingpage = () => {
             >
               {mobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
             </button>
-          </div>
+          </ul>
 
           {/* Mobile Menu */}
           {mobileMenuOpen && (
@@ -221,10 +233,7 @@ const Landingpage = () => {
           id="hero"
           className="pt-36 flex flex-col px-4 py-20 bg-gradient-to-r from-gray-50 to-purple-50 lg:flex-row lg:px-20"
         >
-          <div
-            className="mb-10 lg:mb-0 lg:w-1/2 lg:pr-10"
-            data-aos="fade-left"
-          >
+          <div className="mb-10 lg:mb-0 lg:w-1/2 lg:pr-10" data-aos="fade-left">
             <h1 className="text-4xl font-bold text-gray-900 mb-6 md:text-5xl">
               Show Your Talent. Win{" "}
               <span className="text-purple-600">₦100,000</span> Weekly!
