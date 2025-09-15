@@ -5,6 +5,8 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
-    allowedHosts: ['toplikefe.up.railway.app','toplikefe.onrender.com'],
+    allowedHosts: [
+      'toplike.app' // Add new hosts here
+    ],
   },
 })
