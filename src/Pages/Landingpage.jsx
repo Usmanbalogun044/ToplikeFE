@@ -188,46 +188,35 @@ const Landingpage = () => {
           {mobileMenuOpen && (
             <div className="md:hidden bg-white shadow-xl">
               <ul className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-                <li>
+                <li className="font-semibold py-2 hover:text-purple-600 transition">
                   <a
                     href="#how-it-works"
-                    className="font-semibold py-2 hover:text-purple-600 transition"
                     onClick={(e) => handleSmoothScroll(e, "how-it-works")}
                   >
                     How It Works
                   </a>
                 </li>
-                <li>
+                <li className="font-semibold py-2 hover:text-purple-600 transition">
                   <a
                     href="#winners"
-                    className="font-semibold py-2 hover:text-purple-600 transition"
                     onClick={(e) => handleSmoothScroll(e, "winners")}
                   >
                     Past Winners
                   </a>
                 </li>
-                <li>
-                  <a
-                    href="#faq"
-                    className="font-semibold py-2 hover:text-purple-600 transition"
-                    onClick={(e) => handleSmoothScroll(e, "faq")}
-                  >
+                <li className="font-semibold py-2 hover:text-purple-600 transition">
+                  <a href="#faq" onClick={(e) => handleSmoothScroll(e, "faq")}>
                     FAQ
                   </a>
                 </li>
-                <li>
-                  <NavLink
-                    to="/login"
-                    className="font-semibold py-2 hover:text-purple-600 transition"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
+                <li className="font-semibold py-2 hover:text-purple-600 transition">
+                  <NavLink to="/login" onClick={() => setMobileMenuOpen(false)}>
                     Login
                   </NavLink>
                 </li>
-                <li>
+                <li className="font-semibold py-3 px-6 text-white rounded-full text-center transition bg-purple-600 hover:bg-purple-700">
                   <NavLink
                     to="/signup"
-                    className="bg-purple-600 text-white px-6 py-3 rounded-full font-semibold text-center transition hover:bg-purple-700"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Sign Up
