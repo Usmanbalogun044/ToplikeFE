@@ -24,8 +24,8 @@ const Profilepage = () => {
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
-    avatar: null,
-    avatarPreview: "",
+    profile_picture: null,
+    profile_picture_preview: "",
   });
 
   // Fetch profile data with caching
@@ -44,8 +44,8 @@ const Profilepage = () => {
         setProfile(data);
         setFormData({
           username: data.user.username || "",
-          avatar: data.user.profile_picture || "",
-          avatarPreview: data.user.profile_picture || "",
+          profile_picture: data.user.profile_picture || "",
+          profile_picture_preview: data.user.profile_picture || "",
         });
         setInitialLoad(false);
         setLoading(false);
@@ -74,8 +74,8 @@ const Profilepage = () => {
       setProfile(data);
       setFormData({
         username: data.user.username || "",
-        avatar: null,
-        avatarPreview: data.user.profile_picture || "",
+        profile_picture: null,
+        profile_picture_preview: data.user.profile_picture || "",
       });
       sessionStorage.setItem(cacheKey, JSON.stringify(data));
     } catch (err) {
@@ -95,8 +95,8 @@ const Profilepage = () => {
     if (file) {
       setFormData((prev) => ({
         ...prev,
-        avatar: file,
-        avatarPreview: URL.createObjectURL(file),
+        profile_picture: file,
+        profile_picture_preview: URL.createObjectURL(file),
       }));
     }
   };
@@ -113,8 +113,8 @@ const Profilepage = () => {
 
       const formPayload = new FormData();
       formPayload.append("username", formData.username);
-      if (formData.avatar) {
-        formPayload.append("avatar", formData.avatar);
+      if (formData.profile_picture) {
+        formPayload.append("profile_picture", formData.profile_picture);
       }
 
       const response = await fetch("https://api.toplike.app/api/user/update", {
@@ -136,7 +136,9 @@ const Profilepage = () => {
         user: {
           ...prev.user,
           username: updatedData.user.username,
-          avatar: updatedData.user.avatar || prev.user.avatar,
+          profile_picture: updatedData.user.profile_picture
+            ? `${updatedData.user.profile_picture}?t=${Date.now()}`
+            : prev.user.profile_picture,
         },
       }));
 
@@ -148,7 +150,7 @@ const Profilepage = () => {
       cachedData.user = {
         ...cachedData.user,
         username: updatedData.user.username,
-        avatar:
+        profile_picture:
           updatedData.user.profile_picture || cachedData.user.profile_picture,
       };
       sessionStorage.setItem(cacheKey, JSON.stringify(cachedData));
@@ -172,7 +174,7 @@ const Profilepage = () => {
     navigate("/");
   };
 
-  // Avatar display component
+  // profile_picture display component
   const AvatarDisplay = ({ src, editable = false, size = "lg" }) => {
     const sizeClasses = size === "lg" ? "w-32 h-32" : "w-24 h-24";
 
@@ -300,12 +302,14 @@ const Profilepage = () => {
           {/* Avatar Display */}
           {editMode ? (
             <AvatarDisplay
-              src={formData.profile_picture || profile.user.profile_picture}
+              src={
+                formData.profile_picture_preview || profile.user.profile_picture
+              }
               editable={true}
               size="lg"
             />
           ) : (
-            <AvatarDisplay src={profile.user.avatar} size="lg" />
+            <AvatarDisplay src={profile.user.profile_picture} size="lg" />
           )}
 
           <div className="flex-1 w-full">
@@ -347,8 +351,8 @@ const Profilepage = () => {
                       setEditMode(false);
                       setFormData({
                         username: profile.user.username,
-                        avatar: null,
-                        avatarPreview: profile.user.avatar,
+                        profile_picture: null,
+                        profile_picture_preview: profile.user.profile_picture,
                       });
                     }}
                     className="px-4 py-2 border border-gray-300 rounded-lg font-medium cursor-pointer hover:bg-gray-50 focus:outline-none 
