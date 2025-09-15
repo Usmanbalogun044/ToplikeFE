@@ -34,7 +34,7 @@ const Withdrawmodal = ({ currentBalance, onClose, onWithdrawSuccess }) => {
 
     try {
       const response = await fetch(
-        "https://toplike.up.railway.app/api/withdraw",
+        "https://api.toplike.app/api/withdraw",
         {
           method: "POST",
           headers: {

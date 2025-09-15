@@ -9,7 +9,7 @@ const WalletTransaction = () => {
     const fetchTransactions = async () => {
       try {
         const transactionsurl =
-          "https://toplike.up.railway.app/api/wallet/transactions";
+          "https://api.toplike.app/api/wallet/transactions";
         const options = {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

@@ -19,7 +19,7 @@ const CreateAccount = () => {
 
   const fetchAccounts = async () => {
 
-    const url = "https://toplike.up.railway.app/api/bankaccount";
+    const url = "https://api.toplike.app/api/bankaccount";
     const option = {
       method: "GET",
       headers: {
@@ -47,7 +47,7 @@ const CreateAccount = () => {
 
   const handleAddAccount = async (newAccount) => {
 
-    const url = "https://toplike.up.railway.app/api/bankaccount/create";
+    const url = "https://api.toplike.app/api/bankaccount/create";
     const option = {
       method: "POST",
       headers: {

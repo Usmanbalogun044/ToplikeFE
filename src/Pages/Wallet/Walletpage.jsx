@@ -34,7 +34,7 @@ const Walletpage = () => {
   };
 
   const fetchBalance = useCallback(async () => {
-    const url = "https://toplike.up.railway.app/api/wallet";
+    const url = "https://api.toplike.app/api/wallet";
     try {
       const data = await fetchWithRetry(url, {
         headers: {
@@ -67,7 +67,7 @@ const Walletpage = () => {
   }, []);
 
   const fetchBankAccount = useCallback(async () => {
-    const url = "https://toplike.up.railway.app/api/bankaccount";
+    const url = "https://api.toplike.app/api/bankaccount";
     try {
       const data = await fetchWithRetry(url, {
         headers: {

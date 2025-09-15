@@ -59,8 +59,8 @@ const Profilepage = () => {
       }
 
       const endpoint = isCurrentUser
-        ? "https://toplike.up.railway.app/api/myprofile"
-        : `https://toplike.up.railway.app/api/user/profile/${id}`;
+        ? "https://api.toplike.app/api/myprofile"
+        : `https://api.toplike.app/api/user/profile/${id}`;
 
       const response = await fetch(endpoint, {
         headers: {
@@ -117,16 +117,13 @@ const Profilepage = () => {
         formPayload.append("avatar", formData.avatar);
       }
 
-      const response = await fetch(
-        "https://toplike.up.railway.app/api/user/update",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formPayload,
-        }
-      );
+      const response = await fetch("https://api.toplike.app/api/user/update", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formPayload,
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -261,7 +258,8 @@ const Profilepage = () => {
                     setInitialLoad(true);
                     fetchProfile();
                   }}
-                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200"
+                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md bg-red-100
+                  text-red-700 hover:bg-red-200"
                 >
                   Retry
                 </button>
@@ -286,7 +284,6 @@ const Profilepage = () => {
       {/* Mobile header */}
       <Header />
 
-      
       <div className="max-w-4xl mx-auto p-4 md:p-6">
         {!isCurrentUser && (
           <button
@@ -380,7 +377,7 @@ const Profilepage = () => {
                     <div className="flex flex-wrap gap-2 sm:gap-3">
                       <button
                         onClick={() => setEditMode(true)}
-                        className="flex items-center text-purple-600 cursor-pointer hover:text-purple-800 transition-colors whitespace-nowrap"
+                        className="flex items-center text-purple-600 cursor-pointer transition-colors whitespace-nowrap hover:text-purple-800"
                       >
                         <FiEdit className="mr-1" /> Edit
                       </button>
@@ -472,7 +469,7 @@ const Profilepage = () => {
                   <div className="mt-6">
                     <Link
                       to="/posts/create"
-                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm  text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
                     >
                       Create your first post
                     </Link>
