@@ -45,7 +45,7 @@ const Signup = () => {
     setIsSubmitting(true);
     try {
       const response = await fetch(
-        "https://toplike.up.railway.app/api/signup",
+        "https://api.toplike.app/api/signup",
         {
           method: "POST",
           headers: {

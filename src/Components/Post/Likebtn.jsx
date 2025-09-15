@@ -12,7 +12,7 @@ const Likebtn = ({ postId, initialLikes, isLiked, onSuccess }) => {
     try {
       setLoading(true);
       const response = await fetch(
-        `https://toplike.up.railway.app/api/like-post/${postId}`,
+        `https://api.toplike.app/api/like-post/${postId}`,
         {
           method: "POST",
           headers: {

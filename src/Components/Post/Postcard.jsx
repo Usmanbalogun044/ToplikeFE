@@ -5,7 +5,7 @@ const Postcard = ({ post, onLikeSuccess }) => {
   const [likesList, setLikesList] = useState([]);
 
   const fetchLikes = async () => {
-    const url = `https://toplike.up.railway.app/api/like/list-user/${post.id}`;
+    const url = `https://api.toplike.app/api/like/list-user/${post.id}`;
     const options = { method: "GET", headers: { Accept: "application/json" } };
     try {
       const res = await fetch(url, options);

@@ -11,7 +11,7 @@ const Header = () => {
     const fetchNotifications = async () => {
       try {
         const response = await fetch(
-          "https://toplike.up.railway.app/api/notifications",
+          "https://api.toplike.app/api/notifications",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -40,7 +40,7 @@ const Header = () => {
   const deleteNotification = async (id) => {
     try {
       const response = await fetch(
-        `https://toplike.up.railway.app/api/notifications/delete/${id}`,
+        `https://api.toplike.app/api/notifications/delete/${id}`,
         {
           method: "DELETE",
           headers: {

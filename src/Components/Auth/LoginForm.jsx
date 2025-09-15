@@ -43,7 +43,7 @@ const LoginForm = () => {
     try {
       setLoading(true);
 
-      const loginUrl = "https://toplike.up.railway.app/api/signin";
+      const loginUrl = "https://api.toplike.app/api/signin";
 
       const options = {
         method: "POST",
