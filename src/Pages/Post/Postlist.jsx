@@ -10,7 +10,7 @@ const Postlist = () => {
 
   useEffect(() => {
     const checkSubmission = async () => {
-      const url = "https://toplike.up.railway.app/api/has-user-post";
+      const url = "https://api.toplike.app/api/has-user-post";
       const options = {
         method: "GET",
         headers: {
@@ -40,7 +40,7 @@ const Postlist = () => {
   }, [navigate]);
 
   const loadPosts = async () => {
-    const url = "https://toplike.up.railway.app/api/post/all";
+    const url = "https://api.toplike.app/api/post/all";
     const options = {
       method: "GET",
       headers: {

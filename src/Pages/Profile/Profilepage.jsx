@@ -178,7 +178,7 @@ const Profilepage = () => {
 
     return (
       <div
-        className={`relative ${sizeClasses} rounded-full bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center border-4 border-white shadow-lg`}
+        className={`relative ${sizeClasses} rounded-full flex items-center border-4 justify-center border-white shadow-lg bg-gradient-to-br from-purple-100 to-blue-100`}
       >
         {src ? (
           <img
@@ -265,7 +265,8 @@ const Profilepage = () => {
                 </button>
                 <button
                   onClick={() => navigate("/")}
-                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200"
+                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md bg-gray-100
+                  text-gray-700 hover:bg-gray-200"
                 >
                   Go Home
                 </button>
@@ -335,7 +336,7 @@ const Profilepage = () => {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg cursor-pointer font-medium hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-colors disabled:opacity-70"
+                    className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg cursor-pointer font-medium transition-colors hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-70"
                   >
                     <FiSave className="mr-2" />
                     {loading ? "Saving..." : "Save Changes"}
@@ -377,7 +378,7 @@ const Profilepage = () => {
                     <div className="flex flex-wrap gap-2 sm:gap-3">
                       <button
                         onClick={() => setEditMode(true)}
-                        className="flex items-center text-purple-600 cursor-pointer transition-colors whitespace-nowrap hover:text-purple-800"
+                        className="flex items-center pr-1.5 text-purple-600 cursor-pointer transition-colors whitespace-nowrap hover:text-purple-800"
                       >
                         <FiEdit className="mr-1" /> Edit
                       </button>
@@ -469,7 +470,7 @@ const Profilepage = () => {
                   <div className="mt-6">
                     <Link
                       to="/posts/create"
-                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm  text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                      className="inline-flex items-center px-4 py-2 border border-transparent bg-purple-600 text-sm text-white font-medium shadow-sm rounded-md focus:ring-2  hover:bg-purple-700 focus:outline-none focus:ring-offset-2 focus:ring-purple-800"
                     >
                       Create your first post
                     </Link>

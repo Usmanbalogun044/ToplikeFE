@@ -14,7 +14,7 @@ const CreatepostPage = () => {
   useEffect(() => {
     const checkSubmission = async () => {
       try {
-        const url = "https://toplike.up.railway.app/api/has-user-post";
+        const url = "https://api.toplike.app/api/has-user-post";
         const options = {
           method: "GET",
           headers: {
@@ -86,7 +86,7 @@ const CreatepostPage = () => {
 
   const submitPost = async (formData) => {
     setLoading(true);
-    const url = "https://toplike.up.railway.app/api/post/create";
+    const url = "https://api.toplike.app/api/post/create";
     const options = {
       method: "POST",
       headers: {
