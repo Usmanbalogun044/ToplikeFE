@@ -6,9 +6,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-  "start": "node server.cjs",
-    "heroku-postbuild": "npm install --include=dev && npm run build"
+  "preview": "vite preview",
+  "start": "node server.cjs"
   },
   "dependencies": {
   "express": "^4.19.2",
