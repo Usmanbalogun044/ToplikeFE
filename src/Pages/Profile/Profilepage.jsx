@@ -24,8 +24,8 @@ const Profilepage = () => {
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
-    profile_picture: null,
-    profile_picture_preview: "",
+    profilepix: null,
+    profilepix_preview: "",
   });
 
   // Fetch profile data with caching
@@ -44,8 +44,8 @@ const Profilepage = () => {
         setProfile(data);
         setFormData({
           username: data.user.username || "",
-          profile_picture: data.user.profile_picture || "",
-          profile_picture_preview: data.user.profile_picture || "",
+          profilepix: data.user.profilepix || "",
+          profilepix_preview: data.user.profilepix || "",
         });
         setInitialLoad(false);
         setLoading(false);
@@ -74,8 +74,8 @@ const Profilepage = () => {
       setProfile(data);
       setFormData({
         username: data.user.username || "",
-        profile_picture: null,
-        profile_picture_preview: data.user.profile_picture || "",
+        profilepix: null,
+        profilepix_preview: data.user.profilepix || "",
       });
       sessionStorage.setItem(cacheKey, JSON.stringify(data));
     } catch (err) {
@@ -95,8 +95,8 @@ const Profilepage = () => {
     if (file) {
       setFormData((prev) => ({
         ...prev,
-        profile_picture: file,
-        profile_picture_preview: URL.createObjectURL(file),
+        profilepix: file,
+        profilepix_preview: URL.createObjectURL(file),
       }));
     }
   };
@@ -113,8 +113,8 @@ const Profilepage = () => {
 
       const formPayload = new FormData();
       formPayload.append("username", formData.username);
-      if (formData.profile_picture) {
-        formPayload.append("profile_picture", formData.profile_picture);
+      if (formData.profilepix) {
+        formPayload.append("profilepix", formData.profilepix);
       }
 
       const response = await fetch("https://api.toplike.app/api/user/update", {
@@ -125,20 +125,23 @@ const Profilepage = () => {
         body: formPayload,
       });
 
+      const updatedData = await response.json();
+
       if (!response.ok) {
-        const errorData = await response.json();
         throw new Error(errorData.message || "Update failed");
       }
 
-      const updatedData = await response.json();
+      console.log("Updated data from API:", updatedData);
+
+
       setProfile((prev) => ({
         ...prev,
         user: {
           ...prev.user,
           username: updatedData.user.username,
-          profile_picture: updatedData.user.profile_picture
-            ? `${updatedData.user.profile_picture}?t=${Date.now()}`
-            : prev.user.profile_picture,
+          profilepix: updatedData.user.profilepix
+            ? `${updatedData.user.profilepix}?t=${Date.now()}`
+            : prev.user.profilepix,
         },
       }));
 
@@ -146,14 +149,18 @@ const Profilepage = () => {
       const cacheKey = isCurrentUser
         ? "currentUserProfile"
         : `userProfile-${id}`;
+
       const cachedData = JSON.parse(sessionStorage.getItem(cacheKey)) || {};
       cachedData.user = {
         ...cachedData.user,
         username: updatedData.user.username,
-        profile_picture:
-          updatedData.user.profile_picture || cachedData.user.profile_picture,
+        profilepix:
+          updatedData.user.profilepix ?`${updatedData.user.profilepix}?t=${Date.now()}` : cachedData.user.profilepix,
       };
+
       sessionStorage.setItem(cacheKey, JSON.stringify(cachedData));
+
+      await fetchProfile();
 
       setEditMode(false);
     } catch (err) {
@@ -174,7 +181,7 @@ const Profilepage = () => {
     navigate("/");
   };
 
-  // profile_picture display component
+  // profilepix display component
   const AvatarDisplay = ({ src, editable = false, size = "lg" }) => {
     const sizeClasses = size === "lg" ? "w-32 h-32" : "w-24 h-24";
 
@@ -303,13 +310,13 @@ const Profilepage = () => {
           {editMode ? (
             <AvatarDisplay
               src={
-                formData.profile_picture_preview || profile.user.profile_picture
+                formData.profilepix_preview || profile.user.profilepix
               }
               editable={true}
               size="lg"
             />
           ) : (
-            <AvatarDisplay src={profile.user.profile_picture} size="lg" />
+            <AvatarDisplay src={profile.user.profilepix} size="lg" />
           )}
 
           <div className="flex-1 w-full">
@@ -351,8 +358,8 @@ const Profilepage = () => {
                       setEditMode(false);
                       setFormData({
                         username: profile.user.username,
-                        profile_picture: null,
-                        profile_picture_preview: profile.user.profile_picture,
+                        profilepix: null,
+                        profilepix_preview: profile.user.profilepix,
                       });
                     }}
                     className="px-4 py-2 border border-gray-300 rounded-lg font-medium cursor-pointer hover:bg-gray-50 focus:outline-none 
