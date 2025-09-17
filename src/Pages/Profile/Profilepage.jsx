@@ -24,8 +24,8 @@ const Profilepage = () => {
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
-    profilepix: null,
-    profilepix_preview: "",
+    profile_picture: null,
+    profile_picture_preview: "",
   });
 
   // Fetch profile data with caching
@@ -44,8 +44,8 @@ const Profilepage = () => {
         setProfile(data);
         setFormData({
           username: data.user.username || "",
-          profilepix: data.user.profilepix || "",
-          profilepix_preview: data.user.profilepix || "",
+          profile_picture: data.user.profile_picture || "",
+          profile_picture_preview: data.user.profile_picture || "",
         });
         setInitialLoad(false);
         setLoading(false);
@@ -74,8 +74,8 @@ const Profilepage = () => {
       setProfile(data);
       setFormData({
         username: data.user.username || "",
-        profilepix: null,
-        profilepix_preview: data.user.profilepix || "",
+        profile_picture: null,
+        profile_picture_preview: data.user.profile_picture || "",
       });
       sessionStorage.setItem(cacheKey, JSON.stringify(data));
     } catch (err) {
@@ -95,8 +95,8 @@ const Profilepage = () => {
     if (file) {
       setFormData((prev) => ({
         ...prev,
-        profilepix: file,
-        profilepix_preview: URL.createObjectURL(file),
+        profile_picture: file,
+        profile_picture_preview: URL.createObjectURL(file),
       }));
     }
   };
@@ -113,11 +113,11 @@ const Profilepage = () => {
 
       const formPayload = new FormData();
       formPayload.append("username", formData.username);
-      if (formData.profilepix) {
-        formPayload.append("profilepix", formData.profilepix);
+      if (formData.profile_picture) {
+        formPayload.append("profile_picture", formData.profile_picture);
       }
 
-      const response = await fetch("https://api.toplike.app/api/user/update", {
+      const response = await fetch("https://api.toplike.app/api/user", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -139,9 +139,9 @@ const Profilepage = () => {
         user: {
           ...prev.user,
           username: updatedData.user.username,
-          profilepix: updatedData.user.profilepix
-            ? `${updatedData.user.profilepix}?t=${Date.now()}`
-            : prev.user.profilepix,
+          profile_picture: updatedData.user.profile_picture
+            ? `${updatedData.user.profile_picture}?t=${Date.now()}`
+            : prev.user.profile_picture,
         },
       }));
 
@@ -154,8 +154,8 @@ const Profilepage = () => {
       cachedData.user = {
         ...cachedData.user,
         username: updatedData.user.username,
-        profilepix:
-          updatedData.user.profilepix ?`${updatedData.user.profilepix}?t=${Date.now()}` : cachedData.user.profilepix,
+        profile_picture:
+          updatedData.user.profile_picture ?`${updatedData.user.profile_picture}?t=${Date.now()}` : cachedData.user.profile_picture,
       };
 
       sessionStorage.setItem(cacheKey, JSON.stringify(cachedData));
@@ -181,7 +181,7 @@ const Profilepage = () => {
     navigate("/");
   };
 
-  // profilepix display component
+  // profile_picture display component
   const AvatarDisplay = ({ src, editable = false, size = "lg" }) => {
     const sizeClasses = size === "lg" ? "w-32 h-32" : "w-24 h-24";
 
@@ -310,13 +310,13 @@ const Profilepage = () => {
           {editMode ? (
             <AvatarDisplay
               src={
-                formData.profilepix_preview || profile.user.profilepix
+                formData.profile_picture_preview || profile.user.profile_picture
               }
               editable={true}
               size="lg"
             />
           ) : (
-            <AvatarDisplay src={profile.user.profilepix} size="lg" />
+            <AvatarDisplay src={profile.user.profile_picture} size="lg" />
           )}
 
           <div className="flex-1 w-full">
@@ -358,8 +358,8 @@ const Profilepage = () => {
                       setEditMode(false);
                       setFormData({
                         username: profile.user.username,
-                        profilepix: null,
-                        profilepix_preview: profile.user.profilepix,
+                        profile_picture: null,
+                        profile_picture_preview: profile.user.profile_picture,
                       });
                     }}
                     className="px-4 py-2 border border-gray-300 rounded-lg font-medium cursor-pointer hover:bg-gray-50 focus:outline-none 
