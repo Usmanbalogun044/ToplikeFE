@@ -12,6 +12,7 @@ import {
   FiMail,
   FiUpload,
 } from "react-icons/fi";
+import { p } from "framer-motion/client";
 
 const Profilepage = () => {
   const { id } = useParams();
@@ -128,11 +129,15 @@ const Profilepage = () => {
       const updatedData = await response.json();
 
       if (!response.ok) {
-        throw new Error(errorData.message || "Update failed");
+        if (updatedData.errors) {
+          const firstError = Object.values(updatedData.errors).flat()[0];
+          throw new Error(firstError);
+        }
+
+        throw new Error(updatedData.message || "Update failed");
       }
 
       console.log("Updated data from API:", updatedData);
-
 
       setProfile((prev) => ({
         ...prev,
@@ -154,8 +159,9 @@ const Profilepage = () => {
       cachedData.user = {
         ...cachedData.user,
         username: updatedData.user.username,
-        profile_picture:
-          updatedData.user.profile_picture ?`${updatedData.user.profile_picture}?t=${Date.now()}` : cachedData.user.profile_picture,
+        profile_picture: updatedData.user.profile_picture
+          ? `${updatedData.user.profile_picture}?t=${Date.now()}`
+          : cachedData.user.profile_picture,
       };
 
       sessionStorage.setItem(cacheKey, JSON.stringify(cachedData));
@@ -336,11 +342,12 @@ const Profilepage = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, username: e.target.value })
                     }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+                    className="border border-gray-300 w-full px-4 py-2 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-purple-500"
                     required
                     minLength={3}
                     maxLength={30}
                   />
+                  {error && <p className="mt-1 text-sm text-red-600">{}</p>}
                 </div>
 
                 <div className="flex flex-wrap gap-3">
