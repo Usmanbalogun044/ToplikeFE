@@ -114,6 +114,7 @@ const Profilepage = () => {
 
       const formPayload = new FormData();
       formPayload.append("username", formData.username);
+      
       if (formData.profile_picture) {
         formPayload.append("profile_picture", formData.profile_picture);
       }
