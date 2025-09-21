@@ -134,7 +134,7 @@ const Home = () => {
           </div>
 
           {/* Activity Feed */}
-          <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+          <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-3">
             <div className="p-6 border-b border-gray-200">
               <h2 className="text-lg font-bold">Your Activity</h2>
             </div>

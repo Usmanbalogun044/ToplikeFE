@@ -9,6 +9,7 @@ const CreatepostPage = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [paymentInitiated, setPaymentInitiated] = useState(false);
+  const token = localStorage.getItem("token")
 
   // Check if user already posted
   useEffect(() => {
@@ -18,8 +19,7 @@ const CreatepostPage = () => {
         const options = {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
             Accept: "application/json",
           },
         };
