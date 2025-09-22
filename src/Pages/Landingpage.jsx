@@ -16,6 +16,8 @@ import {
 import { NavLink } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import webimage from "/Images/image1.jpg";
+import toplike from "/Images/toplike1.jpg";
 
 const Landingpage = () => {
   useEffect(() => {
@@ -87,7 +89,7 @@ const Landingpage = () => {
       category: "Fashion Design",
       testimonial:
         "Weekly Wins changed my life! I used the money to start my small business.",
-      image: "/winner1.jpg",
+      image: webimage,
     },
     {
       id: 2,
@@ -109,10 +111,11 @@ const Landingpage = () => {
 
   return (
     <>
-      <main className="font-sans bg-gray-50">
-        {/* Navigation */}
+      <header className="font-sans bg-gray-50 top-0">
+        {/* Navigation bar */}
+
         <nav
-          className={`fixed w-full z-50 transition-all duration-300 ${
+          className={`fixed w-full z-50 transition-all duration-500 ease-in-out ${
             scrolled ? "py-3 bg-white shadow-lg top-0" : "py-5 bg-white"
           }`}
         >
@@ -127,12 +130,12 @@ const Landingpage = () => {
               </a>
             </li>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex space-x-8 items-center">
+            {/* Desktop Nav */}
+            <div className="hidden md:flex space-x-8 items-center transition-all duration-300">
               <li>
                 <a
                   href="#how-it-works"
-                  className="font-semibold text-gray-800 hover:text-purple-600"
+                  className="font-semibold text-gray-800 hover:text-purple-600 transition-colors duration-300"
                   onClick={(e) => handleSmoothScroll(e, "how-it-works")}
                 >
                   How It Works
@@ -141,7 +144,7 @@ const Landingpage = () => {
               <li>
                 <a
                   href="#winners"
-                  className="font-semibold text-gray-800 hover:text-purple-600"
+                  className="font-semibold text-gray-800 hover:text-purple-600 transition-colors duration-300"
                   onClick={(e) => handleSmoothScroll(e, "winners")}
                 >
                   Past Winners
@@ -150,7 +153,7 @@ const Landingpage = () => {
               <li>
                 <a
                   href="#faq"
-                  className="font-semibold text-gray-800 hover:text-purple-600"
+                  className="font-semibold text-gray-800 hover:text-purple-600 transition-colors duration-300"
                   onClick={(e) => handleSmoothScroll(e, "faq")}
                 >
                   FAQ
@@ -159,7 +162,7 @@ const Landingpage = () => {
               <li>
                 <NavLink
                   to="/login"
-                  className="font-semibold text-gray-800 hover:text-purple-600"
+                  className="font-semibold text-gray-800 hover:text-purple-600 transition-colors duration-300"
                 >
                   Login
                 </NavLink>
@@ -167,7 +170,7 @@ const Landingpage = () => {
               <li>
                 <NavLink
                   to="/signup"
-                  className="bg-purple-700 text-white px-6 py-2 rounded-full font-semibold transition hover:bg-purple-800"
+                  className="bg-purple-700 text-white px-6 py-2 rounded-full font-semibold transition-all duration-300 hover:scale-105 hover:bg-purple-800"
                 >
                   Sign Up
                 </NavLink>
@@ -176,7 +179,7 @@ const Landingpage = () => {
 
             {/* Mobile Menu Button */}
             <button
-              className="md:hidden text-gray-800 focus:outline-none"
+              className="md:hidden text-gray-800 focus:outline-none transition-transform duration-300"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle menu"
             >
@@ -186,7 +189,7 @@ const Landingpage = () => {
 
           {/* Mobile Menu */}
           {mobileMenuOpen && (
-            <div className="md:hidden bg-white shadow-xl">
+            <div className="md:hidden bg-white shadow-xl transition-all duration-500 ease-in-out transform origin-top">
               <ul className="container mx-auto px-4 py-4 flex flex-col space-y-4">
                 <li className="font-semibold py-2 hover:text-purple-600 transition">
                   <a
@@ -226,13 +229,15 @@ const Landingpage = () => {
             </div>
           )}
         </nav>
+      </header>
 
+      <main className="font-sans bg-gray-50">
         {/* Hero Section */}
         <section
           id="hero"
           className="pt-36 flex flex-col px-4 py-20 bg-gradient-to-r from-gray-50 to-purple-50 lg:flex-row lg:px-20"
         >
-          <div className="mb-10 lg:mb-0 lg:w-1/2 lg:pr-10" data-aos="fade-left">
+          <div className="mb-10 lg:mb-0 lg:w-1/2 lg:pr-10">
             <h1 className="text-4xl font-bold text-gray-900 mb-6 md:text-5xl">
               Show Your Talent. Win{" "}
               <span className="text-purple-600">₦100,000</span> Weekly!
@@ -242,8 +247,8 @@ const Landingpage = () => {
               Post your best content, get votes, and win cash prizes!
             </p>
             <button
-              className="bg-purple-600 text-white font-semibold py-3 px-8 rounded-full text-lg cursor-pointer transition transform
-             hover:scale-105 hover:bg-purple-700"
+              className="bg-purple-600 text-white font-semibold py-3 px-8 rounded-full text-lg cursor-pointer transition-transform
+             hover:scale-105 hover:bg-purple-700 hover:shadow-lg"
             >
               Join Now for ₦500
             </button>
@@ -261,31 +266,26 @@ const Landingpage = () => {
               <div className="flex items-center">
                 <FiDollarSign className="mr-3" size={18} />
                 <span>
-                  Current prize pool: <strong className="ml-1">₦300,000</strong>
+                  Current prize pool: <strong className="ml-1">₦200,000</strong>
                 </span>
               </div>
             </div>
           </div>
-          <div className="lg:w-1/2 relative" data-aos="fade-right">
-            <div className="bg-white p-2 rounded-2xl shadow-2xl transform rotate-1">
-              <div className="bg-gray-200 rounded-xl h-64 lg:h-96 flex items-center justify-center overflow-hidden">
-                {/* Placeholder for hero image/video */}
-                <div className="text-center p-6">
-                  <FiAward className="mx-auto text-purple-600 mb-4" size={48} />
-                  <p className="text-gray-500">Featured winning submission</p>
-                </div>
-              </div>
+          <figure className="lg:w-1/2 relative">
+            <div className="bg-white p-2 rounded-2xl shadow-2xl h-64 lg:h-96 transform rotate-1">
+              <img
+                src={toplike}
+                className="w-full h-full object-cover rounded-xl object-[center_40%]"
+                alt="TopLike Contest Banner"
+              />
             </div>
 
             {/* Floating stats */}
-            <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-lg">
-              <div className="flex items-center">
-                <FiHeart className="text-red-500 mr-2" />
-                <span className="font-bold">1,200+</span>
-                <span className="ml-1">Weekly Votes</span>
-              </div>
-            </div>
-          </div>
+            <figcaption className="absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-lg flex items-center">
+              <FiHeart className="text-red-500 mr-2" />
+              <span className="font-bold">1,200+</span> Weekly Votes
+            </figcaption>
+          </figure>
         </section>
 
         {/* How It Works */}
@@ -353,8 +353,12 @@ const Landingpage = () => {
                 className="flex-shrink-0 w-80 bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition"
                 data-aos="zoom-in"
               >
-                <div className="h-48 bg-gray-300 flex items-center justify-center">
-                  <span className="text-gray-500">Winner Photo</span>
+                <div className="h-52 bg-gray-300 flex items-center justify-center">
+                  <img
+                    src={webimage}
+                    className="h-52 w-full object-cover"
+                    alt="Winner Photo"
+                  />
                 </div>
                 <div className="p-6">
                   <h3 className="font-bold text-lg mb-1">{winner.username}</h3>
@@ -369,11 +373,7 @@ const Landingpage = () => {
         </section>
 
         {/* CTA Section */}
-        <section
-          id="faq"
-          className="px-4 py-20 lg:px-20 bg-white text-center"
-          data-aos="fade-up"
-        >
+        <section id="faq" className="px-4 py-20 lg:px-20 bg-white text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-800">
             Ready to Showcase Your Talent?
           </h2>
@@ -382,97 +382,89 @@ const Landingpage = () => {
           </p>
           <NavLink
             to="/signup"
-            className="inline-block text-white bg-purple-700 font-semibold py-3 px-10 rounded-full text-lg transition transform hover:scale-105 hover:bg-purple-800 shadowe-md"
+            className="inline-block text-white bg-purple-700 font-semibold py-3 px-10 rounded-full text-lg transition transform shadow-md hover:scale-105 hover:bg-purple-800"
           >
             Sign Up Now
           </NavLink>
         </section>
-
-        <footer className="bg-gray-900 text-gray-200 px-6 py-10 lg:px-20">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Branding */}
-            <div>
-              <h2 className="text-3xl font-bold text-purple-700 mb-4">
-                TopLike
-              </h2>
-              <p className="text-sm text-gray-400">
-                Bringing top-tier experiences to your fingertips.
-              </p>
-            </div>
-
-            {/* Navigation Links */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Links</h3>
-              <ul className="space-y-2">
-                <li>
-                  <a href="#" className="hover:text-purple-300 transition">
-                    Terms & Conditions
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-purple-300 transition">
-                    Privacy Policy
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-purple-300 transition">
-                    Contact Us
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            {/* Social Media */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
-              <div className="flex space-x-4 text-xl">
-                <a href="#" className="hover:text-purple-300 transition">
-                  <FaFacebookF />
-                </a>
-                <a href="#" className="hover:text-purple-300 transition">
-                  <FaTwitter />
-                </a>
-                <a href="#" className="hover:text-purple-300 transition">
-                  <FaInstagram />
-                </a>
-                <a href="#" className="hover:text-purple-300 transition">
-                  <FaLinkedinIn />
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* Footer Bottom */}
-          <div
-            className="mt-10 pt-6 border-t border-gray-700 flex flex-col space-y-4 justify-between text-sm text-gray-500 md:flex-row
-           md:space-y-0"
-          >
-            <p className="">
-              © {new Date().getFullYear()} TopLike. All rights reserved.
-            </p>
-            <div className="flex items-center space-x-5">
-              <a
-                className="text-gray-500 hover:text-purple-300"
-                href="coming-soon"
-              >
-                Privacy policy
-              </a>
-              <a
-                className="text-gray-500 hover:text-purple-300"
-                href="coming-soon"
-              >
-                Terms of Service
-              </a>
-              <a
-                className="text-gray-500 hover:text-purple-300"
-                href="coming-soon"
-              >
-                Cookies
-              </a>
-            </div>
-          </div>
-        </footer>
       </main>
+
+      <footer className="bg-gray-900 text-gray-200 px-6 py-10 lg:px-20">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Branding */}
+          <div>
+            <h2 className="text-3xl font-bold text-purple-700 mb-4">TopLike</h2>
+            <p className="text-sm text-gray-400">
+              Bringing top-tier experiences to your fingertips.
+            </p>
+          </div>
+
+          {/* Navigation Links */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Links</h3>
+            <ul className="space-y-2">
+              <li>
+                <a href="#" className="hover:text-purple-300 transition">
+                  Terms & Conditions
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-purple-300 transition">
+                  Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-purple-300 transition">
+                  Contact Us
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Social Media */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
+            <div className="flex space-x-4 text-xl">
+              <a href="#" className="hover:text-purple-300 transition">
+                <FaFacebookF />
+              </a>
+              <a href="#" className="hover:text-purple-300 transition">
+                <FaTwitter />
+              </a>
+              <a href="#" className="hover:text-purple-300 transition">
+                <FaInstagram />
+              </a>
+              <a href="#" className="hover:text-purple-300 transition">
+                <FaLinkedinIn />
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer Bottom */}
+        <div
+          className="mt-10 pt-6 border-t border-gray-700 flex flex-col space-y-4 justify-between text-sm text-gray-500 md:flex-row
+           md:space-y-0"
+        >
+          <p className="text-center">
+            © {new Date().getFullYear()} TopLike. All rights reserved.
+          </p>
+          <div className="flex items-center justify-between space-x-5">
+            <a
+              className="text-gray-500 hover:text-purple-300"
+              href="coming-soon"
+            >
+              Terms of Service
+            </a>
+            <a
+              className="text-gray-500 hover:text-purple-300"
+              href="coming-soon"
+            >
+              Cookies
+            </a>
+          </div>
+        </div>
+      </footer>
     </>
   );
 };
