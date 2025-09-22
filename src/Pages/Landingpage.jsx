@@ -348,26 +348,25 @@ const Landingpage = () => {
 
           <div className="flex justify-evenly overflow-x-auto pb-6 space-x-6 scrollbar-hide">
             {winners.map((winner) => (
-              <div
+              <figure
                 key={winner.id}
                 className="flex-shrink-0 w-80 bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition"
                 data-aos="zoom-in"
               >
-                <div className="h-52 bg-gray-300 flex items-center justify-center">
-                  <img
-                    src={webimage}
-                    className="h-52 w-full object-cover"
-                    alt="Winner Photo"
-                  />
-                </div>
-                <div className="p-6">
+                <img
+                  src={webimage}
+                  className="h-64 w-full object-center"
+                  alt="TopLike COntest Winner"
+                />
+
+                <figcaption className="p-6">
                   <h3 className="font-bold text-lg mb-1">{winner.username}</h3>
                   <p className="text-purple-600 font-semibold mb-2">
                     {winner.prize} - {winner.category}
                   </p>
                   <p className="text-gray-600 italic">"{winner.testimonial}"</p>
-                </div>
-              </div>
+                </figcaption>
+              </figure>
             ))}
           </div>
         </section>
