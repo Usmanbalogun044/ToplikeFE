@@ -16,7 +16,8 @@ import {
 import { NavLink } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import webimage from "/Images/image1.jpg";
+import officeMan from "/Images/office-man.png";
+import officeWoman from "/Images/office-woman.png";
 import toplike from "/Images/toplike1.jpg";
 
 const Landingpage = () => {
@@ -89,7 +90,7 @@ const Landingpage = () => {
       category: "Fashion Design",
       testimonial:
         "Weekly Wins changed my life! I used the money to start my small business.",
-      image: webimage,
+      image: officeMan,
     },
     {
       id: 2,
@@ -97,7 +98,7 @@ const Landingpage = () => {
       prize: "₦75,000",
       category: "Original Song",
       testimonial: "Winning gave me the confidence to pursue music full-time!",
-      image: "/winner2.jpg",
+      image: officeWoman,
     },
     {
       id: 3,
@@ -105,7 +106,7 @@ const Landingpage = () => {
       prize: "₦50,000",
       category: "Dance Video",
       testimonial: "This platform helped me get discovered by a talent agency!",
-      image: "/winner3.jpg",
+      image: officeMan,
     },
   ];
 
@@ -351,11 +352,10 @@ const Landingpage = () => {
               <figure
                 key={winner.id}
                 className="flex-shrink-0 w-80 bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition"
-                data-aos="zoom-in"
               >
                 <img
-                  src={webimage}
-                  className="h-64 w-full object-center"
+                  src={winner.image}
+                  className="h-64 p-2 w-full object-cover object-[Top_center]"
                   alt="TopLike COntest Winner"
                 />
 
