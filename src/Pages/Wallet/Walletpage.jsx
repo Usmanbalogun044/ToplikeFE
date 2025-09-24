@@ -16,6 +16,7 @@ const Walletpage = () => {
   });
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [hasBankAccount, setHasBankAccount] = useState(null);
+  const [retrying, setRetrying] = useState(false);
   const navigate = useNavigate();
 
   const fetchWithRetry = async (url, options, retries = 3, delay = 1000) => {
@@ -68,6 +69,10 @@ const Walletpage = () => {
 
   const fetchBankAccount = useCallback(async () => {
     const url = "https://api.toplike.app/api/bankaccount";
+
+    if (retrying) return;
+    setRetrying(true);
+
     try {
       const data = await fetchWithRetry(url, {
         headers: {
@@ -100,9 +105,10 @@ const Walletpage = () => {
       }
       return null;
     } finally {
+      setRetrying(false);
       setLoading((prev) => ({ ...prev, bankAccount: false }));
     }
-  }, []);
+  }, [retrying]);
 
   // Initial data fetch
   useEffect(() => {
@@ -134,7 +140,7 @@ const Walletpage = () => {
 
     window.addEventListener("online", handleOnline);
     return () => window.removeEventListener("online", handleOnline);
-  }, [fetchBalance, fetchBankAccount, errors]);
+  }, [fetchBalance, fetchBankAccount]);
 
   // Handle bank account redirect
   useEffect(() => {
