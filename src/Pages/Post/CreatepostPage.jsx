@@ -62,7 +62,7 @@ const CreatepostPage = () => {
     try {
       // Initialize Paystack payment
       const handler = window.PaystackPop.setup({
-        key: "YOUR_PAYSTACK_PUBLIC_KEY",
+        key: "PAYSTACK_PUBLIC_KEY",
         email: "user@example.com",
         amount: 50000, // ₦500 in kobo
         currency: "NGN",

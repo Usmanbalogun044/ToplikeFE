@@ -203,7 +203,7 @@ const Createmodal = ({ onSubmit, loading, paymentInitiated }) => {
               {paymentInitiated ? "Submitting..." : "Processing..."}
             </>
           ) : (
-            <>Pay ₦500 & Submit</>
+            <> Post </>
           )}
         </button>
 

@@ -18,7 +18,7 @@ const Sidebar = ({
   };
 
   return (
-    <div
+    <aside
       className={`hidden md:flex h-screen fixed top-0 left-0 bg-white shadow-sm flex-col transition-all duration-300 ease-in-out overflow-hidden ${
         sidebarCollapsed ? "w-20" : "w-64"
       }`}
@@ -120,7 +120,7 @@ const Sidebar = ({
           )}
         </Link>
       </div>
-    </div>
+    </aside>
   );
 };
 
