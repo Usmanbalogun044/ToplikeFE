@@ -10,35 +10,32 @@ const BankModal = ({ onAddAccount, onClose }) => {
   const [loadingBanks, setLoadingBanks] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     fetchBanks();
   }, []);
 
   const fetchBanks = async () => {
-    
-    // Fetchs the list of banks from the API
-    const url = "https://api.toplike.app/api/banks/list";
-    const option = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    };
-
     try {
       setLoadingBanks(true);
-      const response = await fetch(url, option);
+      // Fetchs the list of banks from the API
+      const response = await fetch("https://api.toplike.app/api/banks/list", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to fetch banks");
+        throw new Error("Failed to fetch banks");
       }
 
       const result = await response.json();
-      setBanks(result.data || result.banks?.data || []);
+
+      const banksData = result.data || result.banks || result.banks?.data || [];
+      setBanks(banksData);
+      
     } catch (err) {
       setError(err.message);
     } finally {

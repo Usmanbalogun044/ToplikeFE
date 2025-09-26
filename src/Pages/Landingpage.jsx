@@ -272,21 +272,21 @@ const Landingpage = () => {
               </div>
             </div>
           </div>
-          <figure className="lg:w-1/2 relative">
-            <div className="bg-white p-2 rounded-2xl shadow-2xl h-64 lg:h-96 transform rotate-1">
+          <div className="lg:w-1/2 relative">
+            <div className="bg-white p-2 rounded-2xl shadow-2xl h-96 md:h-[650px] lg:h-96 transform rotate-1">
               <img
                 src={toplike}
                 className="w-full h-full object-cover rounded-xl object-[center_40%]"
-                alt="TopLike Contest Banner"
+                alt="TopLike Platform showing user interface and contest features"
               />
             </div>
 
             {/* Floating stats */}
-            <figcaption className="absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-lg flex items-center">
+            <div className="absolute -bottom-5 -left-6 bg-white p-4 rounded-xl shadow-lg flex items-center lg:bottom-15 xl:bottom-5">
               <FiHeart className="text-red-500 mr-2" />
               <span className="font-bold">1,200+</span> Weekly Votes
-            </figcaption>
-          </figure>
+            </div>
+          </div>
         </section>
 
         {/* How It Works */}

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FaNairaSign } from "react-icons/fa6";
 
-const WeeklyChallengeModal = ({ onSuccess, onClose}) => {
+const WeeklyChallengeModal = ({ onSuccess, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const token = localStorage.getItem("token");
@@ -18,9 +18,6 @@ const WeeklyChallengeModal = ({ onSuccess, onClose}) => {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          message: "Subscribe to weekly challenge",
-        }),
       });
 
       const data = await response.json();

@@ -11,7 +11,7 @@ const Createmodal = ({ onSubmit, loading, paymentInitiated }) => {
     mediaPreview: null,
   });
 
-  const [errors, setErrors] = useState({}); 
+  const [errors, setErrors] = useState({});
 
   const handleMediaChange = (e) => {
     const file = e.target.files[0];
@@ -42,7 +42,33 @@ const Createmodal = ({ onSubmit, loading, paymentInitiated }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData);
+
+    const newErrors = {};
+
+    if (!formData.caption) {
+      newErrors.caption = "Caption is required";
+    }
+
+    if (!formData.media) {
+      newErrors.media = "Media file is required";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    
+    const submitData = new FormData();
+    submitData.append("caption", formData.caption);
+    submitData.append("post_type", formData.post_type);
+    submitData.append("media", formData.media);
+
+    if (formData.music) {
+      submitData.append("music", formData.music);
+    }
+
+    onSubmit(submitData);
   };
 
   return (
