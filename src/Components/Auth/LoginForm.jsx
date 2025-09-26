@@ -26,10 +26,9 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Clear previous errors
     setError("");
 
-    // Basic validation
+    // Validation
     if (!formData.email || !formData.password) {
       setError("Please fill in all fields");
       return;
@@ -58,43 +57,77 @@ const LoginForm = () => {
       };
 
       const response = await fetch(loginUrl, options);
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          setError("Invalid email or password");
+          return;
+        }
+        if (response.status === 422) {
+          setError("Validation error. Please check your input.");
+          return;
+        }
+        if (response.status >= 500) {
+          setError("Server error. Please try again later.");
+          return;
+        }
+      }
+
       const data = await response.json();
 
       if (!response.ok) {
-        // Handle different error cases
         if (data.errors) {
-          // If the API returns field-specific errors
           setError(Object.values(data.errors).join(", "));
         } else if (data.message) {
-          // If the API returns a general message
           setError(data.message);
         } else {
-          setError("Login failed. Please try again.");
+          setError(` Login failed (Status: ${response.status})`);
         }
         return;
       }
 
-      // Successful login
-      localStorage.setItem("token", data.token);
-
-      // Store remember me preference
-      if (formData.remember) {
-        localStorage.setItem("rememberMe", "true");
-      } else {
-        localStorage.removeItem("rememberMe");
+      if (!data.token) {
+        setError("Login successful but no token received");
+        return;
       }
 
-      navigate("/dashboard");
+      localStorage.setItem("token", data.token);
+
+      if (data.user) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+      }
+
+      if (formData.remember) {
+        localStorage.setItem("rememberMe", "true");
+        localStorage.setItem(
+          "token_expiry",
+          Date.now() + 30 * 24 * 60 * 60 * 1000
+        ); // 30 days
+      } else {
+        localStorage.removeItem("rememberMe");
+        localStorage.removeItem("token_expiry");
+      }
+
+      console.log("Login Successful...");
+
+      navigate("/dashboard", { replace: true });
     } catch (err) {
       console.error("Login error:", err);
-      setError("Network error. Please check your connection and try again.");
+
+      if (err.name === "TypeError" && err.message.includes("fetch")) {
+        setError("Network error. Please check your internet connection.");
+      } else if (err.name === "SyntaxError") {
+        setError("Invalid response from server. Please try again.");
+      } else {
+        setError("An unexpected error occurred. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
   };
   return (
     <>
-    {/* Login Form */}
+      {/* Login Form */}
       <form className="space-y-6" onSubmit={handleSubmit}>
         {error && (
           <div className="mb-4 bg-red-50 border-l-4 border-red-500 p-4 text-red-700 text-sm rounded">

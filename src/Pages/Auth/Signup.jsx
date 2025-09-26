@@ -18,9 +18,49 @@ const Signup = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
+  const validateApiRequirements = (data) => {
+    const newErrors = {};
+
+    if (!data.name || data.name.trim() === "") {
+      newErrors.name = "Full name is required";
+    } else if (data.name.length > 255) {
+      newErrors.name = "Name must be less than 255 characters";
+    }
+
+    if (!data.username || data.username.trim() === "") {
+      newErrors.username = "Username is required";
+    } else if (data.username.length > 255) {
+      newErrors.username = "Username must be less than 255 characters";
+    }
+
+    if (!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+      newErrors.email = "Valid email is required";
+    }
+
+    if (!data.password) {
+      newErrors.password = "Password is required";
+    } else if (data.password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
+    }
+
+    if (data.password !== data.password_confirmation) {
+      newErrors.password_confirmation = "Passwords do not match";
+    }
+
+    if (!acceptedTerms) {
+      newErrors.terms = "You must accept the terms and conditions";
+    }
+
+    return newErrors;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
   const isFormValid = () => {
@@ -28,7 +68,9 @@ const Signup = () => {
       formData.email &&
       /^\S+@\S+\.\S+$/.test(formData.email) &&
       formData.name &&
+      formData.name.length <= 255 &&
       formData.username &&
+      formData.username.length <= 255 &&
       formData.password &&
       formData.password.length >= 8 &&
       formData.password_confirmation &&
@@ -40,33 +82,52 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const apiErrors = validateApiRequirements(formData);
+    if (Object.keys(apiErrors).length > 0) {
+      setErrors(apiErrors);
+      return;
+    }
+
     if (!isFormValid()) return;
 
     setIsSubmitting(true);
+    setErrors({});
+
     try {
-      const response = await fetch(
-        "https://api.toplike.app/api/signup",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch("https://api.toplike.app/api/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name.substring(0, 255),
+          username: formData.username.substring(0, 255),
+          email: formData.email,
+          password: formData.password,
+          password_confirmation: formData.password_confirmation,
+        }),
+      });
 
       const data = await response.json();
 
       if (response.ok) {
         setStep(2);
       } else {
-        setErrors({
-          submit: data.errors || "Signup failed. Please try again.",
-        });
+        // ✅ IMPROVED ERROR HANDLING
+        if (data.errors) {
+          setErrors(data.errors);
+        } else if (data.message) {
+          setErrors({ submit: data.message });
+        } else {
+          setErrors({ submit: "Signup failed. Please try again." });
+        }
       }
     } catch (error) {
-      setErrors({ submit: "An error occurred. Please try again later." });
+      setErrors({
+        submit:
+          "Network error occurred. Please check your connection try again later.",
+      });
     } finally {
       setIsSubmitting(false);
     }
