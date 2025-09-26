@@ -43,6 +43,12 @@ const Createmodal = ({ onSubmit, loading, paymentInitiated }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    if (typeof onSubmit !== "function") {
+      console.error("onSubmit is not a function");
+      setErrors({ submit: "Form submission is not available." });
+      return;
+    }
+
     const newErrors = {};
 
     if (!formData.caption) {
@@ -58,7 +64,6 @@ const Createmodal = ({ onSubmit, loading, paymentInitiated }) => {
       return;
     }
 
-    
     const submitData = new FormData();
     submitData.append("caption", formData.caption);
     submitData.append("post_type", formData.post_type);
