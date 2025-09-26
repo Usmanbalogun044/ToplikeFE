@@ -278,6 +278,8 @@ const Landingpage = () => {
                 src={toplike}
                 className="w-full h-full object-cover rounded-xl object-[center_40%]"
                 alt="TopLike Platform showing user interface and contest features"
+                loading="eager"
+                decoding="sync"
               />
             </div>
 

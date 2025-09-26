@@ -107,15 +107,11 @@ const Profilepage = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      if (!token) {
-        navigate("/login");
-        return;
-      }
 
       const formPayload = new FormData();
       formPayload.append("username", formData.username);
-      
-      if (formData.profile_picture) {
+
+      if (formData.profile_picture instanceof File) {
         formPayload.append("profile_picture", formData.profile_picture);
       }
 
@@ -199,15 +195,17 @@ const Profilepage = () => {
         {src ? (
           <img
             src={src}
-            alt="Profile"
+            alt={`Profile picture of ${profile.user.username}`}
             className="w-full h-full rounded-full object-cover"
+            loading="eager"
+            decoding="async"
             onError={(e) => {
               e.target.onerror = null;
               e.target.src = "";
             }}
           />
         ) : (
-          <FiUser className="text-purple-400 w-16 h-16" />
+          <FiUser className="text-purple-400 w-16 h-16" aria-label="Default profile icon" />
         )}
 
         {editable && (
@@ -456,9 +454,12 @@ const Profilepage = () => {
                     ) : (
                       <img
                         src={post.mediaUrl}
-                        alt={post.title}
+                        alt={`${post.title} by ${profile.user.username}`}
                         className="w-full h-full object-cover"
                         loading="lazy"
+                        decoding="async"
+                        width="300" 
+                        height="300"
                       />
                     )}
                   </div>
