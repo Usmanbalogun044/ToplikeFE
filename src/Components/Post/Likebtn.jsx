@@ -87,43 +87,48 @@ const Likebtn = ({
   };
 
   return (
-    <div className="flex items-center space-x-1">
-      <button
-        onClick={handleClick}
-        disabled={loading || disabled}
-        className={`flex items-center space-x-1 transition-all duration-200 transform hover:scale-110 active:scale-95 ${
-          liked
-            ? "text-red-500"
-            : disabled
-            ? "text-gray-300 cursor-not-allowed"
-            : "text-gray-500 hover:text-red-400"
-        } ${loading ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
-        title={disabled ? "Join challenge to like" : liked ? "Unlike" : "Like"}
-      >
-        {liked ? (
-          <FaHeart className="text-red-500 animate-pulse" size={18} />
-        ) : (
-          <FiHeart size={18} />
-        )}
-        <span
-          className={`font-medium ${
+    <>
+      {" "}
+      <div className="flex items-center space-x-1">
+        <button
+          onClick={handleClick}
+          disabled={loading || disabled}
+          className={`flex items-center space-x-1 transition-all duration-200 transform hover:scale-110 active:scale-95 ${
             liked
               ? "text-red-500"
               : disabled
-              ? "text-gray-300"
-              : "text-gray-600"
-          }`}
+              ? "text-gray-300 cursor-not-allowed"
+              : "text-gray-500 hover:text-red-400"
+          } ${loading ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+          title={
+            disabled ? "Join challenge to like" : liked ? "Unlike" : "Like"
+          }
         >
-          {likes}
-        </span>
-      </button>
+          {liked ? (
+            <FaHeart className="text-red-500 animate-pulse" size={18} />
+          ) : (
+            <FiHeart size={18} />
+          )}
+          <span
+            className={`font-medium ${
+              liked
+                ? "text-red-500"
+                : disabled
+                ? "text-gray-300"
+                : "text-gray-600"
+            }`}
+          >
+            {likes}
+          </span>
+        </button>
 
-      {error && (
-        <div className="absolute mt-8 px-2 py-1 bg-red-100 text-red-600 text-xs rounded opacity-0 animate-fade-in">
-          {error}
-        </div>
-      )}
-    </div>
+        {error && (
+          <div className="absolute mt-8 px-2 py-1 bg-red-100 text-red-600 text-xs rounded opacity-0 animate-fade-in">
+            {error}
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

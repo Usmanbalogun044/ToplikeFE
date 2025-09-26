@@ -38,12 +38,10 @@ const Home = () => {
 
       if (response.ok) {
         const data = await response.json();
-        // Assuming the API returns subscription status in user data
         setHasSubscribed(data.user?.has_subscribed || false);
       }
     } catch (error) {
       console.error("Subscription check error:", error);
-      // If we can't check, assume not subscribed to show overlay
       setHasSubscribed(false);
     }
   };
@@ -142,12 +140,13 @@ const Home = () => {
           {hasSubscribed && (
             <div className="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-200">
               <div className="flex items-center space-x-4">
-                <div className="h-12 w-12 rounded-full bg-gradient-to-r from-purple-400 to-pink-500 flex items-center justify-center text-white font-bold text-lg">
+                <div className="h-12 w-12 rounded-full bg-gradient-to-r from-purple-400 to-pink-500 flex items-center justify-center text-lg text-white font-bold">
                   U
                 </div>
                 <Link
                   to="/posts/create"
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 rounded-full px-6 py-3 text-gray-600 cursor-pointer transition duration-200"
+                  className="flex-1 px-6 py-3 text-gray-600 bg-gray-100 rounded-full cursor-pointer hover:bg-gray-200 transition 
+                  duration-200"
                 >
                   What's on your mind?
                 </Link>

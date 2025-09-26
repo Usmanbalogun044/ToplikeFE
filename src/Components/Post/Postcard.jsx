@@ -25,12 +25,14 @@ const Postcard = ({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow duration-200 relative">
+    <div
+      className="bg-white border border-gray-200 rounded-xl shadow-sm transition-shadow duration-200 relative overflow-hidden hover:shadow-md"
+    >
       {/* Post Header */}
       <div className="p-4 border-b border-gray-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center text-white font-semibold">
+            <div className="h-10 w-10 rounded-full text-white bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center font-semibold">
               {post.user?.username?.charAt(0)?.toUpperCase() || "U"}
             </div>
             <div>
