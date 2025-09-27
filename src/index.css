@@ -7,3 +7,15 @@
 * {
     font-family: 'Poppins', sans-serif;
 }
+
+/* Hide native scrollbars (we provide custom MagicScrollBar) */
+html, body {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge legacy */
+}
+html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; }
+
+/* Optional: if accessibility requires, add a class to re-enable */
+html.show-native-scrollbar, html.show-native-scrollbar body { scrollbar-width: thin; }
+html.show-native-scrollbar::-webkit-scrollbar { display: block; width: 10px; }
+html.show-native-scrollbar::-webkit-scrollbar-thumb { background: linear-gradient(180deg,#a855f7,#7e22ce); border-radius: 8px; }

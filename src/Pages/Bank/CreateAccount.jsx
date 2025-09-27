@@ -46,10 +46,13 @@ const CreateAccount = () => {
   };
 
   const handleAddAccount = async (newAccount) => {
-
-    const url = "https://api.toplike.app/api/bankaccount/create";
+    // If a bank account already exists, backend supports PUT /bankaccount to update; otherwise POST /bankaccount/create
+    const hasExisting = accounts && accounts.length > 0;
+    const url = hasExisting
+      ? "https://api.toplike.app/api/bankaccount"
+      : "https://api.toplike.app/api/bankaccount/create";
     const option = {
-      method: "POST",
+      method: hasExisting ? "PUT" : "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -67,11 +70,16 @@ const CreateAccount = () => {
       const response = await fetch(url, option);
 
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || "Failed to add account");
+        let msg = "Failed to save account";
+        try {
+          const data = await response.json();
+          msg = data?.message || data?.error || msg;
+        } catch (_) {}
+        throw new Error(msg);
       }
 
-      fetchAccounts();
+      // Refresh list to reflect latest account and resolved account_name
+      await fetchAccounts();
       setShowAddModal(false);
     } catch (err) {
       setError(err.message);

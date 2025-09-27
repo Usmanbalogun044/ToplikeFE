@@ -1,4 +1,6 @@
 import { FiHeart, FiMessageSquare, FiShare2 } from "react-icons/fi";
+import { useState } from "react";
+import Likebtn from "./Likebtn";
 
 const Postcard = ({ post, onLikeSuccess }) => {
   const [showLikes, setShowLikes] = useState(false);
@@ -49,7 +51,7 @@ const Postcard = ({ post, onLikeSuccess }) => {
 
           {/* Post Actions */}
           <div className="flex justify-between items-center border-t pt-3">
-            <LikeButton
+            <Likebtn
               postId={post.id}
               initialLikes={post.likes}
               isLiked={post.isLiked}
