@@ -19,3 +19,19 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; }
 html.show-native-scrollbar, html.show-native-scrollbar body { scrollbar-width: thin; }
 html.show-native-scrollbar::-webkit-scrollbar { display: block; width: 10px; }
 html.show-native-scrollbar::-webkit-scrollbar-thumb { background: linear-gradient(180deg,#a855f7,#7e22ce); border-radius: 8px; }
+
+/* --- Lightweight animation replacements (removed framer-motion) --- */
+@keyframes fadeSlideLeft {0%{opacity:0;transform:translateX(-42px);}100%{opacity:1;transform:translateX(0);}}
+@keyframes fadeSlideRight {0%{opacity:0;transform:translateX(42px);}100%{opacity:1;transform:translateX(0);}}
+@keyframes slowWobble {0%{transform:rotate(0deg);}25%{transform:rotate(3deg);}50%{transform:rotate(-3deg);}75%{transform:rotate(2deg);}100%{transform:rotate(0deg);}}
+.animate-fade-slide-left{animation:fadeSlideLeft .75s cubic-bezier(.22,1,.36,1) both;}
+.animate-fade-slide-right{animation:fadeSlideRight .75s cubic-bezier(.22,1,.36,1) .08s both;}
+.hero-rotate-slow{animation:slowWobble 6s ease-in-out infinite;}
+@keyframes fadeSlideUp {0%{opacity:0;transform:translateY(32px);}100%{opacity:1;transform:translateY(0);}}
+.animate-fade-slide-up{animation:fadeSlideUp .7s cubic-bezier(.22,1,.36,1) both;}
+/* Accordion */
+ .accordion-content{max-height:0;opacity:0;transition:max-height .35s ease,opacity .35s ease;}
+ .accordion-open .accordion-content{max-height:400px;opacity:1;}
+/* Progress bar animation */
+@keyframes growBar {0%{width:0}100%{width:100%;}}
+.animate-progress-bar{animation:growBar 2.8s ease-in-out both;}

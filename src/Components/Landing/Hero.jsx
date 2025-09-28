@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
 import { FiAward, FiArrowRight, FiHeart, FiClock, FiDollarSign } from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
 
@@ -48,11 +47,8 @@ const Hero = ({ stats, timeLeft, onScrollHow }) => {
         <div className="absolute inset-0 pointer-events-none dynamic-light mix-blend-overlay" />
       </div>
       <div ref={sceneRef} className="relative z-10 px-5 md:px-14 xl:px-24 flex flex-col-reverse md:flex-row items-center gap-12">
-        <motion.div
-          className="md:w-1/2"
-          initial={{ opacity: 0, x: -40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
+        <div
+          className="md:w-1/2 animate-fade-slide-left"
         >
           <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur rounded-full px-4 py-2 text-sm text-purple-200 border border-white/10 mb-5">
             <FiAward className="text-purple-300" />
@@ -87,29 +83,24 @@ const Hero = ({ stats, timeLeft, onScrollHow }) => {
             <div className="flex items-center gap-2"><FiClock /> Next cycle ends in {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m {timeLeft.seconds}s</div>
             <div className="flex items-center gap-2"><FiDollarSign /> Cash rewards paid to your TopLike wallet.</div>
           </div>
-        </motion.div>
-        <motion.div
-          className="md:w-1/2 relative"
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.1 }}
+        </div>
+        <div
+          className="md:w-1/2 relative animate-fade-slide-right"
         >
           <div className="relative rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/10 backdrop-blur-xl bg-white/5 border border-white/10 h-[380px] md:h-[480px] flex items-center justify-center">
             <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-fuchsia-500/10 to-transparent mix-blend-overlay" />
             <div className="text-center px-10">
-              <motion.div
-                animate={{ rotate: [0, 3, -3, 0] }}
-                transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-                className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500 to-fuchsia-600 shadow-lg shadow-purple-900/40 mb-8"
+              <div
+                className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500 to-fuchsia-600 shadow-lg shadow-purple-900/40 mb-8 hero-rotate-slow"
               >
                 <FiHeart className="text-white" size={38} />
-              </motion.div>
+              </div>
               <h3 className="text-white font-semibold text-2xl mb-4 tracking-tight">One Post. One Shot. Every Week.</h3>
               <p className="text-purple-100 text-sm leading-relaxed max-w-sm mx-auto">Focus on quality over spam. Craft your best submission – photo, video, reel, design or highlight clip – and let the people decide.</p>
             </div>
             <div className="absolute -bottom-4 -right-4 w-40 h-40 bg-gradient-to-tr from-fuchsia-500/30 to-purple-500/0 blur-2xl pointer-events-none" />
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

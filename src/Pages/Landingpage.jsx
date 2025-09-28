@@ -1,30 +1,26 @@
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect, Suspense } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
-import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
-import AOS from "aos";
-import "aos/dist/aos.css";
 
 // Modular landing components
-import Hero from "../Components/Landing/Hero";
-import ValueGrid from "../Components/Landing/ValueGrid";
-import Categories from "../Components/Landing/Categories";
-import HowItWorks from "../Components/Landing/HowItWorks";
-import JourneyTimeline from "../Components/Landing/JourneyTimeline";
-import CreatorJourney from "../Components/Landing/CreatorJourney";
-import Testimonials from "../Components/Landing/Testimonials";
-import FAQSection from "../Components/Landing/FAQSection";
-import Footer from "../Components/Landing/Footer";
-import AnimatedCanvas from "../Components/Landing/AnimatedCanvas";
+import Hero from "../Components/Landing/Hero"; // keep hero eager for LCP
 import { statTargets } from "../Components/Landing/landingConfig";
 import toplikeLogo from "../assets/toplike.png";
-import MagicScrollBar from "../Components/Landing/MagicScrollBar";
+import LazyMount from "../Components/Util/LazyMount";
+
+// Code-split lower priority sections
+const ValueGrid = React.lazy(() => import("../Components/Landing/ValueGrid"));
+const Categories = React.lazy(() => import("../Components/Landing/Categories"));
+const HowItWorks = React.lazy(() => import("../Components/Landing/HowItWorks"));
+const JourneyTimeline = React.lazy(() => import("../Components/Landing/JourneyTimeline"));
+const CreatorJourney = React.lazy(() => import("../Components/Landing/CreatorJourney"));
+const Testimonials = React.lazy(() => import("../Components/Landing/Testimonials"));
+const FAQSection = React.lazy(() => import("../Components/Landing/FAQSection"));
+const Footer = React.lazy(() => import("../Components/Landing/Footer"));
+// Removed MagicScrollBar for ultra lightweight build
 
 const Landingpage = () => {
-  useEffect(() => {
-    AOS.init({ duration: 1000 });
-  }, []);
+  // NOTE: Removed AOS to cut ~20KB and redundant animation overhead (Framer + CSS handle animations)
 
   // Weekly cycle countdown ending Sunday 23:59:59 UTC
   const calcTimeLeft = () => {
@@ -95,8 +91,8 @@ const Landingpage = () => {
   return (
     <>
   <main className="font-sans relative overflow-hidden bg-transparent text-purple-100">
-        <AnimatedCanvas />
-  <MagicScrollBar />
+        {/* Ultra-light: static gradient background only */}
+        <div className="pointer-events-none fixed inset-0 -z-20 bg-[radial-gradient(circle_at_30%_20%,#2a0b4d_0%,#090114_55%,#05010c_85%)]" aria-hidden="true" />
         {/* Navigation */}
         <nav
           className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
@@ -221,21 +217,31 @@ const Landingpage = () => {
             }}
         />
 
-        <ValueGrid />
-
-        <Categories />
-
-        <HowItWorks />
-
-        <JourneyTimeline />
-
-  <CreatorJourney />
-
-        <Testimonials />
-
-        <FAQSection />
-
-        <Footer />
+        {/* Lazy mount the rest only when scrolled near them to reduce initial JS evaluation */}
+        <Suspense fallback={null}>
+          <LazyMount><ValueGrid /></LazyMount>
+        </Suspense>
+        <Suspense fallback={null}>
+          <LazyMount><Categories /></LazyMount>
+        </Suspense>
+        <Suspense fallback={null}>
+          <LazyMount><HowItWorks /></LazyMount>
+        </Suspense>
+        <Suspense fallback={null}>
+          <LazyMount><JourneyTimeline /></LazyMount>
+        </Suspense>
+        <Suspense fallback={null}>
+          <LazyMount timeout={400}><CreatorJourney /></LazyMount>
+        </Suspense>
+        <Suspense fallback={null}>
+          <LazyMount><Testimonials /></LazyMount>
+        </Suspense>
+        <Suspense fallback={null}>
+          <LazyMount><FAQSection /></LazyMount>
+        </Suspense>
+        <Suspense fallback={null}>
+          <LazyMount><Footer /></LazyMount>
+        </Suspense>
       </main>
     </>
   );
