@@ -1,3 +1,4 @@
+import { FiHeart, FiMessageSquare, FiShare2 } from "react-icons/fi";
 import { useState } from "react";
 import Likebtn from "./Likebtn";
 
@@ -8,6 +9,7 @@ const Postcard = ({
   isInteractive = true,
 }) => {
   const [showFullCaption, setShowFullCaption] = useState(false);
+  const [showLikes, setShowLikes] = useState(false); // ✅ added missing state
 
   const caption = post.caption || "";
   const shouldTruncate = caption.length > 150;
@@ -17,17 +19,12 @@ const Postcard = ({
       : caption;
 
   const handleLikeClick = (likeData) => {
-    if (!isInteractive) {
-      // If not subscribed, the overlay will handle this
-      return;
-    }
+    if (!isInteractive) return; // overlay will handle this
     onLikeSuccess?.(likeData);
   };
 
   return (
-    <div
-      className="bg-white border border-gray-200 rounded-xl shadow-sm transition-shadow duration-200 relative overflow-hidden hover:shadow-md"
-    >
+    <div className="bg-white border border-gray-200 rounded-xl shadow-sm transition-shadow duration-200 relative overflow-hidden hover:shadow-md">
       {/* Post Header */}
       <div className="p-4 border-b border-gray-200">
         <div className="flex items-center justify-between">
@@ -40,7 +37,7 @@ const Postcard = ({
                 @{post.user?.username || "anonymous"}
               </h3>
               <p className="text-sm text-gray-500">
-                {formatTimeAgo(post.created_at)}
+                {post.created_at ? formatTimeAgo(post.created_at) : ""}
               </p>
             </div>
           </div>
@@ -70,7 +67,7 @@ const Postcard = ({
           {post.media_type === "video" ? (
             <video
               src={post.media_url}
-              controls={isInteractive} // Disable controls if not subscribed
+              controls={isInteractive}
               className="w-full h-auto max-h-96 object-contain"
               poster={post.thumbnail_url}
             >
@@ -87,41 +84,34 @@ const Postcard = ({
         </div>
       )}
 
-      {/* Actions */}
-      <div className="p-4 border-t border-gray-200">
-        <div className="flex items-center justify-between">
-          <Likebtn
-            postId={post.id}
-            initialLikes={post.likes_count || 0}
-            initialIsLiked={post.is_liked || false}
-            onSuccess={handleLikeClick}
-            disabled={!isInteractive} // Disable like button if not subscribed
-          />
+      {/* Post Actions */}
+      <div className="flex justify-between items-center border-t pt-3 px-4 pb-3">
+        <Likebtn
+          postId={post.id}
+          initialLikes={post.likes}
+          initialIsLiked={post.isLiked} // ✅ corrected prop name
+          onSuccess={() => onLikeSuccess(post.id)} // ✅ removed undefined fetchLikes
+        />
 
-          <button
-            className={`flex items-center space-x-2 transition ${
-              isInteractive
-                ? "text-gray-500 hover:text-gray-700 cursor-pointer"
-                : "text-gray-300 cursor-not-allowed"
-            }`}
-            disabled={!isInteractive}
+        <button
+          className="flex items-center text-gray-500 hover:text-purple-600 space-x-1"
+          onClick={() => setShowLikes(!showLikes)}
+        >
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
           >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-              />
-            </svg>
-            <span>{post.comments_count || 0}</span>
-          </button>
-        </div>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+            />
+          </svg>
+          <span>{post.comments_count || 0}</span>
+        </button>
       </div>
     </div>
   );

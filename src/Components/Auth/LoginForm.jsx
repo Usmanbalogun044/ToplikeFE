@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
 
 const LoginForm = () => {
@@ -20,7 +19,7 @@ const LoginForm = () => {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
-    if (error) setError(""); // clear error message on input change
+    if (error) setError("");
   };
 
   const handleSubmit = async (e) => {
@@ -28,24 +27,19 @@ const LoginForm = () => {
 
     setError("");
 
-    // Validation
     if (!formData.email || !formData.password) {
       setError("Please fill in all fields");
       return;
     }
-
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       setError("Please enter a valid email");
       return;
     }
-
     try {
       setLoading(true);
-
-      const loginUrl = "https://api.toplike.app/api/signin";
-
-      const options = {
+      const response = await fetch("https://api.toplike.app/api/signin", {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
@@ -54,217 +48,151 @@ const LoginForm = () => {
           email: formData.email,
           password: formData.password,
         }),
-      };
-
-      const response = await fetch(loginUrl, options);
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          setError("Invalid email or password");
-          return;
-        }
-        if (response.status === 422) {
-          setError("Validation error. Please check your input.");
-          return;
-        }
-        if (response.status >= 500) {
-          setError("Server error. Please try again later.");
-          return;
-        }
-      }
-
+      });
       const data = await response.json();
-
       if (!response.ok) {
-        if (data.errors) {
-          setError(Object.values(data.errors).join(", "));
-        } else if (data.message) {
-          setError(data.message);
-        } else {
-          setError(` Login failed (Status: ${response.status})`);
-        }
+        if (data.errors) setError(Object.values(data.errors).join(", "));
+        else if (data.message) setError(data.message);
+        else setError("Login failed. Please try again.");
         return;
       }
-
-      if (!data.token) {
-        setError("Login successful but no token received");
-        return;
-      }
-
       localStorage.setItem("token", data.token);
-
-      if (data.user) {
-        localStorage.setItem("user", JSON.stringify(data.user));
-      }
-
-      if (formData.remember) {
-        localStorage.setItem("rememberMe", "true");
-        localStorage.setItem(
-          "token_expiry",
-          Date.now() + 30 * 24 * 60 * 60 * 1000
-        ); // 30 days
-      } else {
-        localStorage.removeItem("rememberMe");
-        localStorage.removeItem("token_expiry");
-      }
-
-      console.log("Login Successful...");
-
-      navigate("/dashboard", { replace: true });
+      if (formData.remember) localStorage.setItem("rememberMe", "true");
+      else localStorage.removeItem("rememberMe");
+      navigate("/dashboard");
     } catch (err) {
       console.error("Login error:", err);
-
-      if (err.name === "TypeError" && err.message.includes("fetch")) {
-        setError("Network error. Please check your internet connection.");
-      } else if (err.name === "SyntaxError") {
-        setError("Invalid response from server. Please try again.");
-      } else {
-        setError("An unexpected error occurred. Please try again.");
-      }
+      setError("Network error. Please try again.");
     } finally {
       setLoading(false);
     }
   };
+
   return (
-    <>
-      {/* Login Form */}
-      <form className="space-y-6" onSubmit={handleSubmit}>
-        {error && (
-          <div className="mb-4 bg-red-50 border-l-4 border-red-500 p-4 text-red-700 text-sm rounded">
-            {error}
-          </div>
-        )}
-        <div>
+    <form className="space-y-7" onSubmit={handleSubmit}>
+      {error && (
+        <div className="bg-red-50 border border-red-400/40 rounded-xl p-4 text-red-700 text-sm font-medium">
+          {error}
+        </div>
+      )}
+      <div className="space-y-5">
+        <div className="relative">
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-xs font-semibold uppercase tracking-wide text-purple-800 mb-1"
           >
-            Email address
+            Email
           </label>
-          <div className="mt-1 relative rounded-md shadow-sm">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FiMail className="h-5 w-5 text-gray-400" />
-            </div>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              required
-              value={formData.email}
-              onChange={handleChange}
-              className="py-2 pl-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500"
-            />
-          </div>
+          <FiMail className="input-icon" />
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            required
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="you@example.com"
+            className="input-field"
+          />
         </div>
-
-        <div>
+        <div className="relative">
           <label
             htmlFor="password"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-xs font-semibold uppercase tracking-wide text-purple-800 mb-1"
           >
             Password
           </label>
-          <div className="mt-1 relative rounded-md shadow-sm">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FiLock className="h-5 w-5 text-gray-400" />
-            </div>
-            <input
-              id="password"
-              name="password"
-              type={showPassword ? "text" : "password"}
-              autoComplete="current-password"
-              required
-              value={formData.password}
-              onChange={handleChange}
-              className="py-2 pl-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 
-              pr-10"
-            />
-            <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="text-gray-400 hover:text-gray-500 cursor-pointer"
-              >
-                {showPassword ? (
-                  <FiEyeOff className="h-5 w-5" />
-                ) : (
-                  <FiEye className="h-5 w-5" />
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <input
-              id="remember-me"
-              name="remember"
-              type="checkbox"
-              checked={formData.remember}
-              onChange={handleChange}
-              className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded cursor-pointer"
-            />
-            <label
-              htmlFor="remember-me"
-              className="ml-2 block text-sm text-gray-700"
-            >
-              Remember me
-            </label>
-          </div>
-
-          <div className="text-sm">
-            <Link
-              to="/forgot-password"
-              className="font-medium text-purple-600 hover:text-purple-500"
-            >
-              Forgot your password?
-            </Link>
-          </div>
-        </div>
-
-        <div>
-          {/* Sign in Button */}
+          <FiLock className="input-icon" />
+          <input
+            id="password"
+            name="password"
+            type={showPassword ? "text" : "password"}
+            autoComplete="current-password"
+            required
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="••••••••"
+            className="input-field pr-12"
+          />
           <button
-            type="submit"
-            disabled={loading}
-            className={`w-full flex justify-center py-3 px-4 border border-transparent cursor-pointer rounded-md shadow-sm text-sm font-medium
-             text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 ${
-               loading ? "opacity-70 cursor-not-allowed" : ""
-             }`}
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="password-toggle-btn"
+            aria-label={showPassword ? "Hide password" : "Show password"}
           >
-            {loading ? (
-              <>
-                <svg
-                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-                Signing in...
-              </>
+            {showPassword ? (
+              <FiEyeOff className="h-5 w-5" />
             ) : (
-              "Sign in"
+              <FiEye className="h-5 w-5" />
             )}
           </button>
         </div>
-      </form>
-    </>
+      </div>
+      <div className="flex items-center justify-between">
+        <label className="flex items-center gap-2 cursor-pointer select-none">
+          <input
+            id="remember-me"
+            name="remember"
+            type="checkbox"
+            checked={formData.remember}
+            onChange={handleChange}
+            className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-purple-300 rounded"
+          />
+          <span className="text-xs font-medium text-purple-900">
+            Remember me
+          </span>
+        </label>
+        <div className="text-xs font-semibold">
+          <Link to="/forgot-password" className="link-soft">
+            Forgot password?
+          </Link>
+        </div>
+      </div>
+      <div>
+        <button
+          type="submit"
+          disabled={loading}
+          className={`btn-brand ${
+            loading ? "opacity-70 pointer-events-none" : ""
+          }`}
+        >
+          {loading ? (
+            <>
+              <svg
+                className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              Signing in...
+            </>
+          ) : (
+            "Sign In"
+          )}
+        </button>
+      </div>
+      <div className="text-center text-xs font-medium text-purple-900/70">
+        Need an account?{" "}
+        <Link to="/signup" className="link-soft">
+          Create one
+        </Link>
+      </div>
+    </form>
   );
 };
 

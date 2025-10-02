@@ -17,6 +17,17 @@ const BankModal = ({ onAddAccount, onClose }) => {
   }, []);
 
   const fetchBanks = async () => {
+    // Fetch the list of banks from the API
+    const url = "https://api.toplike.app/api/banks/list";
+    const option = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    };
+
     try {
       setLoadingBanks(true);
       // Fetchs the list of banks from the API
@@ -33,9 +44,9 @@ const BankModal = ({ onAddAccount, onClose }) => {
 
       const result = await response.json();
 
-      const banksData = result.data || result.banks || result.banks?.data || [];
-      setBanks(banksData);
-      
+      // Backend returns: { message, banks: { status, message, data: [...] } }
+      const list = Array.isArray(result?.banks?.data) ? result.banks.data : [];
+      setBanks(list);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -45,13 +56,23 @@ const BankModal = ({ onAddAccount, onClose }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === "accountNumber") {
+      // Keep only digits and limit to 10 characters as per backend validation
+      const digitsOnly = value.replace(/\D/g, "").slice(0, 10);
+      setFormData((prev) => ({ ...prev, accountNumber: digitsOnly }));
+      return;
+    }
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-  //banks.data.name wo i dey go sleep
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.bankCode || !formData.accountNumber) {
       setError("Please select bank and enter account number");
+      return;
+    }
+
+    if (formData.accountNumber.length !== 10) {
+      setError("Account number must be exactly 10 digits");
       return;
     }
 
@@ -121,6 +142,9 @@ const BankModal = ({ onAddAccount, onClose }) => {
                 onChange={handleChange}
                 className="pl-10 w-full p-3 border border-gray-300 rounded-lg"
                 placeholder="1234567890"
+                maxLength={10}
+                inputMode="numeric"
+                pattern="\\d{10}"
                 required
               />
             </div>
