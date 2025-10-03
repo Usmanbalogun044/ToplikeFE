@@ -1,21 +1,32 @@
 import React, { useState, useEffect, Suspense } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
-import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import {
+  FaFacebookF,
+  FaTwitter,
+  FaInstagram,
+  FaLinkedinIn,
+} from "react-icons/fa";
 
 // Modular landing components
 import Hero from "../Components/Landing/Hero"; // keep hero eager for LCP
 import { statTargets } from "../Components/Landing/landingConfig";
-import toplikeLogo from "../assets/toplike.png";
+import toplikeLogo from "/Images/toplike.png";
 import LazyMount from "../Components/Util/LazyMount";
 
 // Code-split lower priority sections
 const ValueGrid = React.lazy(() => import("../Components/Landing/ValueGrid"));
 const Categories = React.lazy(() => import("../Components/Landing/Categories"));
 const HowItWorks = React.lazy(() => import("../Components/Landing/HowItWorks"));
-const JourneyTimeline = React.lazy(() => import("../Components/Landing/JourneyTimeline"));
-const CreatorJourney = React.lazy(() => import("../Components/Landing/CreatorJourney"));
-const Testimonials = React.lazy(() => import("../Components/Landing/Testimonials"));
+const JourneyTimeline = React.lazy(() =>
+  import("../Components/Landing/JourneyTimeline")
+);
+const CreatorJourney = React.lazy(() =>
+  import("../Components/Landing/CreatorJourney")
+);
+const Testimonials = React.lazy(() =>
+  import("../Components/Landing/Testimonials")
+);
 const FAQSection = React.lazy(() => import("../Components/Landing/FAQSection"));
 const Footer = React.lazy(() => import("../Components/Landing/Footer"));
 
@@ -69,7 +80,11 @@ const Landingpage = () => {
   };
 
   // Stats animation
-  const [stats, setStats] = useState({ creators: 0, payouts: 0, weeklyReach: 0 });
+  const [stats, setStats] = useState({
+    creators: 0,
+    payouts: 0,
+    weeklyReach: 0,
+  });
   useEffect(() => {
     const duration = 1800;
     const start = performance.now();
@@ -110,11 +125,11 @@ const Landingpage = () => {
               onClick={(e) => handleSmoothScroll(e, "hero")}
               className="group relative flex items-center gap-3 focus:outline-none"
             >
-              <div className="relative w-11 h-11 rounded-2xl bg-[#140626]/70 backdrop-blur-sm border border-purple-500/30 shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_6px_18px_-6px_rgba(150,60,255,0.55)] overflow-hidden flex items-center justify-center">
+              <div className="relative w-11 h-11 rounded-2xl flex items-center bg-[#140626]/70 backdrop-blur-sm border border-purple-500/30 overflow-hidden justify-center shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_6px_18px_-6px_rgba(150,60,255,0.55)]">
                 <img
                   src={toplikeLogo}
                   alt="TopLike"
-                  className="w-9 h-9 object-contain drop-shadow-[0_2px_6px_rgba(255,120,255,0.45)] group-hover:scale-105 transition-transform"
+                  className="w-7 h-7 object-contain drop-shadow-[0_2px_6px_rgba(255,120,255,0.45)] group-hover:scale-105 transition-transform"
                   loading="lazy"
                 />
                 <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-60 transition bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.5),transparent_65%)]" />
@@ -155,7 +170,8 @@ const Landingpage = () => {
               </NavLink>
               <NavLink
                 to="/signup"
-                className="relative inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide text-white bg-gradient-to-br from-fuchsia-600 via-purple-600 to-fuchsia-500 shadow-[0_0_0_1px_rgba(255,255,255,0.07),0_10px_30px_-10px_rgba(155,65,255,0.7)] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.07),0_6px_18px_-6px_rgba(160,70,255,0.9)] transition group overflow-hidden"
+                className="relative inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm overflow-hidden transition font-semibold tracking-wide text-white bg-gradient-to-br from-fuchsia-600 via-purple-600 to-fuchsia-500 group shadow-[0_0_0_1px_rgba(
+                255,255,255,0.07),0_10px_30px_-10px_rgba(155,65,255,0.7)] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.07),0_6px_18px_-6px_rgba(160,70,255,0.9)]"
               >
                 <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.4),transparent_60%)]" />
                 <span>Create Account</span>
@@ -165,7 +181,7 @@ const Landingpage = () => {
 
             {/* Mobile Menu Trigger */}
             <button
-              className="md:hidden relative w-11 h-11 flex items-center justify-center rounded-xl bg-gradient-to-br from-fuchsia-600/30 to-purple-700/30 border border-purple-500/30 text-fuchsia-200 shadow-inner shadow-fuchsia-500/20 backdrop-blur-sm active:scale-95 transition"
+              className="md:hidden relative w-11 h-11 flex items-center justify-center rounded-xl bg-gradient-to-br from-fuchsia-600/30 to-purple-700/30 border border-purple-500/30 text-fuchsia-200 transition shadow-inner shadow-fuchsia-500/20 backdrop-blur-sm active:scale-95"
               onClick={() => setMobileMenuOpen((o) => !o)}
               aria-label="Toggle navigation menu"
               aria-expanded={mobileMenuOpen}
@@ -181,7 +197,7 @@ const Landingpage = () => {
                   : "opacity-0 pointer-events-none scale-y-50"
               } `}
             >
-              <div className="mx-4 mt-3 p-5 rounded-2xl backdrop-blur-xl bg-[#1a062c]/85 border border-purple-600/30 shadow-[0_0_0_1px_rgba(255,255,255,0.05),0_14px_40px_-10px_rgba(140,55,255,0.55)] space-y-4">
+              <div className="mx-4 mt-3 p-5 rounded-2xl backdrop-blur-xl bg-[#1a062c]/85 border border-purple-600/30 space-y-4 shadow-[0_0_0_1px_rgba(255,255,255,0.05),0_14px_40px_-10px_rgba(140,55,255,0.55)]">
                 {[
                   { href: "how-it-works", label: "How It Works" },
                   { href: "winners", label: "Past Winners" },
@@ -190,10 +206,11 @@ const Landingpage = () => {
                   <button
                     key={l.href}
                     onClick={(e) => handleSmoothScroll(e, l.href)}
-                    className="w-full text-left text-sm font-semibold tracking-wide text-purple-100/85 hover:text-fuchsia-200 flex items-center justify-between py-2 group"
+                    className="w-full text-left text-sm font-semibold tracking-wide text-purple-100/85 flex items-center justify-between py-2 group hover:text-fuchsia-200"
                   >
                     <span>{l.label}</span>
-                    <span className="h-[2px] w-6 bg-gradient-to-r from-fuchsia-500 to-purple-500 rounded-full scale-x-0 group-hover:scale-x-100 origin-left transition" />
+                    <span className="h-[2px] w-6 bg-gradient-to-r from-fuchsia-500 to-purple-500 rounded-full scale-x-0 origin-left 
+                    transition group-hover:scale-x-100" />
                   </button>
                 ))}
                 <div className="pt-2 flex flex-col gap-3">
@@ -207,7 +224,7 @@ const Landingpage = () => {
                   <NavLink
                     to="/signup"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="text-center text-sm font-semibold px-5 py-3 rounded-xl bg-gradient-to-r from-fuchsia-600 via-purple-600 to-fuchsia-500 text-white shadow-[0_6px_22px_-8px_rgba(158,65,255,0.7)] hover:shadow-[0_4px_16px_-6px_rgba(165,70,255,0.85)] active:scale-[0.97] transition"
+                    className="text-center text-sm font-semibold px-5 py-3 rounded-xl bg-gradient-to-r from-fuchsia-600 via-purple-600 to-fuchsia-500 text-white shadow-[0_6px_22px_-8px_rgba(158,65,255,0.7)] active:scale-[0.97] transition hover:shadow-[0_4px_16px_-6px_rgba(165,70,255,0.85)]"
                   >
                     Create Account
                   </NavLink>
@@ -216,7 +233,7 @@ const Landingpage = () => {
             </div>
 
             {/* Scroll Progress Bar */}
-            <div className="absolute left-0 bottom-0 h-[2px] w-full bg-purple-900/40 overflow-hidden rounded-full">
+            <div className="absolute left-0 -bottom-2 h-[2px] w-full bg-purple-900/40 overflow-hidden rounded-full">
               <div
                 style={{ width: `${scrollProgress}%` }}
                 className="h-full bg-gradient-to-r from-fuchsia-500 via-purple-500 to-fuchsia-300 transition-[width] duration-150"
@@ -283,81 +300,6 @@ const Landingpage = () => {
           </LazyMount>
         </Suspense>
       </main>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-200 px-6 py-10 lg:px-20">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Branding */}
-          <div>
-            <h2 className="text-3xl font-bold text-purple-700 mb-4">TopLike</h2>
-            <p className="text-sm text-gray-400">
-              Bringing top-tier experiences to your fingertips.
-            </p>
-          </div>
-
-          {/* Navigation Links */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Links</h3>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className="hover:text-purple-300 transition">
-                  Terms & Conditions
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-purple-300 transition">
-                  Privacy Policy
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-purple-300 transition">
-                  Contact Us
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Social Media */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
-            <div className="flex space-x-4 text-xl">
-              <a href="#" className="hover:text-purple-300 transition">
-                <FaFacebookF />
-              </a>
-              <a href="#" className="hover:text-purple-300 transition">
-                <FaTwitter />
-              </a>
-              <a href="#" className="hover:text-purple-300 transition">
-                <FaInstagram />
-              </a>
-              <a href="#" className="hover:text-purple-300 transition">
-                <FaLinkedinIn />
-              </a>
-            </div>
-          </div>
-        </div>
-
-        {/* Footer Bottom */}
-        <div className="mt-10 pt-6 border-t border-gray-700 flex flex-col space-y-4 justify-between text-sm text-gray-500 md:flex-row md:space-y-0">
-          <p className="text-center">
-            © {new Date().getFullYear()} TopLike. All rights reserved.
-          </p>
-          <div className="flex items-center justify-between space-x-5">
-            <a
-              className="text-gray-500 hover:text-purple-300"
-              href="coming-soon"
-            >
-              Terms of Service
-            </a>
-            <a
-              className="text-gray-500 hover:text-purple-300"
-              href="coming-soon"
-            >
-              Cookies
-            </a>
-          </div>
-        </div>
-      </footer>
     </>
   );
 };

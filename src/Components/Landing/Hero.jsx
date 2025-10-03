@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { FiAward, FiArrowRight, FiHeart, FiClock, FiDollarSign } from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
 
@@ -46,7 +46,7 @@ const Hero = ({ stats, timeLeft, onScrollHow }) => {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_30%,rgba(255,255,255,0.06),transparent_60%),radial-gradient(circle_at_80%_65%,rgba(167,60,255,0.1),transparent_65%)]" />
         <div className="absolute inset-0 pointer-events-none dynamic-light mix-blend-overlay" />
       </div>
-      <div ref={sceneRef} className="relative z-10 px-5 md:px-14 xl:px-24 flex flex-col-reverse md:flex-row items-center gap-12">
+      <div ref={sceneRef} className="relative z-10 px-4 pt-2 pb-10 md:px-14 xl:px-24 flex flex-col-reverse md:flex-row items-center gap-12">
         <div
           className="md:w-1/2 animate-fade-slide-left"
         >
@@ -54,7 +54,7 @@ const Hero = ({ stats, timeLeft, onScrollHow }) => {
             <FiAward className="text-purple-300" />
             <span>Weekly Creative Showcase</span>
           </div>
-          <h1 className="text-4xl md:text-5xl xl:text-6xl font-extrabold tracking-tight leading-tight bg-gradient-to-br from-white via-purple-200 to-purple-400 bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-5xl xl:text-6xl font-extrabold tracking-tight leading-tight bg-clip-text text-transparent bg-gradient-to-br from-white via-purple-200 to-purple-400">
             Share Your Best. Get Noticed. Earn Real Rewards.
           </h1>
           <p className="mt-6 text-base md:text-lg text-purple-100 leading-relaxed max-w-xl">
