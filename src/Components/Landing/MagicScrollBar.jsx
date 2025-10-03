@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 /* MagicScrollBar: A vertical right-edge reactive bar showing scroll progress + pulsing magical energy nodes.
    - Pure React (no Three.js) for lightweight UI overlay.

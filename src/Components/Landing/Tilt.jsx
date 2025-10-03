@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 
 // Lightweight 3D tilt wrapper (no re-renders on mouse move, uses direct style mutation)
 const Tilt = ({ children, className = '', glare = true, max = 14, scale = 1.04 }) => {

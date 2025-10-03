@@ -1,27 +1,54 @@
-import React from 'react';
+
 
 const testimonials = [
-  { name: 'Ada · Fashion', quote: 'One entry. 6 days later I had verifiable traction + cash reward. It forces craft.', avatar: 'A' },
-  { name: 'Tunde · Comedy', quote: 'No follower flex culture here. Just authentic reactions. I improved faster.', avatar: 'T' },
-  { name: 'Mina · Tech', quote: 'This replaced random posting for me. Structured, measurable, addictive in a good way.', avatar: 'M' }
+  {
+    name: "Ada · Fashion",
+    quote:
+      "One entry. 6 days later I had verifiable traction + cash reward. It forces craft.",
+    avatar: "A",
+  },
+  {
+    name: "Tunde · Comedy",
+    quote:
+      "No follower flex culture here. Just authentic reactions. I improved faster.",
+    avatar: "T",
+  },
+  {
+    name: "Mina · Tech",
+    quote:
+      "This replaced random posting for me. Structured, measurable, addictive in a good way.",
+    avatar: "M",
+  },
 ];
 
 const Testimonials = () => (
   <section id="testimonials" className="px-6 py-24 relative">
     <div className="max-w-6xl mx-auto">
-  <h2 className="animate-fade-slide-up text-3xl md:text-4xl font-bold text-center mb-4 bg-gradient-to-b from-white to-purple-200/70 bg-clip-text text-transparent">Creator Signals</h2>
-  <p className="text-center text-purple-200/80 max-w-xl mx-auto mb-14">Early users explain how one-post-per-week discipline reshaped output.</p>
+      <h2 className="animate-fade-slide-up text-3xl md:text-4xl font-bold text-center mb-4 bg-gradient-to-b from-white to-purple-200/70 bg-clip-text text-transparent">
+        Creator Signals
+      </h2>
+      <p className="text-center text-purple-200/80 max-w-xl mx-auto mb-14">
+        Early users explain how one-post-per-week discipline reshaped output.
+      </p>
 
       <div className="grid md:grid-cols-3 gap-8">
-        {testimonials.map((t,i)=>(
-          <div key={t.name} style={{animationDelay:`${i*70}ms`}} className="animate-fade-slide-up relative rounded-2xl p-8 flex flex-col bg-gradient-to-br from-[#1d0b32]/85 to-[#2b0f4d]/80 backdrop-blur-xl border border-fuchsia-500/10 shadow-lg shadow-black/40 hover:shadow-fuchsia-600/30 transition">
+        {testimonials.map((t, i) => (
+          <div
+            key={t.name}
+            style={{ animationDelay: `${i * 70}ms` }}
+            className="animate-fade-slide-up relative rounded-2xl p-8 flex flex-col bg-gradient-to-br from-[#1d0b32]/85 to-[#2b0f4d]/80 backdrop-blur-xl border border-fuchsia-500/10 shadow-lg shadow-black/40 hover:shadow-fuchsia-600/30 transition"
+          >
             <div className="flex items-center gap-3 mb-5 relative z-10">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-fuchsia-500 text-white flex items-center justify-center font-semibold text-lg ring-1 ring-white/20">{t.avatar}</div>
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-fuchsia-500 text-white flex items-center text-lg justify-center font-semibold ring-1 ring-white/20">
+                {t.avatar}
+              </div>
               <div>
                 <p className="font-semibold text-purple-50 text-sm">{t.name}</p>
               </div>
             </div>
-            <p className="text-purple-200/80 text-sm leading-relaxed flex-1 relative z-10">“{t.quote}”</p>
+            <p className="text-purple-200/80 text-sm leading-relaxed flex-1 relative z-10">
+              “{t.quote}”
+            </p>
           </div>
         ))}
       </div>
