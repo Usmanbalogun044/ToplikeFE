@@ -83,18 +83,20 @@ const LoginForm = () => {
           >
             Email
           </label>
-          <FiMail className="input-icon" />
-          <input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            required
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="you@example.com"
-            className="input-field"
-          />
+          <div className="relative">
+            <FiMail className="absolute left-3 -translate-y-1/2 top-1/2 w-4 h-4 text-[#8b5cf6] pointer-events-none" />
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="mail@mailer.com"
+              className="input-field"
+            />
+          </div>
         </div>
         <div className="relative">
           <label
@@ -103,30 +105,32 @@ const LoginForm = () => {
           >
             Password
           </label>
-          <FiLock className="input-icon" />
-          <input
-            id="password"
-            name="password"
-            type={showPassword ? "text" : "password"}
-            autoComplete="current-password"
-            required
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="••••••••"
-            className="input-field pr-12"
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="password-toggle-btn"
-            aria-label={showPassword ? "Hide password" : "Show password"}
-          >
-            {showPassword ? (
-              <FiEyeOff className="h-5 w-5" />
-            ) : (
-              <FiEye className="h-5 w-5" />
-            )}
-          </button>
+          <div className="relative">
+            <FiLock className="absolute left-3 -translate-y-1/2 top-1/2 w-4 h-4 text-[#8b5cf6] pointer-events-none" />
+            <input
+              id="password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              autoComplete="current-password"
+              required
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="••••••••"
+              className="input-field pr-12"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute top-1/2 right-3 -translate-y-1/2 text-[#8b5cf6] cursor-pointer"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? (
+                <FiEyeOff className="h-5 w-5" />
+              ) : (
+                <FiEye className="h-5 w-5" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
       <div className="flex items-center justify-between">
