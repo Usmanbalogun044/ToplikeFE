@@ -1,20 +1,31 @@
 /* Global 3D & depth styling */
 
-.hero-3d .dynamic-light { 
-	background: radial-gradient(circle at calc(50% + (var(--mx,0) * 40%)) calc(50% + (var(--my,0) * 40%)), rgba(255,255,255,0.15), rgba(255,255,255,0) 60%);
-	transition: background .25s linear;
+.hero-3d .dynamic-light {
+  background: radial-gradient(
+    circle at calc(50% + (var(--mx, 0) * 40%)) calc(50% + (var(--my, 0) * 40%)),
+    rgba(255, 255, 255, 0.15),
+    rgba(255, 255, 255, 0) 60%
+  );
+  transition: background 0.25s linear;
 }
 
 .three-d-card {
-	transform-style: preserve-3d;
-	perspective: 900px;
+  transform-style: preserve-3d;
+  perspective: 900px;
 }
 
-.tilt-wrapper { position: relative; }
-.tilt-wrapper .tilt-glare { mix-blend-mode: plus-lighter; }
+.tilt-wrapper {
+  position: relative;
+}
+.tilt-wrapper .tilt-glare {
+  mix-blend-mode: plus-lighter;
+}
 
 @media (prefers-reduced-motion: reduce) {
-	.tilt-wrapper { transition: none !important; }
-	.tilt-wrapper * { transition: none !important; }
+  .tilt-wrapper {
+    transition: none !important;
+  }
+  .tilt-wrapper * {
+    transition: none !important;
+  }
 }
-

@@ -135,40 +135,83 @@ const Signup = () => {
 
   return (
     <>
-      <div className="auth-bg flex items-center justify-center px-6 py-10 md:py-14">
+      <div className="auth-bg flex items-center justify-center px-4 py-10 md:px-10 md:py-2">
         <div className="w-full max-w-7xl grid lg:grid-cols-2 gap-16 items-center">
           {/* Brand / Story Panel */}
-          <div className="hidden lg:flex flex-col gap-8 animate-fade-slide-up" style={{animationDelay:'60ms'}}>
+          <div
+            className="hidden lg:flex flex-col gap-8 animate-fade-slide-up"
+            style={{ animationDelay: "60ms" }}
+          >
             <Link to="/" className="inline-flex items-center gap-2 group">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-600 to-fuchsia-600 shadow-lg shadow-fuchsia-800/30 flex items-center justify-center font-bold text-white text-xl tracking-tight">TL</div>
-              <span className="text-3xl font-extrabold brand-gradient-text leading-none">TopLike</span>
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-600 to-fuchsia-600 shadow-lg shadow-fuchsia-800/30 flex items-center justify-center font-bold text-white text-xl tracking-tight">
+                TL
+              </div>
+              <span className="text-3xl font-extrabold brand-gradient-text leading-none">
+                TopLike
+              </span>
             </Link>
             <div>
-              <h1 className="text-4xl font-extrabold tracking-tight mb-4 brand-gradient-text">Create Your Account</h1>
-              <p className="text-purple-900/70 font-medium leading-relaxed max-w-lg">Join a focused weekly challenge loop that rewards craft over spam. One strategic upload, six days of authentic distribution, results you can track & withdraw.</p>
+              <h1 className="text-4xl font-extrabold tracking-tight mb-4 brand-gradient-text">
+                Create Your Account
+              </h1>
+              <p className="text-purple-900/70 font-medium leading-relaxed max-w-lg">
+                Join a focused weekly challenge loop that rewards craft over
+                spam. One strategic upload, six days of authentic distribution,
+                results you can track & withdraw.
+              </p>
             </div>
             <div className="grid sm:grid-cols-2 gap-4 text-sm font-medium">
-              <div className="mini-bullet"><span />Fair ranking algorithm</div>
-              <div className="mini-bullet"><span />Wallet & payouts</div>
-              <div className="mini-bullet"><span />Trust & growth tiers</div>
-              <div className="mini-bullet"><span />Zero follower bias</div>
+              <div className="mini-bullet">
+                <span />
+                Fair ranking algorithm
+              </div>
+              <div className="mini-bullet">
+                <span />
+                Wallet & payouts
+              </div>
+              <div className="mini-bullet">
+                <span />
+                Trust & growth tiers
+              </div>
+              <div className="mini-bullet">
+                <span />
+                Zero follower bias
+              </div>
             </div>
-            <p className="text-xs uppercase tracking-wider text-purple-800/60 font-semibold">Craft • Discipline • Momentum</p>
+            <p className="text-xs uppercase tracking-wider text-purple-800/60 font-semibold">
+              Craft • Discipline • Momentum
+            </p>
           </div>
 
           {/* Auth Card */}
-          <div className="glass-auth-card p-8 md:p-10 relative auth-card-anim">
+          <div className="glass-auth-card p-5 md:p-7 relative auth-card-anim">
             <div className="absolute -inset-px rounded-[28px] pointer-events-none bg-gradient-to-br from-fuchsia-500/10 via-purple-500/5 to-transparent" />
             <div className="relative z-10">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-purple-900 flex items-center gap-2">{step === 1 ? 'Create Account' : 'Verify Email'}</h2>
-                <Link to="/login" className="text-xs link-soft">Have an account? Sign in</Link>
+                <h2 className="text-xl font-bold text-purple-900 flex items-center gap-2">
+                  {step === 1 ? "Create Account" : "Verify Email"}
+                </h2>
+                <Link to="/login" className="text-xs link-soft">
+                  Have an account? Sign in
+                </Link>
               </div>
               <div>
                 <div className="step-circles">
-                  {[1,2].map(n => <div key={n} className={`circle ${step>=n?'active':''}`}>{n}</div>)}
+                  {[1, 2].map((n) => (
+                    <div
+                      key={n}
+                      className={`circle ${step >= n ? "active" : ""}`}
+                    >
+                      {n}
+                    </div>
+                  ))}
                 </div>
-                <div className="progress-track mb-6"><div className="progress-bar-auth" style={{width:`${(step/2)*100}%`}} /></div>
+                <div className="progress-track mb-6">
+                  <div
+                    className="progress-bar-auth"
+                    style={{ width: `${(step / 2) * 100}%` }}
+                  />
+                </div>
               </div>
               {step === 1 ? (
                 <SignupForm
@@ -188,11 +231,25 @@ const Signup = () => {
                   <div className="mx-auto flex items-center justify-center h-14 w-14 rounded-2xl bg-green-100 ring-2 ring-green-400/30 mb-5 shadow shadow-green-600/20">
                     <FiCheckCircle className="h-8 w-8 text-green-600" />
                   </div>
-                  <h3 className="text-2xl font-bold text-purple-900 mb-3">Verify Your Email</h3>
+                  <h3 className="text-2xl font-bold text-purple-900 mb-3">
+                    Verify Your Email
+                  </h3>
                   <div className="text-sm text-purple-900/70 space-y-4 max-w-sm mx-auto">
-                    <p>We sent a verification link to <span className="font-semibold">{formData.email}</span>.</p>
-                    <p>Open it to activate your account and begin your first weekly cycle.</p>
-                    <p className="text-xs">No email? Check spam or <button type="button" className="link-soft">resend link</button>.</p>
+                    <p>
+                      We sent a verification link to{" "}
+                      <span className="font-semibold">{formData.email}</span>.
+                    </p>
+                    <p>
+                      Open it to activate your account and begin your first
+                      weekly cycle.
+                    </p>
+                    <p className="text-xs">
+                      No email? Check spam or{" "}
+                      <button type="button" className="link-soft">
+                        resend link
+                      </button>
+                      .
+                    </p>
                   </div>
                 </div>
               )}

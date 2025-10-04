@@ -153,7 +153,7 @@ const LoginForm = () => {
         <button
           type="submit"
           disabled={loading}
-          className={`btn-brand ${
+          className={`btn-brand cursor-pointer ${
             loading ? "opacity-70 pointer-events-none" : ""
           }`}
         >
@@ -185,12 +185,6 @@ const LoginForm = () => {
             "Sign In"
           )}
         </button>
-      </div>
-      <div className="text-center text-xs font-medium text-purple-900/70">
-        Need an account?{" "}
-        <Link to="/signup" className="link-soft">
-          Create one
-        </Link>
       </div>
     </form>
   );
