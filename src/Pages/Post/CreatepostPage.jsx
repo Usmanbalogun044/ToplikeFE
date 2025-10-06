@@ -4,40 +4,53 @@ import Header from "../../Components/Sharedd/Header";
 
 const CreatepostPage = () => {
   const [loading, setLoading] = useState(false);
-  const [paymentIntiated, setPaymentInitiated] = useState(false);
+  const [paymentInitiated, setPaymentInitiated] = useState(false);
   const token = localStorage.getItem("token");
 
-  const handleSubmit = async (e) => {
+  // ✅ Helper function: safely parse JSON or fallback to text
+  const parseResponse = async (response) => {
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      return await response.json();
+    } else {
+      const text = await response.text();
+      return { message: text }; // wrap plain text/HTML in an object
+    }
+  };
+
+  const handleSubmit = async (formData) => {
     setLoading(true);
 
     try {
+      // 🔹 Subscription check
       const subscriptionCheck = await fetch(
         "https://api.toplike.app/api/has-user-post",
         {
           method: "GET",
           headers: {
-            Autorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
 
-      const subscriptionData = await subscriptionCheck.json();
+      const subscriptionData = await parseResponse(subscriptionCheck);
 
       if (!subscriptionCheck.ok || !subscriptionData.hasPosted) {
         setPaymentInitiated(true);
 
+        // 🔹 Join challenge
         const joinResponse = await fetch(
           "https://api.toplike.app/api/join/challenge",
           {
             method: "POST",
             headers: {
-              Autorization: `Bearer ${token}`,
+              Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
             },
           }
         );
 
-        const joinData = await joinResponse.json();
+        const joinData = await parseResponse(joinResponse);
 
         if (joinData.redirect_url) {
           // Redirect to payment page
@@ -45,10 +58,12 @@ const CreatepostPage = () => {
           return;
         }
 
-        throw new Error("Failed to initiate payment");
+        if (!joinResponse.ok) {
+          throw new Error(joinData.message || "Failed to join challenge");
+        }
       }
 
-      // User is subscribed, proceed with post creation
+      // 🔹 Create post
       const response = await fetch("https://api.toplike.app/api/post/create", {
         method: "POST",
         headers: {
@@ -57,10 +72,17 @@ const CreatepostPage = () => {
         body: formData,
       });
 
-      const result = await response.json();
+      const result = await parseResponse(response);
 
       if (!response.ok) {
-        throw new Error(result.message || "Failed to create post");
+        const msg = result.message;
+
+        // If backend sent HTML, hide it
+        if (msg && msg.startsWith("<!DOCTYPE")) {
+          throw new Error(`Request failed: ${response.status}`);
+        }
+
+        throw new Error(msg || `Request failed: ${response.status}`);
       }
 
       console.log("Post created successfully:", result);
@@ -96,7 +118,7 @@ const CreatepostPage = () => {
           <Createmodal
             onSubmit={handleSubmit}
             loading={loading}
-            paymentInitiated={paymentIntiated}
+            paymentInitiated={paymentInitiated}
           />
         </div>
       </main>
