@@ -65,9 +65,9 @@ const Createmodal = ({ onSubmit, loading, paymentInitiated }) => {
     }
 
     const submitData = new FormData();
-    submitData.append("caption", formData.caption);
+    submitData.append("caption", formData.caption || "");
     submitData.append("post_type", formData.post_type);
-    submitData.append("media", formData.media);
+    submitData.append("media[0]", formData.media);
 
     if (formData.music) {
       submitData.append("music", formData.music);

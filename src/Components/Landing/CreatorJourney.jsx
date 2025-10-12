@@ -1,6 +1,3 @@
-
-
-
 const CharacterCanvas = () => (
   <div className="w-full h-full flex items-center justify-center relative overflow-hidden">
     <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_35%,rgba(180,70,255,0.15),transparent_65%)]" />
@@ -86,8 +83,10 @@ const CreatorJourney = () => {
                 <div className="absolute -left-[13px] mt-1 w-6 h-6 rounded-full bg-gradient-to-br from-fuchsia-500 to-purple-600 shadow-lg shadow-fuchsia-600/40 group-hover:scale-110 transition" />
                 <div className="ml-2">
                   <h3 className="font-bold text-lg md:text-xl text-purple-50 flex items-center gap-3">
-                    <span className="text-sm px-2 py-1 rounded-md bg-purple-700/40 border border-purple-500/30 shadow-inner 
-                    shadow-fuchsia-500/10">
+                    <span
+                      className="text-sm px-2 py-1 rounded-md bg-purple-700/40 border border-purple-500/30 shadow-inner 
+                    shadow-fuchsia-500/10"
+                    >
                       {s.day}
                     </span>
                     {s.title}

@@ -7,7 +7,6 @@ const CreatepostPage = () => {
   const [paymentInitiated, setPaymentInitiated] = useState(false);
   const token = localStorage.getItem("token");
 
-  // ✅ Helper function: safely parse JSON or fallback to text
   const parseResponse = async (response) => {
     const contentType = response.headers.get("content-type");
     if (contentType && contentType.includes("application/json")) {
@@ -35,17 +34,17 @@ const CreatepostPage = () => {
 
       const subscriptionData = await parseResponse(subscriptionCheck);
 
+      // If user hasn't joined challenge first
       if (!subscriptionCheck.ok || !subscriptionData.hasPosted) {
         setPaymentInitiated(true);
 
-        // 🔹 Join challenge
+        // Join challenge
         const joinResponse = await fetch(
           "https://api.toplike.app/api/join/challenge",
           {
             method: "POST",
             headers: {
               Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
             },
           }
         );
@@ -63,7 +62,7 @@ const CreatepostPage = () => {
         }
       }
 
-      // 🔹 Create post
+      // Create post
       const response = await fetch("https://api.toplike.app/api/post/create", {
         method: "POST",
         headers: {
