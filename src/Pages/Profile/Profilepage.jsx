@@ -12,7 +12,7 @@ import {
   FiMail,
   FiUpload,
 } from "react-icons/fi";
-import { p } from "framer-motion";
+
 
 const Profilepage = () => {
   const { id } = useParams();
