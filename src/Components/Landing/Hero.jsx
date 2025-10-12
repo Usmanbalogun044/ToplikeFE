@@ -71,7 +71,7 @@ const Hero = ({ stats, timeLeft, onScrollHow }) => {
       </div>
       <div
         ref={sceneRef}
-        className="relative z-10 px-4 pt-2 pb-10 md:px-14 xl:px-24 flex flex-col-reverse md:flex-row items-center gap-12"
+        className="relative z-10 px-4 pt-2 pb-10 md:px-14 xl:px-24 flex flex-col md:flex-row items-center gap-12"
       >
         <div className="md:w-1/2 animate-fade-slide-left">
           <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur rounded-full px-4 py-2 text-sm text-purple-200 border border-white/10 mb-5">
