@@ -70,13 +70,14 @@ const Home = () => {
 
   const handleLikeSuccess = (likeData) => {
     if (!hasSubscribed) {
+      
       // Show join challenge modal when trying to like without subscription
       setShowChallengeModal(true);
       return;
     }
 
 
-    // Update the specic post in the posts array
+    // Update the specic post  in the posts array
     setPosts((prevPosts) =>
       prevPosts.map((post) =>
         post.id === likeData.postId
