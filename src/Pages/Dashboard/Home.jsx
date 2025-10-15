@@ -75,7 +75,8 @@ const Home = () => {
       return;
     }
 
-    // Update the specific post in the posts array
+
+    // Update the specic post in the posts array
     setPosts((prevPosts) =>
       prevPosts.map((post) =>
         post.id === likeData.postId
