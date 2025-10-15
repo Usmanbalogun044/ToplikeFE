@@ -29,7 +29,7 @@ const Profilepage = () => {
     profile_picture_preview: "",
   });
 
-  // Fetch profile data with caching
+  // Fetching profile data with caching
   const fetchProfile = async () => {
     try {
       setLoading(true);

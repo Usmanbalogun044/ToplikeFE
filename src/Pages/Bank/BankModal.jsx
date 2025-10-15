@@ -17,20 +17,8 @@ const BankModal = ({ onAddAccount, onClose }) => {
   }, []);
 
   const fetchBanks = async () => {
-    // Fetch the list of banks from the API
-    const url = "https://api.toplike.app/api/banks/list";
-    const option = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    };
-
     try {
       setLoadingBanks(true);
-      // Fetchs the list of banks from the API
       const response = await fetch("https://api.toplike.app/api/banks/list", {
         method: "GET",
         headers: {
@@ -43,9 +31,18 @@ const BankModal = ({ onAddAccount, onClose }) => {
       }
 
       const result = await response.json();
+      // console.log("=== BANKS DATA ===");
+      // console.log("Full banks response:", result);
 
-      // Backend returns: { message, banks: { status, message, data: [...] } }
       const list = Array.isArray(result?.banks?.data) ? result.banks.data : [];
+      // console.log("Banks list:", list);
+
+      // Check if OPay is in the list and what its data looks like
+      const opayBank = list.find((bank) =>
+        bank.name.toLowerCase().includes("opay")
+      );
+      // console.log("OPay bank data:", opayBank);
+
       setBanks(list);
     } catch (err) {
       setError(err.message);
@@ -57,7 +54,6 @@ const BankModal = ({ onAddAccount, onClose }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "accountNumber") {
-      // Keep only digits and limit to 10 characters as per backend validation
       const digitsOnly = value.replace(/\D/g, "").slice(0, 10);
       setFormData((prev) => ({ ...prev, accountNumber: digitsOnly }));
       return;
@@ -81,8 +77,15 @@ const BankModal = ({ onAddAccount, onClose }) => {
       setError("");
       const selectedBank = banks.find((b) => b.code === formData.bankCode);
 
+      console.log("Sending bank data:", {
+        account_number: formData.accountNumber,
+        bank_code: formData.bankCode,
+        bank_name: selectedBank?.name || "",
+      });
+
       await onAddAccount({
         accountNumber: formData.accountNumber,
+        bankCode: formData.bankCode,
         bankName: selectedBank?.name || "",
       });
 
@@ -144,7 +147,7 @@ const BankModal = ({ onAddAccount, onClose }) => {
                 placeholder="1234567890"
                 maxLength={10}
                 inputMode="numeric"
-                pattern="\\d{10}"
+                pattern="\d{10}"
                 required
               />
             </div>

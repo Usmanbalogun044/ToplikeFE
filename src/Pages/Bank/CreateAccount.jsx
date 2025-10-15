@@ -18,70 +18,120 @@ const CreateAccount = () => {
   }, [navigate]);
 
   const fetchAccounts = async () => {
-
-    const url = "https://api.toplike.app/api/bankaccount";
-    const option = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    };
-
     try {
       setLoading(true);
       setError("");
-      const response = await fetch(url, option);
 
-      if (!response.ok) throw new Error("Failed to load accounts");
+      const token = localStorage.getItem("token");
+
+      const response = await fetch("https://api.toplike.app/api/bankaccount", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
+
+      // console.log("Accounts response status:", response.status);
+
+      if (!response.ok) {
+        throw new Error(`Failed to load accounts: ${response.status}`);
+      }
 
       const data = await response.json();
-      setAccounts(data.bank_account ? [data.bank_account] : []);
+      // console.log("Accounts response data:", data);
+
+      // Handles different response structures
+      if (data.bank_account) {
+        setAccounts(
+          Array.isArray(data.bank_account)
+            ? data.bank_account
+            : [data.bank_account]
+        );
+      } else if (data.account) {
+        setAccounts(
+          Array.isArray(data.account) ? data.account : [data.account]
+        );
+      } else if (data.data) {
+        setAccounts(Array.isArray(data.data) ? data.data : [data.data]);
+      } else {
+        setAccounts([]);
+      }
     } catch (err) {
-      setError(err.message);
+      if (err.message.includes("404")) {
+        // 404 is not an error - just no accounts
+        setAccounts([]);
+      } else {
+        setError(err.message);
+        console.error("Accounts fetch error:", err);
+      }
     } finally {
       setLoading(false);
     }
   };
 
   const handleAddAccount = async (newAccount) => {
-    // If a bank account already exists, backend supports PUT /bankaccount to update; otherwise POST /bankaccount/create
     const hasExisting = accounts && accounts.length > 0;
     const url = hasExisting
       ? "https://api.toplike.app/api/bankaccount"
       : "https://api.toplike.app/api/bankaccount/create";
-    const option = {
-      method: hasExisting ? "PUT" : "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify({
-        account_number: newAccount.accountNumber,
-        bank_name: newAccount.bankName,
-      }),
-    };
-    
+
+    // console.log("=== BANK ACCOUNT REQUEST ===");
+    // console.log("URL:", url);
+    // console.log("Method:", hasExisting ? "PUT" : "POST");
+    // console.log("Account Data:", newAccount);
+
     try {
       setAddingAccount(true);
       setError("");
-      const response = await fetch(url, option);
+
+      const response = await fetch(url, {
+        method: hasExisting ? "PUT" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          account_number: newAccount.accountNumber,
+          bank_name: newAccount.bankName,
+          // Also try bank_code if available
+          bank_code: newAccount.bankCode,
+        }),
+      });
+
+      // console.log("Response Status:", response.status);
+
+      const responseData = await response.json();
+      // console.log("Full Response:", responseData);
 
       if (!response.ok) {
-        let msg = "Failed to save account";
-        try {
-          const data = await response.json();
-          msg = data?.message || data?.error || msg;
-        } catch (_) {}
-        throw new Error(msg);
+        console.log("Error Details:", {
+          status: response.status,
+          statusText: response.statusText,
+          data: responseData,
+        });
+
+        let errorMessage = "Failed to save account";
+
+        if (responseData.errors) {
+          const allErrors = Object.values(responseData.errors).flat();
+          errorMessage = allErrors.join(", ");
+          console.log("Validation Errors:", allErrors);
+        } else if (responseData.message) {
+          errorMessage = responseData.message;
+        }
+
+        throw new Error(errorMessage);
       }
 
-      // Refresh list to reflect latest account and resolved account_name
+      // Success
+      console.log("Account saved successfully!");
       await fetchAccounts();
       setShowAddModal(false);
     } catch (err) {
+      console.error("Add account error:", err);
       setError(err.message);
     } finally {
       setAddingAccount(false);

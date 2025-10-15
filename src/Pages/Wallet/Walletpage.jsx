@@ -68,34 +68,66 @@ const Walletpage = () => {
   }, []);
 
   const fetchBankAccount = useCallback(async () => {
-    const url = "https://api.toplike.app/api/bankaccount";
-
     if (retrying) return;
     setRetrying(true);
 
     try {
-      const data = await fetchWithRetry(url, {
+      const token = localStorage.getItem("token");
+      console.log(
+        "Fetching bank account with token:",
+        token ? "Token exists" : "No token"
+      );
+
+      const response = await fetch("https://api.toplike.app/api/bankaccount", {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
         },
       });
 
-      const hasAccount = !!data.bank_account;
+      console.log("Bank account response status:", response.status);
+      console.log("Bank account response headers:", response.headers);
+
+      if (response.status === 404) {
+        // 404 means no bank account exists yet - this is normal for new users
+        console.log(
+          "No bank account found (404) - this is normal for new users"
+        );
+        setHasBankAccount(false);
+        sessionStorage.setItem("hasBankAccount", "false");
+        setErrors((prev) => ({ ...prev, bankAccount: null }));
+        return false;
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Bank account response data:", data);
+
+      // Handle different possible response structures
+      const hasAccount = !!(data.bank_account || data.account || data.data);
       setHasBankAccount(hasAccount);
       sessionStorage.setItem("hasBankAccount", hasAccount.toString());
       setErrors((prev) => ({ ...prev, bankAccount: null }));
       return hasAccount;
     } catch (err) {
       console.error("Bank account fetch error:", err);
+
+      if (err.message.includes("404")) {
+        // 404 is not an error - it just means no account exists
+        setHasBankAccount(false);
+        sessionStorage.setItem("hasBankAccount", "false");
+        setErrors((prev) => ({ ...prev, bankAccount: null }));
+        return false;
+      }
+
       setErrors((prev) => ({
         ...prev,
         bankAccount: err.message || "Network error",
       }));
-
-      if (err.message.includes("404")) {
-        setHasBankAccount(false);
-        return false;
-      }
 
       // Use cached value if available
       const cachedBankAccount = sessionStorage.getItem("hasBankAccount");
@@ -142,12 +174,17 @@ const Walletpage = () => {
     return () => window.removeEventListener("online", handleOnline);
   }, [fetchBalance, fetchBankAccount]);
 
-  // Handle bank account redirect
+  // Handle bank account redirect - only redirect if we're sure there's no account
   useEffect(() => {
-    if (hasBankAccount === false && !loading.bankAccount) {
+    if (
+      hasBankAccount === false &&
+      !loading.bankAccount &&
+      !errors.bankAccount
+    ) {
+      console.log("No bank account found, redirecting to create account");
       navigate("/create-account");
     }
-  }, [hasBankAccount, loading.bankAccount, navigate]);
+  }, [hasBankAccount, loading.bankAccount, errors.bankAccount, navigate]);
 
   const handleWithdrawSuccess = useCallback(() => {
     fetchBalance();
@@ -161,7 +198,6 @@ const Walletpage = () => {
       {/* Mobile header */}
       <Header />
 
-      
       <div className="max-w-4xl mx-auto p-4 md:p-6">
         {isLoading ? (
           <div className="space-y-8">
@@ -225,12 +261,14 @@ const Walletpage = () => {
                   onClick={() => {
                     if (hasBankAccount) {
                       setShowWithdrawModal(true);
+                    } else if (hasBankAccount === false) {
+                      navigate("/create-account");
                     }
                   }}
                   className="bg-white text-purple-600 px-4 py-2 rounded-lg font-medium cursor-pointer hover:bg-gray-100 transition"
-                  disabled={balance < 1000 || !hasBankAccount}
+                  disabled={balance < 1000}
                 >
-                  Withdraw
+                  {hasBankAccount === false ? "Add Bank Account" : "Withdraw"}
                 </button>
               </div>
               {balance < 1000 && (
