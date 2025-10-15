@@ -21,7 +21,7 @@ const CreatepostPage = () => {
     setLoading(true);
 
     try {
-      // 🔹 Subscription check
+      // Subscription check
       const subscriptionCheck = await fetch(
         "https://api.toplike.app/api/has-user-post",
         {
@@ -85,6 +85,8 @@ const CreatepostPage = () => {
       }
 
       console.log("Post created successfully:", result);
+      sessionStorage.removeItem("currentUserProfile");
+      window.location.href = "/dashboard";
 
       // Redirect to dashboard or show success message
       window.location.href = "/dashboard";

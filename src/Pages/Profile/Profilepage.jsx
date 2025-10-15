@@ -11,8 +11,8 @@ import {
   FiArrowLeft,
   FiMail,
   FiUpload,
+  FiMessageCircle,
 } from "react-icons/fi";
-
 
 const Profilepage = () => {
   const { id } = useParams();
@@ -48,9 +48,6 @@ const Profilepage = () => {
           profile_picture: data.user.profile_picture || "",
           profile_picture_preview: data.user.profile_picture || "",
         });
-        setInitialLoad(false);
-        setLoading(false);
-        return;
       }
 
       const token = localStorage.getItem("token");
@@ -205,7 +202,10 @@ const Profilepage = () => {
             }}
           />
         ) : (
-          <FiUser className="text-purple-400 w-16 h-16" aria-label="Default profile icon" />
+          <FiUser
+            className="text-purple-400 w-16 h-16"
+            aria-label="Default profile icon"
+          />
         )}
 
         {editable && (
@@ -226,11 +226,11 @@ const Profilepage = () => {
     );
   };
 
-  // Skeleton loader during initial load
+  // loader during initial load
   if (initialLoad) {
     return (
       <div className="max-w-4xl mx-auto p-4 md:p-6">
-        {/* Profile Header Skeleton */}
+        {/* Profile Header */}
         <div className="flex flex-col md:flex-row items-start md:items-center gap-6 mb-8">
           <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-gray-200 animate-pulse"></div>
           <div className="flex-1 space-y-3">
@@ -244,7 +244,7 @@ const Profilepage = () => {
           </div>
         </div>
 
-        {/* Posts Grid Skeleton */}
+        {/* Posts Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[...Array(3)].map((_, i) => (
             <div
@@ -433,46 +433,138 @@ const Profilepage = () => {
           <h2 className="text-xl font-bold text-gray-900 mb-6">
             Recent Activity
           </h2>
-          {profile.posts && profile.posts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {profile.posts.map((post) => (
-                <Link
-                  key={post.id}
-                  to={`/posts/${post.id}`}
-                  className="group relative block rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
-                >
-                  <div className="aspect-square bg-gray-100">
-                    {post.isVideo ? (
-                      <video
-                        className="w-full h-full object-cover"
-                        muted
-                        playsInline
-                        preload="none"
-                      >
-                        <source src={post.mediaUrl} type="video/mp4" />
-                      </video>
-                    ) : (
-                      <img
-                        src={post.mediaUrl}
-                        alt={`${post.title} by ${profile.user.username}`}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                        decoding="async"
-                        width="300" 
-                        height="300"
-                      />
+
+          {profile.posts &&
+          profile.posts.data &&
+          profile.posts.data.length > 0 ? (
+            <div className="space-y-6">
+              {profile.posts.data.map((post) => {
+                const media =
+                  post.media && post.media.length > 0 ? post.media[0] : null;
+                const mediaUrl = media ? media.file_path : null;
+                const isVideo = media ? media.type === "video" : false;
+
+                return (
+                  <div
+                    key={post.id}
+                    className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100"
+                  >
+                    {/* Post Header */}
+                    <div className="p-4 border-b border-gray-100">
+                      <div className="flex items-center space-x-3">
+                        <img
+                          src={profile.user.profile_picture}
+                          alt={profile.user.username}
+                          className="w-10 h-10 rounded-full object-cover"
+                        />
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900">
+                            {profile.user.username}
+                          </h3>
+                          <p className="text-sm text-gray-500">
+                            {new Date(post.created_at).toLocaleDateString()} at{" "}
+                            {new Date(post.created_at).toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </p>
+                        </div>
+                        {post.type && (
+                          <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium capitalize">
+                            {post.type}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Caption */}
+                    {post.caption && (
+                      <div className="p-4 border-b border-gray-100">
+                        <p className="text-gray-800 whitespace-pre-wrap">
+                          {post.caption}
+                        </p>
+                      </div>
                     )}
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                    <div className="text-white">
-                      <h3 className="font-medium truncate">{post.title}</h3>
-                      <p className="text-sm flex items-center">
-                        <FiAward className="mr-1" /> {post.likes || 0} likes
-                      </p>
+
+                    {/* Media */}
+                    {mediaUrl && (
+                      <div className="flex justify-center bg-gray-50">
+                        <div className="max-w-2xl w-full">
+                          {isVideo ? (
+                            <video
+                              className="w-full max-h-96 object-contain"
+                              controls
+                              playsInline
+                            >
+                              <source src={mediaUrl} type="video/mp4" />
+                              Your browser does not support the video tag.
+                            </video>
+                          ) : (
+                            <img
+                              src={mediaUrl}
+                              alt={
+                                post.caption ||
+                                `Post by ${profile.user.username}`
+                              }
+                              className="w-full max-h-96 object-contain"
+                              loading="lazy"
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src =
+                                  "https://via.placeholder.com/500x300?text=Image+Not+Found";
+                                e.target.className =
+                                  "w-full h-64 object-cover bg-gray-200";
+                              }}
+                            />
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Post Stats & Actions */}
+                    <div className="p-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-6 text-gray-600">
+                          <div className="flex items-center space-x-2">
+                            <FiAward className="w-5 h-5 text-purple-600" />
+                            <span className="font-medium">
+                              {post.likes_count || 0} likes
+                            </span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <FiMessageCircle className="w-5 h-5 text-gray-400" />
+                            <span>Comment</span>
+                          </div>
+                        </div>
+
+                        {post.music && (
+                          <div className="flex items-center space-x-2 text-sm text-gray-500">
+                            <span>🎵</span>
+                            <span>{post.music}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Visibility Status */}
+                      <div className="mt-3 pt-3 border-t border-gray-100">
+                        <span
+                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                            post.is_visible
+                              ? "bg-green-100 text-green-800"
+                              : "bg-gray-100 text-gray-800"
+                          }`}
+                        >
+                          {post.is_visible ? "Public" : "Private"}
+                        </span>
+                        <span className="text-xs text-gray-500 ml-2">
+                          Posted on{" "}
+                          {new Date(post.created_at).toLocaleDateString()}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </Link>
-              ))}
+                );
+              })}
             </div>
           ) : (
             <div className="bg-white rounded-xl p-8 text-center shadow-sm">
@@ -490,7 +582,7 @@ const Profilepage = () => {
                   <div className="mt-6">
                     <Link
                       to="/posts/create"
-                      className="inline-flex items-center px-4 py-2 border border-transparent bg-purple-600 text-sm text-white font-medium shadow-sm rounded-md focus:ring-2  hover:bg-purple-700 focus:outline-none focus:ring-offset-2 focus:ring-purple-800"
+                      className="inline-flex items-center px-4 py-2 border border-transparent bg-purple-600 text-sm text-white font-medium shadow-sm rounded-md focus:ring-2 hover:bg-purple-700 focus:outline-none focus:ring-offset-2 focus:ring-purple-800"
                     >
                       Create your first post
                     </Link>
