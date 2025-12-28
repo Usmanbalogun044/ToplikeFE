@@ -1,15 +1,9 @@
 import React, { useState, useEffect, Suspense } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
-import {
-  FaFacebookF,
-  FaTwitter,
-  FaInstagram,
-  FaLinkedinIn,
-} from "react-icons/fa";
 
 // Modular landing components
-import Hero from "../Components/Landing/Hero"; // keep hero eager for LCP
+import Hero from "../Components/Landing/Hero";
 import { statTargets } from "../Components/Landing/landingConfig";
 import toplikeLogo from "/Images/toplike.png";
 import LazyMount from "../Components/Util/LazyMount";
@@ -102,21 +96,17 @@ const Landingpage = () => {
 
   return (
     <>
-      <main className="font-sans relative overflow-hidden bg-transparent text-purple-100">
-        {/* Gradient Background */}
-        <div
-          className="pointer-events-none fixed inset-0 -z-20 bg-[radial-gradient(circle_at_30%_20%,#2a0b4d_0%,#090114_55%,#05010c_85%)]"
-          aria-hidden="true"
-        />
+      <main className="font-sans relative overflow-hidden bg-[#05010a] text-purple-100">
+        {/* Premium Background */}
+        <div className="premium-bg pointer-events-none" aria-hidden="true" />
 
         {/* Navigation */}
         <nav
           className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
             scrolled
-              ? "backdrop-blur-xl bg-[#0f031fcc]/85 py-2 shadow-[0_4px_28px_-6px_rgba(132,45,255,0.45)] border-b border-purple-600/30"
-              : "backdrop-blur-md bg-[#14062699] py-4 border-b border-transparent"
+              ? "glass-nav py-2"
+              : "bg-transparent py-4 border-b border-transparent"
           }`}
-          aria-label="Primary"
           role="navigation"
         >
           <div className="relative container mx-auto px-4 lg:px-20 flex items-center justify-between gap-6">
@@ -125,17 +115,15 @@ const Landingpage = () => {
               onClick={(e) => handleSmoothScroll(e, "hero")}
               className="group relative flex items-center gap-3 focus:outline-none"
             >
-              <div className="relative w-11 h-11 rounded-2xl flex items-center bg-[#140626]/70 backdrop-blur-sm border border-purple-500/30 overflow-hidden justify-center shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_6px_18px_-6px_rgba(150,60,255,0.55)]">
+              <div className="relative w-11 h-11 rounded-2xl flex items-center bg-black/30 backdrop-blur-sm border border-white/10 overflow-hidden justify-center">
                 <img
                   src={toplikeLogo}
                   alt="TopLike"
-                  className="w-7 h-7 object-contain drop-shadow-[0_2px_6px_rgba(255,120,255,0.45)] group-hover:scale-105 transition-transform"
-                  loading="lazy"
+                  className="w-7 h-7 object-contain drop-shadow-[0_2px_6px_rgba(168,85,247,0.5)] group-hover:scale-105 transition-transform"
                 />
-                <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-60 transition bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.5),transparent_65%)]" />
               </div>
-              <span className="sr-only">TopLike Home</span>
-              <span className="ml-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-md bg-fuchsia-600/30 border border-fuchsia-400/30 text-fuchsia-100 tracking-widest">
+              <span className="text-xl font-bold tracking-tight text-white">TopLike</span>
+              <span className="ml-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-md bg-purple-600/30 border border-purple-400/30 text-purple-100 tracking-widest">
                 BETA
               </span>
             </button>
@@ -151,10 +139,10 @@ const Landingpage = () => {
                   <a
                     href={`#${l.href}`}
                     onClick={(e) => handleSmoothScroll(e, l.href)}
-                    className="relative text-purple-200/80 hover:text-fuchsia-200 transition-colors px-1 py-2 group"
+                    className="relative text-purple-200/80 hover:text-white transition-colors px-1 py-2 group"
                   >
                     <span>{l.label}</span>
-                    <span className="pointer-events-none absolute left-0 bottom-0 h-[2px] w-0 group-hover:w-full bg-gradient-to-r from-fuchsia-400 via-purple-400 to-fuchsia-300 rounded-full transition-all duration-400" />
+                    <span className="pointer-events-none absolute left-0 bottom-0 h-[2px] w-0 group-hover:w-full bg-gradient-to-r from-fuchsia-400 to-purple-400 rounded-full transition-all duration-400" />
                   </a>
                 </li>
               ))}
@@ -164,27 +152,23 @@ const Landingpage = () => {
             <div className="hidden md:flex items-center gap-4">
               <NavLink
                 to="/login"
-                className="text-purple-200/70 hover:text-fuchsia-200 font-semibold text-sm tracking-wide transition"
+                className="text-purple-200/90 hover:text-white font-semibold text-sm tracking-wide transition"
               >
                 Login
               </NavLink>
               <NavLink
                 to="/signup"
-                className="relative inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm overflow-hidden transition font-semibold tracking-wide text-white bg-gradient-to-br from-fuchsia-600 via-purple-600 to-fuchsia-500 group shadow-[0_0_0_1px_rgba(
-                255,255,255,0.07),0_10px_30px_-10px_rgba(155,65,255,0.7)] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.07),0_6px_18px_-6px_rgba(160,70,255,0.9)]"
+                className="btn-brand text-sm px-6 py-2.5 shadow-lg shadow-purple-900/40"
               >
-                <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.4),transparent_60%)]" />
-                <span>Create Account</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-fuchsia-300 animate-pulse" />
+                Create Account
               </NavLink>
             </div>
 
             {/* Mobile Menu Trigger */}
             <button
-              className="md:hidden relative w-11 h-11 flex items-center justify-center rounded-xl bg-gradient-to-br from-fuchsia-600/30 to-purple-700/30 border border-purple-500/30 text-fuchsia-200 transition shadow-inner shadow-fuchsia-500/20 backdrop-blur-sm active:scale-95"
+              className="md:hidden relative w-11 h-11 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-white transition active:scale-95"
               onClick={() => setMobileMenuOpen((o) => !o)}
               aria-label="Toggle navigation menu"
-              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
             </button>
@@ -195,9 +179,9 @@ const Landingpage = () => {
                 mobileMenuOpen
                   ? "opacity-100 scale-y-100"
                   : "opacity-0 pointer-events-none scale-y-50"
-              } `}
+              }`}
             >
-              <div className="mx-4 mt-3 p-5 rounded-2xl backdrop-blur-xl bg-[#1a062c]/85 border border-purple-600/30 space-y-4 shadow-[0_0_0_1px_rgba(255,255,255,0.05),0_14px_40px_-10px_rgba(140,55,255,0.55)]">
+              <div className="mx-4 mt-3 p-5 rounded-2xl glass-panel space-y-4">
                 {[
                   { href: "how-it-works", label: "How It Works" },
                   { href: "winners", label: "Past Winners" },
@@ -206,25 +190,24 @@ const Landingpage = () => {
                   <button
                     key={l.href}
                     onClick={(e) => handleSmoothScroll(e, l.href)}
-                    className="w-full text-left text-sm font-semibold tracking-wide text-purple-100/85 flex items-center justify-between py-2 group hover:text-fuchsia-200"
+                    className="w-full text-left text-sm font-semibold tracking-wide text-purple-100/90 flex items-center justify-between py-2 group hover:text-white"
                   >
                     <span>{l.label}</span>
-                    <span className="h-[2px] w-6 bg-gradient-to-r from-fuchsia-500 to-purple-500 rounded-full scale-x-0 origin-left 
-                    transition group-hover:scale-x-100" />
+                    <span className="h-[2px] w-6 bg-purple-500 rounded-full scale-x-0 origin-left transition group-hover:scale-x-100" />
                   </button>
                 ))}
                 <div className="pt-2 flex flex-col gap-3">
                   <NavLink
                     to="/login"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="text-center text-sm font-semibold text-purple-100/80 hover:text-fuchsia-200 transition"
+                    className="text-center text-sm font-semibold text-white/90 hover:text-white transition py-2"
                   >
                     Login
                   </NavLink>
                   <NavLink
                     to="/signup"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="text-center text-sm font-semibold px-5 py-3 rounded-xl bg-gradient-to-r from-fuchsia-600 via-purple-600 to-fuchsia-500 text-white shadow-[0_6px_22px_-8px_rgba(158,65,255,0.7)] active:scale-[0.97] transition hover:shadow-[0_4px_16px_-6px_rgba(165,70,255,0.85)]"
+                    className="btn-brand justify-center py-3"
                   >
                     Create Account
                   </NavLink>
@@ -233,10 +216,10 @@ const Landingpage = () => {
             </div>
 
             {/* Scroll Progress Bar */}
-            <div className="absolute left-0 -bottom-2 h-[2px] w-full bg-purple-900/40 overflow-hidden rounded-full">
+            <div className="absolute left-0 -bottom-[1px] h-[2px] w-full bg-white/5 overflow-hidden">
               <div
                 style={{ width: `${scrollProgress}%` }}
-                className="h-full bg-gradient-to-r from-fuchsia-500 via-purple-500 to-fuchsia-300 transition-[width] duration-150"
+                className="h-full bg-gradient-to-r from-purple-500 to-fuchsia-500 transition-[width] duration-150"
               />
             </div>
           </div>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaNairaSign } from "react-icons/fa6";
+import { API_URL } from "../../config";
 
 const WeeklyChallengeModal = ({ onSuccess, onClose }) => {
   const [loading, setLoading] = useState(false);
@@ -11,7 +12,7 @@ const WeeklyChallengeModal = ({ onSuccess, onClose }) => {
     setError("");
 
     try {
-      const url = "https://api.toplike.app/api/join/challenge";
+      const url = `${API_URL}/join/challenge`;
       const response = await fetch(url, {
         method: "POST",
         headers: {

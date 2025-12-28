@@ -27,7 +27,6 @@ const Createmodal = ({ onSubmit, loading, paymentInitiated }) => {
       return;
     }
     if (file.size > 10 * 1024 * 1024) {
-      // 10MB limit
       setErrors({ ...errors, media: "File size must be less than 10MB" });
       return;
     }
@@ -81,25 +80,25 @@ const Createmodal = ({ onSubmit, loading, paymentInitiated }) => {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Caption Field */}
         <div>
-          <label className="block text-sm font-medium mb-1">Caption*</label>
-          <input
-            type="text"
-            className={`w-full p-3 border rounded-lg focus:outline-none ${
-              errors.caption ? "border-red-500" : "border-gray-300"
+          <label className="block text-xs font-semibold text-purple-200/80 mb-2 uppercase tracking-wide">Caption</label>
+          <textarea
+            className={`w-full p-4 rounded-xl focus:outline-none bg-black/20 border border-white/10 text-white placeholder-purple-300/30 transition-colors focus:border-fuchsia-500/50 min-h-[100px] resize-none ${
+              errors.caption ? "border-red-500/50" : ""
             }`}
+            placeholder="Write something amazing..."
             value={formData.caption}
             onChange={(e) =>
               setFormData({ ...formData, caption: e.target.value })
             }
-            maxLength={100}
+            maxLength={200}
           />
           {errors.caption && (
-            <p className="mt-1 text-sm text-red-500">{errors.caption}</p>
+            <p className="mt-1 text-xs text-red-400">{errors.caption}</p>
           )}
         </div>
 
         {/* Post Type Toggle */}
-        <div className="flex space-x-4">
+        <div className="flex space-x-4 bg-black/20 p-1.5 rounded-xl border border-white/5 w-fit">
           <button
             type="button"
             onClick={() =>
@@ -110,10 +109,10 @@ const Createmodal = ({ onSubmit, loading, paymentInitiated }) => {
                 mediaPreview: null,
               })
             }
-            className={`flex items-center cursor-pointer px-4 py-2 rounded-lg ${
+            className={`flex items-center cursor-pointer px-4 py-2 rounded-lg text-sm font-medium transition-all ${
               formData.post_type === "image"
-                ? "bg-purple-100 text-purple-600"
-                : "bg-gray-100"
+                ? "bg-fuchsia-600 text-white shadow-lg shadow-fuchsia-600/20"
+                : "text-purple-300/60 hover:text-white"
             }`}
           >
             <FiImage className="mr-2" /> Image
@@ -128,10 +127,10 @@ const Createmodal = ({ onSubmit, loading, paymentInitiated }) => {
                 mediaPreview: null,
               })
             }
-            className={`flex items-center cursor-pointer px-4 py-2 rounded-lg ${
+            className={`flex items-center cursor-pointer px-4 py-2 rounded-lg text-sm font-medium transition-all ${
               formData.post_type === "video"
-                ? "bg-purple-100 text-purple-600"
-                : "bg-gray-100"
+                ? "bg-fuchsia-600 text-white shadow-lg shadow-fuchsia-600/20"
+                : "text-purple-300/60 hover:text-white"
             }`}
           >
             <FiVideo className="mr-2" /> Video
@@ -140,20 +139,20 @@ const Createmodal = ({ onSubmit, loading, paymentInitiated }) => {
 
         {/* Media Upload */}
         <div>
-          <label className="block text-sm font-medium mb-1">Media*</label>
+          <label className="block text-xs font-semibold text-purple-200/80 mb-2 uppercase tracking-wide">Media</label>
           {formData.mediaPreview ? (
-            <div className="relative">
+            <div className="relative group">
               {formData.post_type === "video" ? (
                 <video
                   src={formData.mediaPreview}
                   controls
-                  className="w-full aspect-square object-cover rounded-lg bg-black"
+                  className="w-full aspect-video object-cover rounded-xl bg-black border border-white/10"
                 />
               ) : (
                 <img
                   src={formData.mediaPreview}
                   alt="Preview"
-                  className="w-full aspect-square object-cover rounded-lg"
+                  className="w-full aspect-square object-cover rounded-xl border border-white/10"
                 />
               )}
               <button
@@ -165,24 +164,25 @@ const Createmodal = ({ onSubmit, loading, paymentInitiated }) => {
                     mediaPreview: null,
                   })
                 }
-                className="absolute top-2 right-2 bg-black/50 text-white p-1 rounded-full cursor-pointer"
+                className="absolute top-2 right-2 bg-black/60 hover:bg-red-500 text-white p-2 rounded-full cursor-pointer transition-colors backdrop-blur-sm"
               >
-                <FiX size={20} />
+                <FiX size={16} />
               </button>
             </div>
           ) : (
             <div
-              className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer ${
-                errors.media ? "border-red-500" : "border-gray-300"
+              className={`border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-all hover:bg-white/5 hover:border-fuchsia-500/30 ${
+                errors.media ? "border-red-500/40 bg-red-500/5" : "border-white/10 bg-black/20"
               }`}
               onClick={() => fileInputRef.current.click()}
             >
-              <FiUpload className="mx-auto h-12 w-12 text-gray-400" />
-              <p className="mt-2">
-                Click to upload{" "}
-                {formData.post_type === "video" ? "video" : "image"}
+              <div className="w-16 h-16 rounded-full bg-purple-500/10 flex items-center justify-center mx-auto mb-4 border border-purple-500/20">
+                 <FiUpload className="h-8 w-8 text-fuchsia-400" />
+              </div>
+              <p className="text-white font-medium">
+                Click to upload {formData.post_type === "video" ? "video" : "image"}
               </p>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-xs text-purple-300/50 mt-2">
                 {formData.post_type === "video"
                   ? "MP4, MOV (max 10MB)"
                   : "JPG, PNG (max 10MB)"}
@@ -197,7 +197,7 @@ const Createmodal = ({ onSubmit, loading, paymentInitiated }) => {
             </div>
           )}
           {errors.media && (
-            <p className="mt-1 text-sm text-red-500">{errors.media}</p>
+            <p className="mt-2 text-xs text-red-400 pl-1">{errors.media}</p>
           )}
         </div>
 
@@ -205,41 +205,20 @@ const Createmodal = ({ onSubmit, loading, paymentInitiated }) => {
         <button
           type="submit"
           disabled={loading}
-          className={`w-full bg-purple-600 text-white py-3 px-4 rounded-lg cursor-pointer font-medium flex items-center justify-center ${
-            loading ? "opacity-70" : "hover:bg-purple-700"
-          }`}
+          className="btn-brand w-full py-3.5 text-base shadow-xl shadow-fuchsia-900/20"
         >
           {loading ? (
-            <>
-              <svg
-                className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-              {paymentInitiated ? "Submitting..." : "Processing..."}
-            </>
+            <div className="flex items-center gap-2">
+               <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+               <span>{paymentInitiated ? "Submitting..." : "Posting..."}</span>
+            </div>
           ) : (
-            <> Post </>
+            "Share Post"
           )}
         </button>
 
         {errors.submit && (
-          <p className="text-sm text-red-500 text-center">{errors.submit}</p>
+          <p className="text-sm text-red-400 text-center">{errors.submit}</p>
         )}
       </form>
     </>

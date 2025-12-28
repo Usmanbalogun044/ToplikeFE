@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { FiX, FiCreditCard } from "react-icons/fi";
+import { API_URL } from "../../config";
 
 const BankModal = ({ onAddAccount, onClose }) => {
   const [formData, setFormData] = useState({
@@ -19,7 +20,7 @@ const BankModal = ({ onAddAccount, onClose }) => {
   const fetchBanks = async () => {
     try {
       setLoadingBanks(true);
-      const response = await fetch("https://api.toplike.app/api/banks/list", {
+      const response = await fetch(`${API_URL}/banks/list`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,

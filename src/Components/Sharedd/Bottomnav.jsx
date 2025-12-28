@@ -1,65 +1,45 @@
+import { FiHome, FiPlusSquare, FiUser, FiAward, FiDollarSign } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
-import { FiHome, FiUser } from "react-icons/fi";
-import { FaRegSquarePlus } from "react-icons/fa6";
-import { BsWallet } from "react-icons/bs";
-import { LuSearch } from "react-icons/lu";
 
 const Bottomnav = () => {
   const location = useLocation();
 
-  // Helper function to check if path matches
-  const isActive = (path) => {
-    return location.pathname === path;
-  };
+  const navItems = [
+    { icon: FiHome, label: "Feed", path: "/dashboard" },
+    { icon: FiAward, label: "Rank", path: "/leaderboard" },
+    { icon: FiPlusSquare, label: "Post", path: "/posts/create" },
+    { icon: FiDollarSign, label: "Wallet", path: "/wallet" },
+    { icon: FiUser, label: "Profile", path: "/profile" },
+  ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg">
-      <div className="flex justify-around pb-5">
-        <Link
-          to="/dashboard"
-          className={`flex flex-col items-center py-3 px-4 ${
-            isActive("/dashboard") ? "text-purple-600" : "text-gray-500"
-          }`}
-        >
-          <FiHome className="h-5 w-5" />
-          <span className="text-xs mt-1">Home</span>
-        </Link>
-        <Link
-          to="/search"
-          className={`flex flex-col items-center py-3 px-4 ${
-            isActive("/search") ? "text-purple-600" : "text-gray-500"
-          }`}
-        >
-          <LuSearch className="h-5 w-5" />
-          <span className="text-xs mt-1">Search</span>
-        </Link>
-        <Link
-          to="/posts/create"
-          className={`flex flex-col items-center py-3 px-4 ${
-            isActive("/posts/create") ? "text-purple-600" : "text-gray-500"
-          }`}
-        >
-          <FaRegSquarePlus className="h-5 w-5" />
-          <span className="text-xs mt-1">Post</span>
-        </Link>
-        <Link
-          to="/wallet"
-          className={`flex flex-col items-center py-3 px-4 ${
-            isActive("/wallet") ? "text-purple-600" : "text-gray-500"
-          }`}
-        >
-          <BsWallet className="h-5 w-5" />
-          <span className="text-xs mt-1">Wallet</span>
-        </Link>
-        <Link
-          to="/profile"
-          className={`flex flex-col items-center py-3 px-4 ${
-            isActive("/profile") ? "text-purple-600" : "text-gray-500"
-          }`}
-        >
-          <FiUser className="h-5 w-5" />
-          <span className="text-xs mt-1">Profile</span>
-        </Link>
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 glass-nav border-t border-white/10 pb-1">
+      <div className="flex justify-around items-center h-16 px-2">
+        {navItems.map((item) => {
+          const isActive = location.pathname === item.path;
+          return (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`flex flex-col items-center justify-center w-full h-full transition-all duration-300 group ${
+                isActive ? "text-fuchsia-400" : "text-purple-300/40"
+              }`}
+            >
+              <div
+                className={`p-2 rounded-xl transition-all duration-300 ${
+                  isActive
+                    ? "bg-purple-500/10 transform -translate-y-1 shadow-lg shadow-purple-500/5 ring-1 ring-purple-500/20"
+                    : "group-active:scale-95"
+                }`}
+              >
+                <item.icon className={`w-5 h-5 ${isActive ? "stroke-[2.5px] fill-purple-500/10" : "stroke-[2px]"}`} />
+              </div>
+              <span className={`text-[10px] mt-1 font-medium tracking-wide ${isActive ? "text-white" : "text-purple-300/50"}`}>
+                {item.label}
+              </span>
+            </Link>
+          );
+        })}
       </div>
     </nav>
   );

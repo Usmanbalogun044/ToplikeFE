@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiPlus, FiCheck, FiArrowLeft, FiCreditCard } from "react-icons/fi";
 import BankModal from "./BankModal";
+import { API_URL } from "../../config";
 
 const CreateAccount = () => {
   const [accounts, setAccounts] = useState([]);
@@ -24,7 +25,7 @@ const CreateAccount = () => {
 
       const token = localStorage.getItem("token");
 
-      const response = await fetch("https://api.toplike.app/api/bankaccount", {
+      const response = await fetch(`${API_URL}/bankaccount`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -74,8 +75,8 @@ const CreateAccount = () => {
   const handleAddAccount = async (newAccount) => {
     const hasExisting = accounts && accounts.length > 0;
     const url = hasExisting
-      ? "https://api.toplike.app/api/bankaccount"
-      : "https://api.toplike.app/api/bankaccount/create";
+      ? `${API_URL}/bankaccount`
+      : `${API_URL}/bankaccount/create`;
 
     // console.log("=== BANK ACCOUNT REQUEST ===");
     // console.log("URL:", url);

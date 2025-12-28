@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FiX, FiCheck, FiAlertCircle } from "react-icons/fi";
 import { FaNairaSign } from "react-icons/fa6";
+import { API_URL } from "../../config";
 
 const Withdrawmodal = ({ currentBalance, onClose, onWithdrawSuccess }) => {
   const [amount, setAmount] = useState("");
@@ -12,7 +13,6 @@ const Withdrawmodal = ({ currentBalance, onClose, onWithdrawSuccess }) => {
     e.preventDefault();
     setError("");
 
-    // Validate amount
     if (!amount || isNaN(amount)) {
       setError("Please enter a valid amount");
       return;
@@ -34,7 +34,7 @@ const Withdrawmodal = ({ currentBalance, onClose, onWithdrawSuccess }) => {
 
     try {
       const response = await fetch(
-        "https://api.toplike.app/api/withdraw",
+        `${API_URL}/withdraw`,
         {
           method: "POST",
           headers: {
@@ -50,7 +50,6 @@ const Withdrawmodal = ({ currentBalance, onClose, onWithdrawSuccess }) => {
         throw new Error(errorData.message || "Withdrawal failed");
       }
 
-      // Success case
       setSuccess(true);
       if (onWithdrawSuccess) onWithdrawSuccess(withdrawalAmount);
     } catch (error) {
@@ -60,24 +59,22 @@ const Withdrawmodal = ({ currentBalance, onClose, onWithdrawSuccess }) => {
     }
   };
 
-  // Success Screen
   if (success) {
     return (
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-lg w-full max-w-md p-6 text-center">
-          <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
-            <FiCheck className="h-6 w-6 text-green-600" />
+      <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
+        <div className="glass-panel w-full max-w-sm p-8 text-center rounded-3xl border border-green-500/30 shadow-[0_0_50px_rgba(34,197,94,0.2)]">
+          <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-500/20 mb-6 border border-green-500/30">
+            <FiCheck className="h-8 w-8 text-green-400" />
           </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <h3 className="text-xl font-bold text-white mb-2">
             Withdrawal Successful!
           </h3>
-          <p className="text-sm text-gray-500 mb-6">
-            ₦{parseFloat(amount).toLocaleString("en-NG")} will be processed
-            within 24 hours.
+          <p className="text-purple-200/60 mb-8">
+            ₦{parseFloat(amount).toLocaleString("en-NG")} will be processed within 24 hours.
           </p>
           <button
             onClick={onClose}
-            className="w-full bg-purple-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-purple-700 transition-colors"
+            className="w-full bg-green-600 hover:bg-green-500 text-white py-3 rounded-xl font-bold transition-all shadow-lg shadow-green-600/20"
           >
             Done
           </button>
@@ -86,60 +83,58 @@ const Withdrawmodal = ({ currentBalance, onClose, onWithdrawSuccess }) => {
     );
   }
 
-  // Main Form
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg w-full max-w-md">
-        <div className="flex justify-between items-center p-4 border-b">
-          <h3 className="font-bold text-lg">Withdraw Funds</h3>
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
+      <div className="glass-panel w-full max-w-md rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+        <div className="flex justify-between items-center p-6 border-b border-white/5 bg-white/5">
+          <h3 className="font-bold text-xl text-white">Withdraw Funds</h3>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 transition-colors"
+            className="text-purple-300/50 hover:text-white transition-colors"
           >
             <FiX size={24} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6">
-          {/* Amount Input */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium mb-1 text-gray-700">
-              Amount (₦)
+        <form onSubmit={handleSubmit} className="p-6 md:p-8">
+          <div className="mb-8">
+            <label className="block text-xs font-bold text-purple-200/50 uppercase tracking-wider mb-2">
+              Amount to Withdraw
             </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaNairaSign className="text-gray-400" />
+            <div className="relative group">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <FaNairaSign className="text-fuchsia-400 text-xl" />
               </div>
               <input
                 type="number"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="py-2 pl-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
-                placeholder="1000"
+                className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-2xl font-bold text-white placeholder-purple-500/20 focus:outline-none focus:border-fuchsia-500/50 transition-all"
+                placeholder="0.00"
                 min="1000"
                 max={currentBalance}
                 step="100"
+                autoFocus
               />
             </div>
-            <p className="text-sm text-gray-500 mt-2">
-              Available balance: ₦{currentBalance.toLocaleString("en-NG")}
-            </p>
+            <div className="flex justify-between mt-3 text-xs">
+                 <p className="text-purple-300/50">Min: ₦1,000</p>
+                 <p className="text-fuchsia-300/80 font-medium">Available: ₦{currentBalance.toLocaleString("en-NG")}</p>
+            </div>
           </div>
 
-          {/* Error Message */}
           {error && (
-            <div className="mb-4 flex items-start bg-red-50 border-l-4 border-red-500 p-3 rounded-r">
-              <FiAlertCircle className="text-red-500 mt-0.5 mr-2 flex-shrink-0" />
-              <span className="text-red-700">{error}</span>
+            <div className="mb-6 flex items-center gap-3 bg-red-500/10 border border-red-500/20 p-4 rounded-xl">
+              <FiAlertCircle className="text-red-400 flex-shrink-0" />
+              <span className="text-red-200 text-sm">{error}</span>
             </div>
           )}
 
-          {/* Action Buttons */}
-          <div className="flex justify-end space-x-3">
+          <div className="flex gap-3">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-6 py-3.5 border border-white/10 rounded-xl text-purple-200/60 hover:text-white hover:bg-white/5 transition-colors font-medium"
               disabled={loading}
             >
               Cancel
@@ -147,34 +142,15 @@ const Withdrawmodal = ({ currentBalance, onClose, onWithdrawSuccess }) => {
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 disabled:opacity-70 transition-colors"
+              className="flex-1 py-3.5 bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white rounded-xl font-bold shadow-lg shadow-fuchsia-900/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
-                <span className="inline-flex items-center">
-                  <svg
-                    className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                  Processing...
-                </span>
+                <div className="flex items-center justify-center gap-2">
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    Processing...
+                </div>
               ) : (
-                "Withdraw"
+                "Withdraw Funds"
               )}
             </button>
           </div>

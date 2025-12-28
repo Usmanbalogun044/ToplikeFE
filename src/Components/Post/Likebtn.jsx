@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { FiHeart } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
+import { API_URL } from "../../config";
 
 const Likebtn = ({
   postId,
@@ -32,7 +33,7 @@ const Likebtn = ({
 
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `https://api.toplike.app/api/like-post/${postId}`,
+        `${API_URL}/like-post/${postId}`,
         {
           method: "POST",
           headers: {
@@ -87,48 +88,47 @@ const Likebtn = ({
   };
 
   return (
-    <>
-      {" "}
-      <div className="flex items-center space-x-1">
-        <button
-          onClick={handleClick}
-          disabled={loading || disabled}
-          className={`flex items-center space-x-1 transition-all duration-200 transform hover:scale-110 active:scale-95 ${
+    <div className="flex items-center space-x-1 relative">
+      <button
+        onClick={handleClick}
+        disabled={loading || disabled}
+        className={`flex items-center space-x-1.5 transition-all duration-300 transform hover:scale-105 active:scale-95 group ${
+          liked
+            ? "text-fuchsia-500 drop-shadow-[0_0_8px_rgba(217,70,239,0.5)]"
+            : disabled
+            ? "text-purple-300/30 cursor-not-allowed"
+            : "text-purple-300/60 hover:text-fuchsia-400"
+        } ${loading ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+        title={
+          disabled ? "Join challenge to like" : liked ? "Unlike" : "Like"
+        }
+      >
+        <div className={`transition-transform duration-300 ${liked ? "scale-110" : "group-hover:scale-110"}`}>
+            {liked ? (
+                <FaHeart className="text-fuchsia-500 animate-pulse" size={20} />
+            ) : (
+                <FiHeart size={20} className="stroke-current stroke-2" />
+            )}
+        </div>
+        <span
+          className={`font-semibold text-sm transition-colors ${
             liked
-              ? "text-red-500"
+              ? "text-fuchsia-500"
               : disabled
-              ? "text-gray-300 cursor-not-allowed"
-              : "text-gray-500 hover:text-red-400"
-          } ${loading ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
-          title={
-            disabled ? "Join challenge to like" : liked ? "Unlike" : "Like"
-          }
+              ? "text-purple-300/30"
+              : "text-purple-300/80 group-hover:text-fuchsia-400"
+          }`}
         >
-          {liked ? (
-            <FaHeart className="text-red-500 animate-pulse" size={18} />
-          ) : (
-            <FiHeart size={18} />
-          )}
-          <span
-            className={`font-medium ${
-              liked
-                ? "text-red-500"
-                : disabled
-                ? "text-gray-300"
-                : "text-gray-600"
-            }`}
-          >
-            {likes}
-          </span>
-        </button>
+          {likes}
+        </span>
+      </button>
 
-        {error && (
-          <div className="absolute mt-8 px-2 py-1 bg-red-100 text-red-600 text-xs rounded opacity-0 animate-fade-in">
-            {error}
-          </div>
-        )}
-      </div>
-    </>
+      {error && (
+        <div className="absolute -bottom-8 left-0 z-50 px-2 py-1 bg-red-500/20 text-red-300 border border-red-500/30 text-[10px] rounded whitespace-nowrap backdrop-blur-sm">
+          {error}
+        </div>
+      )}
+    </div>
   );
 };
 

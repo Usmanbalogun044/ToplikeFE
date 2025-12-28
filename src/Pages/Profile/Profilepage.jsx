@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import Header from "../../Components/Sharedd/Header";
+import Postcard from "../../Components/Post/Postcard";
 import {
   FiUser,
   FiEdit,
@@ -11,8 +12,11 @@ import {
   FiArrowLeft,
   FiMail,
   FiUpload,
-  FiMessageCircle,
+  FiShield,
+  FiSettings,
 } from "react-icons/fi";
+import VerifiedBadge from "../../Components/VerifiedBadge";
+import { API_URL } from "../../config";
 
 const Profilepage = () => {
   const { id } = useParams();
@@ -57,8 +61,8 @@ const Profilepage = () => {
       }
 
       const endpoint = isCurrentUser
-        ? "https://api.toplike.app/api/myprofile"
-        : `https://api.toplike.app/api/user/profile/${id}`;
+        ? `${API_URL}/myprofile`
+        : `${API_URL}/user/profile/${id}`;
 
       const response = await fetch(endpoint, {
         headers: {
@@ -112,7 +116,7 @@ const Profilepage = () => {
         formPayload.append("profile_picture", formData.profile_picture);
       }
 
-      const response = await fetch("https://api.toplike.app/api/user", {
+      const response = await fetch(`${API_URL}/user`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -130,8 +134,6 @@ const Profilepage = () => {
 
         throw new Error(updatedData.message || "Update failed");
       }
-
-      console.log("Updated data from API:", updatedData);
 
       setProfile((prev) => ({
         ...prev,
@@ -171,31 +173,24 @@ const Profilepage = () => {
   };
 
   const handleLogout = () => {
-    // Clear authentication tokens
     localStorage.removeItem("token");
-
-    // Clear cached profile data
     sessionStorage.removeItem("currentUserProfile");
-
-    // Redirect to landing page
     navigate("/");
   };
 
-  // profile_picture display component
   const AvatarDisplay = ({ src, editable = false, size = "lg" }) => {
-    const sizeClasses = size === "lg" ? "w-32 h-32" : "w-24 h-24";
+    const sizeClasses = size === "lg" ? "w-28 h-28 md:w-32 md:h-32" : "w-24 h-24";
 
     return (
       <div
-        className={`relative ${sizeClasses} rounded-full flex items-center border-4 justify-center border-white shadow-lg bg-gradient-to-br from-purple-100 to-blue-100`}
+        className={`relative ${sizeClasses} rounded-full flex items-center justify-center border-4 border-fuchsia-500/20 shadow-[0_0_30px_rgba(168,85,247,0.3)] bg-gradient-to-br from-purple-500/10 to-fuchsia-500/10 overflow-hidden`}
       >
         {src ? (
           <img
             src={src}
             alt={`Profile picture of ${profile.user.username}`}
-            className="w-full h-full rounded-full object-cover"
+            className="w-full h-full object-cover"
             loading="eager"
-            decoding="async"
             onError={(e) => {
               e.target.onerror = null;
               e.target.src = "";
@@ -203,16 +198,16 @@ const Profilepage = () => {
           />
         ) : (
           <FiUser
-            className="text-purple-400 w-16 h-16"
+            className="text-fuchsia-300 w-12 h-12"
             aria-label="Default profile icon"
           />
         )}
 
         {editable && (
-          <label className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 rounded-full opacity-0 hover:opacity-100 transition-opacity cursor-pointer">
+          <label className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 hover:opacity-100 transition-opacity cursor-pointer z-10">
             <div className="text-white text-center p-2">
-              <FiUpload className="mx-auto mb-1" />
-              <span className="text-xs">Change Photo</span>
+              <FiUpload className="mx-auto mb-1 animate-bounce" />
+              <span className="text-[10px] font-bold uppercase tracking-wider">Change</span>
             </div>
             <input
               type="file"
@@ -226,32 +221,12 @@ const Profilepage = () => {
     );
   };
 
-  // loader during initial load
   if (initialLoad) {
     return (
-      <div className="max-w-4xl mx-auto p-4 md:p-6">
-        {/* Profile Header */}
-        <div className="flex flex-col md:flex-row items-start md:items-center gap-6 mb-8">
-          <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-gray-200 animate-pulse"></div>
-          <div className="flex-1 space-y-3">
-            <div className="h-8 w-3/4 bg-gray-200 rounded animate-pulse"></div>
-            <div className="h-4 w-full bg-gray-200 rounded animate-pulse"></div>
-            <div className="h-4 w-2/3 bg-gray-200 rounded animate-pulse"></div>
-            <div className="flex space-x-4 pt-2">
-              <div className="h-6 w-20 bg-gray-200 rounded animate-pulse"></div>
-              <div className="h-6 w-20 bg-gray-200 rounded animate-pulse"></div>
-            </div>
-          </div>
-        </div>
-
-        {/* Posts Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[...Array(3)].map((_, i) => (
-            <div
-              key={i}
-              className="aspect-square bg-gray-200 rounded-lg animate-pulse"
-            ></div>
-          ))}
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        <div className="flex-1 flex justify-center items-center">
+             <div className="animate-spin rounded-full h-12 w-12 border-4 border-white/10 border-t-fuchsia-500 shadow-lg shadow-fuchsia-500/20"></div>
         </div>
       </div>
     );
@@ -259,34 +234,28 @@ const Profilepage = () => {
 
   if (error) {
     return (
-      <div className="max-w-4xl mx-auto p-6">
-        <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
-          <div className="flex items-center">
-            <FiX className="h-5 w-5 text-red-500 flex-shrink-0" />
-            <div className="ml-3">
-              <p className="text-sm text-red-700">{error}</p>
-              <div className="mt-4 flex space-x-3">
-                <button
-                  onClick={() => {
-                    setError("");
-                    setInitialLoad(true);
-                    fetchProfile();
-                  }}
-                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md bg-red-100
-                  text-red-700 hover:bg-red-200"
-                >
-                  Retry
-                </button>
-                <button
-                  onClick={() => navigate("/")}
-                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md bg-gray-100
-                  text-gray-700 hover:bg-gray-200"
-                >
-                  Go Home
-                </button>
-              </div>
+      <div className="max-w-4xl mx-auto p-6 min-h-screen flex flex-col justify-center">
+        <div className="glass-panel border-l-4 border-red-500 p-6 rounded-xl text-center">
+           <FiX className="h-10 w-10 text-red-500 mx-auto mb-3" />
+            <p className="text-red-300 mb-6">{error}</p>
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => {
+                  setError("");
+                  setInitialLoad(true);
+                  fetchProfile();
+                }}
+                className="btn-brand bg-red-500/20 text-red-300 hover:bg-red-500/30"
+              >
+                Retry
+              </button>
+              <button
+                onClick={() => navigate("/")}
+                className="btn-ghost"
+              >
+                Go Home
+              </button>
             </div>
-          </div>
         </div>
       </div>
     );
@@ -296,300 +265,148 @@ const Profilepage = () => {
 
   return (
     <>
-      {/* Mobile header */}
       <Header />
 
-      <div className="max-w-4xl mx-auto p-4 md:p-6">
+      <div className="max-w-4xl mx-auto p-4 md:p-6 pb-24">
         {!isCurrentUser && (
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center text-purple-600 mb-4 hover:text-purple-800 transition-colors"
-          >
-            <FiArrowLeft className="mr-1" /> Back
-          </button>
+            <button onClick={() => navigate(-1)} className="flex items-center text-purple-300/60 hover:text-white mb-6 transition gap-2">
+                <FiArrowLeft /> Back
+            </button>
         )}
 
-        {/* Profile Header */}
-        <div className="flex flex-col md:flex-row items-start md:items-center gap-6 mb-8 bg-white rounded-xl p-6 shadow-sm">
-          {/* Avatar Display */}
-          {editMode ? (
-            <AvatarDisplay
-              src={
-                formData.profile_picture_preview || profile.user.profile_picture
-              }
-              editable={true}
-              size="lg"
-            />
-          ) : (
-            <AvatarDisplay src={profile.user.profile_picture} size="lg" />
-          )}
-
-          <div className="flex-1 w-full">
-            {editMode ? (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label
-                    htmlFor="username"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Username
-                  </label>
-                  <input
-                    type="text"
-                    id="username"
-                    value={formData.username}
-                    onChange={(e) =>
-                      setFormData({ ...formData, username: e.target.value })
-                    }
-                    className="border border-gray-300 w-full px-4 py-2 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-purple-500"
-                    required
-                    minLength={3}
-                    maxLength={30}
-                  />
-                  {error && <p className="mt-1 text-sm text-red-600">{}</p>}
-                </div>
-
-                <div className="flex flex-wrap gap-3">
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg cursor-pointer font-medium transition-colors hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-70"
-                  >
-                    <FiSave className="mr-2" />
-                    {loading ? "Saving..." : "Save Changes"}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setEditMode(false);
-                      setFormData({
-                        username: profile.user.username,
-                        profile_picture: null,
-                        profile_picture_preview: profile.user.profile_picture,
-                      });
-                    }}
-                    className="px-4 py-2 border border-gray-300 rounded-lg font-medium cursor-pointer hover:bg-gray-50 focus:outline-none 
-                    focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            ) : (
-              <>
-                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-                  <div className="flex-1">
-                    <h1 className="text-2xl font-bold text-gray-900">
-                      {profile.user.username}
-                    </h1>
-
-                    {profile.user.email && (
-                      <div className="flex items-center mt-2 text-gray-600">
-                        <FiMail className="mr-2" />
-                        <span>{profile.user.email}</span>
-                      </div>
-                    )}
-                  </div>
-
-                  {isCurrentUser && (
-                    <div className="flex flex-wrap gap-2 sm:gap-3">
-                      <button
-                        onClick={() => setEditMode(true)}
-                        className="flex items-center pr-1.5 text-purple-600 cursor-pointer transition-colors whitespace-nowrap hover:text-purple-800"
-                      >
-                        <FiEdit className="mr-1" /> Edit
-                      </button>
-                      <button
+        {/* Profile Card */}
+        <div className="glass-panel p-6 md:p-8 rounded-3xl mb-8 relative overflow-hidden animate-fade-in-up">
+          {/* Header Actions */}
+         <div className="absolute top-4 right-4 z-10 flex gap-2">
+             {!isCurrentUser ? (
+                  /* Add follow/message buttons for other users here if needed */
+                  null
+             ) : (
+                <div className="flex gap-2">
+                     <button
                         onClick={handleLogout}
-                        className="flex items-center text-red-600 cursor-pointer hover:text-red-800 transition-colors whitespace-nowrap"
+                        className="p-2 rounded-full hover:bg-white/10 text-red-400 hover:text-red-300 transition"
+                        title="Logout"
                       >
-                        <FiX className="mr-1" /> Logout
+                        <FiX size={20} />
                       </button>
-                    </div>
-                  )}
                 </div>
+             )}
+         </div>
 
-                <div className="flex flex-wrap gap-3 mt-6">
-                  <div className="flex items-center bg-purple-50 px-4 py-2 rounded-lg">
-                    <FiAward className="text-purple-600 mr-2" />
-                    <span className="font-medium">
-                      {profile.user.wins || 0} Wins
-                    </span>
-                  </div>
-                  <div className="flex items-center bg-purple-50 px-4 py-2 rounded-lg">
-                    <FiBarChart2 className="text-purple-600 mr-2" />
-                    <span className="font-medium">
-                      Rank #{profile.user.rank || "--"}
-                    </span>
-                  </div>
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-6 relative z-10">
+            {editMode ? (
+                <div className="flex flex-col items-center gap-4 w-full">
+                   <AvatarDisplay
+                        src={formData.profile_picture_preview || profile.user.profile_picture}
+                        editable={true}
+                    />
+                    <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4">
+                        <div>
+                         <label className="text-xs font-bold text-purple-300/50 uppercase tracking-wider mb-2 block">Username</label>
+                            <input
+                                type="text"
+                                value={formData.username}
+                                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                                className="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-fuchsia-500 focus:outline-none transition"
+                                minLength={3}
+                                maxLength={30}
+                            />
+                        </div>
+                        <div className="flex gap-3 pt-2">
+                           <button type="submit" className="btn-brand flex-1 py-2.5 text-sm" disabled={loading}>
+                                {loading ? "Saving..." : "Save Changes"}
+                           </button>
+                           <button
+                             type="button"
+                             onClick={() => setEditMode(false)}
+                             className="btn-ghost flex-1 py-2.5 text-sm"
+                            >
+                                Cancel
+                           </button>
+                        </div>
+                    </form>
                 </div>
-              </>
+            ) : (
+                <>
+                <div className="flex-shrink-0">
+                     <AvatarDisplay src={profile.user.profile_picture} />
+                </div>
+                
+                <div className="flex-1 text-center md:text-left w-full">
+                    <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-2">
+                        <div>
+                            <h1 className="text-3xl font-bold text-white flex items-center gap-2 justify-center md:justify-start">
+                                {profile.user.username}
+                                {profile.user.is_verified && <VerifiedBadge size={20} />}
+                            </h1>
+                            {profile.user.email && (
+                                <div className="text-purple-300/50 text-sm mt-1 flex items-center justify-center md:justify-start gap-2">
+                                    <FiMail size={14} /> {profile.user.email}
+                                </div>
+                            )}
+                        </div>
+                        
+                         {isCurrentUser && (
+                            <button
+                                onClick={() => setEditMode(true)}
+                                className="mt-4 md:mt-0 px-4 py-1.5 rounded-full border border-purple-500/30 text-purple-200 text-sm hover:bg-purple-500/10 transition flex items-center gap-2"
+                            >
+                                <FiSettings size={14} /> Edit Profile
+                            </button>
+                         )}
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3 mt-6">
+                        <div className="bg-white/5 border border-white/5 rounded-xl p-3 flex flex-col items-center">
+                             <div className="text-fuchsia-400 mb-1"><FiAward size={20}/></div>
+                             <span className="text-2xl font-bold text-white">{profile.user.wins || 0}</span>
+                             <span className="text-[10px] text-purple-300/50 uppercase tracking-widest">Wins</span>
+                        </div>
+                        <div className="bg-white/5 border border-white/5 rounded-xl p-3 flex flex-col items-center">
+                             <div className="text-purple-400 mb-1"><FiBarChart2 size={20}/></div>
+                             <span className="text-2xl font-bold text-white">#{profile.user.rank || "--"}</span>
+                             <span className="text-[10px] text-purple-300/50 uppercase tracking-widest">Rank</span>
+                        </div>
+                    </div>
+                </div>
+                </>
             )}
           </div>
         </div>
 
         {/* User Posts */}
-        <div className="mt-8 mb-5">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">
-            Recent Activity
+        <div className="animate-fade-in-up delay-100">
+          <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+             <span className="w-1.5 h-6 bg-fuchsia-500 rounded-full"></span>
+             Recent Activity
           </h2>
 
-          {profile.posts &&
-          profile.posts.data &&
-          profile.posts.data.length > 0 ? (
-            <div className="space-y-6">
-              {profile.posts.data.map((post) => {
-                const media =
-                  post.media && post.media.length > 0 ? post.media[0] : null;
-                const mediaUrl = media ? media.file_path : null;
-                const isVideo = media ? media.type === "video" : false;
-
-                return (
-                  <div
-                    key={post.id}
-                    className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100"
-                  >
-                    {/* Post Header */}
-                    <div className="p-4 border-b border-gray-100">
-                      <div className="flex items-center space-x-3">
-                        <img
-                          src={profile.user.profile_picture}
-                          alt={profile.user.username}
-                          className="w-10 h-10 rounded-full object-cover"
-                        />
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900">
-                            {profile.user.username}
-                          </h3>
-                          <p className="text-sm text-gray-500">
-                            {new Date(post.created_at).toLocaleDateString()} at{" "}
-                            {new Date(post.created_at).toLocaleTimeString([], {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
-                          </p>
-                        </div>
-                        {post.type && (
-                          <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium capitalize">
-                            {post.type}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Caption */}
-                    {post.caption && (
-                      <div className="p-4 border-b border-gray-100">
-                        <p className="text-gray-800 whitespace-pre-wrap">
-                          {post.caption}
-                        </p>
-                      </div>
-                    )}
-
-                    {/* Media */}
-                    {mediaUrl && (
-                      <div className="flex justify-center bg-gray-50">
-                        <div className="max-w-2xl w-full">
-                          {isVideo ? (
-                            <video
-                              className="w-full max-h-96 object-contain"
-                              controls
-                              playsInline
-                            >
-                              <source src={mediaUrl} type="video/mp4" />
-                              Your browser does not support the video tag.
-                            </video>
-                          ) : (
-                            <img
-                              src={mediaUrl}
-                              alt={
-                                post.caption ||
-                                `Post by ${profile.user.username}`
-                              }
-                              className="w-full max-h-96 object-contain"
-                              loading="lazy"
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src =
-                                  "https://via.placeholder.com/500x300?text=Image+Not+Found";
-                                e.target.className =
-                                  "w-full h-64 object-cover bg-gray-200";
-                              }}
-                            />
-                          )}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Post Stats & Actions */}
-                    <div className="p-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-6 text-gray-600">
-                          <div className="flex items-center space-x-2">
-                            <FiAward className="w-5 h-5 text-purple-600" />
-                            <span className="font-medium">
-                              {post.likes_count || 0} likes
-                            </span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <FiMessageCircle className="w-5 h-5 text-gray-400" />
-                            <span>Comment</span>
-                          </div>
-                        </div>
-
-                        {post.music && (
-                          <div className="flex items-center space-x-2 text-sm text-gray-500">
-                            <span>🎵</span>
-                            <span>{post.music}</span>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Visibility Status */}
-                      <div className="mt-3 pt-3 border-t border-gray-100">
-                        <span
-                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                            post.is_visible
-                              ? "bg-green-100 text-green-800"
-                              : "bg-gray-100 text-gray-800"
-                          }`}
-                        >
-                          {post.is_visible ? "Public" : "Private"}
-                        </span>
-                        <span className="text-xs text-gray-500 ml-2">
-                          Posted on{" "}
-                          {new Date(post.created_at).toLocaleDateString()}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+          {profile.posts && profile.posts.data && profile.posts.data.length > 0 ? (
+            <div className="grid gap-6">
+              {profile.posts.data.map((post) => (
+                   <Postcard
+                        key={post.id}
+                        post={{...post, user: profile.user}} // Enhance post with user data since API might return it flat
+                        isInteractive={true}
+                        formatTimeAgo={(date) => new Date(date).toLocaleDateString()}
+                        // Note: You might need to adjust Postcard to not try to refetch user data if provided
+                   />
+              ))}
             </div>
           ) : (
-            <div className="bg-white rounded-xl p-8 text-center shadow-sm">
-              <div className="mx-auto max-w-md">
-                <FiUser className="mx-auto h-12 w-12 text-gray-400" />
-                <h3 className="mt-2 text-lg font-medium text-gray-900">
-                  No activity yet
-                </h3>
-                <p className="mt-1 text-gray-500">
-                  {isCurrentUser
-                    ? "You haven't created any content yet."
-                    : "This user hasn't created any content yet."}
+             <div className="glass-panel p-12 text-center rounded-2xl border-dashed border-2 border-white/10">
+                <FiUser className="mx-auto h-16 w-16 text-purple-500/20 mb-4" />
+                <h3 className="text-lg font-bold text-white mb-2">No activity yet</h3>
+                <p className="text-purple-300/50 mb-6">
+                   {isCurrentUser ? "You haven't shown the world what you've got yet." : "This user is sleeping on their potential."}
                 </p>
                 {isCurrentUser && (
-                  <div className="mt-6">
-                    <Link
-                      to="/posts/create"
-                      className="inline-flex items-center px-4 py-2 border border-transparent bg-purple-600 text-sm text-white font-medium shadow-sm rounded-md focus:ring-2 hover:bg-purple-700 focus:outline-none focus:ring-offset-2 focus:ring-purple-800"
-                    >
-                      Create your first post
-                    </Link>
-                  </div>
+                   <Link to="/posts/create" className="btn-brand px-6 py-2.5 text-sm">
+                      Create First Post
+                   </Link>
                 )}
-              </div>
-            </div>
+             </div>
           )}
         </div>
       </div>

@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Withdrawmodal from "./Withdrawmodal";
 import WalletTransactions from "./WalletTransaction";
 import Header from "../../Components/Sharedd/Header";
+import { FiCreditCard, FiArrowUpRight, FiDollarSign, FiPlus, FiAlertCircle } from "react-icons/fi";
+import { API_URL } from "../../config";
 
 const Walletpage = () => {
   const [balance, setBalance] = useState(0);
@@ -35,7 +37,7 @@ const Walletpage = () => {
   };
 
   const fetchBalance = useCallback(async () => {
-    const url = "https://api.toplike.app/api/wallet";
+    const url = `${API_URL}/wallet`;
     try {
       const data = await fetchWithRetry(url, {
         headers: {
@@ -73,12 +75,8 @@ const Walletpage = () => {
 
     try {
       const token = localStorage.getItem("token");
-      console.log(
-        "Fetching bank account with token:",
-        token ? "Token exists" : "No token"
-      );
 
-      const response = await fetch("https://api.toplike.app/api/bankaccount", {
+      const response = await fetch(`${API_URL}/bankaccount`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -86,14 +84,7 @@ const Walletpage = () => {
         },
       });
 
-      console.log("Bank account response status:", response.status);
-      console.log("Bank account response headers:", response.headers);
-
       if (response.status === 404) {
-        // 404 means no bank account exists yet - this is normal for new users
-        console.log(
-          "No bank account found (404) - this is normal for new users"
-        );
         setHasBankAccount(false);
         sessionStorage.setItem("hasBankAccount", "false");
         setErrors((prev) => ({ ...prev, bankAccount: null }));
@@ -105,19 +96,13 @@ const Walletpage = () => {
       }
 
       const data = await response.json();
-      console.log("Bank account response data:", data);
-
-      // Handle different possible response structures
       const hasAccount = !!(data.bank_account || data.account || data.data);
       setHasBankAccount(hasAccount);
       sessionStorage.setItem("hasBankAccount", hasAccount.toString());
       setErrors((prev) => ({ ...prev, bankAccount: null }));
       return hasAccount;
     } catch (err) {
-      console.error("Bank account fetch error:", err);
-
       if (err.message.includes("404")) {
-        // 404 is not an error - it just means no account exists
         setHasBankAccount(false);
         sessionStorage.setItem("hasBankAccount", "false");
         setErrors((prev) => ({ ...prev, bankAccount: null }));
@@ -129,7 +114,6 @@ const Walletpage = () => {
         bankAccount: err.message || "Network error",
       }));
 
-      // Use cached value if available
       const cachedBankAccount = sessionStorage.getItem("hasBankAccount");
       if (cachedBankAccount !== null) {
         setHasBankAccount(cachedBankAccount === "true");
@@ -142,9 +126,7 @@ const Walletpage = () => {
     }
   }, [retrying]);
 
-  // Initial data fetch
   useEffect(() => {
-    // Load cached data immediately
     const cachedBalance = sessionStorage.getItem("walletBalance");
     const cachedBankAccount = sessionStorage.getItem("hasBankAccount");
 
@@ -158,11 +140,9 @@ const Walletpage = () => {
       setLoading((prev) => ({ ...prev, bankAccount: false }));
     }
 
-    // Fetch fresh data
     fetchBalance();
     fetchBankAccount();
 
-    // Set up network event listeners
     const handleOnline = () => {
       if (errors.balance || errors.bankAccount) {
         fetchBalance();
@@ -174,113 +154,115 @@ const Walletpage = () => {
     return () => window.removeEventListener("online", handleOnline);
   }, [fetchBalance, fetchBankAccount]);
 
-  // Handle bank account redirect - only redirect if we're sure there's no account
+  // Handle bank account redirect - only redirect if check is complete and explicitly false
   useEffect(() => {
-    if (
-      hasBankAccount === false &&
-      !loading.bankAccount &&
-      !errors.bankAccount
-    ) {
-      console.log("No bank account found, redirecting to create account");
-      navigate("/create-account");
-    }
-  }, [hasBankAccount, loading.bankAccount, errors.bankAccount, navigate]);
+      // Disabled auto-redirect to avoid bad UX if API is flaky. User should click "Add Bank Account" manually.
+  }, []);
 
   const handleWithdrawSuccess = useCallback(() => {
     fetchBalance();
   }, [fetchBalance]);
 
   const isLoading = loading.balance || loading.bankAccount;
-  const hasErrors = errors.balance || errors.bankAccount;
 
   return (
     <>
-      {/* Mobile header */}
       <Header />
 
-      <div className="max-w-4xl mx-auto p-4 md:p-6">
-        {isLoading ? (
-          <div className="space-y-8">
-            <div className="bg-gray-200 animate-pulse rounded-xl h-32"></div>
-            <div className="space-y-4">
-              <div className="h-6 w-1/4 bg-gray-200 animate-pulse rounded"></div>
-              {[...Array(5)].map((_, i) => (
-                <div
-                  key={i}
-                  className="h-16 bg-gray-100 animate-pulse rounded"
-                ></div>
-              ))}
-            </div>
+      <div className="max-w-4xl mx-auto p-4 md:p-6 pb-20">
+        {isLoading && !balance ? (
+          <div className="flex justify-center p-12">
+             <div className="animate-spin rounded-full h-12 w-12 border-4 border-white/10 border-t-fuchsia-500"></div>
           </div>
         ) : (
           <>
-            {/* Error banners that don't block the UI */}
-            {errors.balance && (
-              <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-4">
-                <p className="text-yellow-700">
-                  Balance data might be outdated: {errors.balance}
-                </p>
-                <button
-                  onClick={fetchBalance}
-                  className="mt-2 text-sm text-yellow-600 font-medium"
-                >
-                  Retry
-                </button>
-              </div>
-            )}
+            <h1 className="text-2xl font-bold text-white mb-6">My Wallet</h1>
 
-            {errors.bankAccount && (
-              <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-4">
-                <p className="text-yellow-700">
-                  Bank account verification failed: {errors.bankAccount}
-                </p>
-                <button
-                  onClick={fetchBankAccount}
-                  className="mt-2 text-sm text-yellow-600 font-medium"
-                >
-                  Retry
-                </button>
-              </div>
-            )}
-
-            {/* Main content */}
-            <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl shadow-lg p-6 text-white mb-8">
-              <div className="flex justify-between items-start">
+            {/* Error banners */}
+            {(errors.balance || errors.bankAccount) && (
+              <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 mb-6 flex items-start gap-3">
+                <FiAlertCircle className="text-red-400 mt-0.5" />
                 <div>
-                  <h2 className="text-lg font-medium">Available Balance</h2>
-                  <p className="text-3xl font-bold mt-2">
-                    ₦{balance.toLocaleString("en-NG")}
+                  <p className="text-red-200 text-sm">
+                    {errors.balance || errors.bankAccount}
                   </p>
-                  {errors.balance && (
-                    <p className="text-xs text-purple-200 mt-1">
-                      Showing cached data
-                    </p>
-                  )}
+                  <button
+                    onClick={() => { fetchBalance(); fetchBankAccount(); }}
+                    className="text-white text-xs bg-red-500/20 px-3 py-1 mt-2 rounded-lg hover:bg-red-500/30 transition"
+                  >
+                    Retry Connection
+                  </button>
                 </div>
-                <button
-                  onClick={() => {
-                    if (hasBankAccount) {
-                      setShowWithdrawModal(true);
-                    } else if (hasBankAccount === false) {
-                      navigate("/create-account");
-                    }
-                  }}
-                  className="bg-white text-purple-600 px-4 py-2 rounded-lg font-medium cursor-pointer hover:bg-gray-100 transition"
-                  disabled={balance < 1000}
-                >
-                  {hasBankAccount === false ? "Add Bank Account" : "Withdraw"}
-                </button>
               </div>
-              {balance < 1000 && (
-                <p className="text-sm text-purple-200 mt-3">
-                  Minimum withdrawal amount is ₦1,000
-                </p>
-              )}
-              {hasBankAccount === false && (
-                <p className="text-sm text-purple-200 mt-3">
-                  Please add a bank account to withdraw
-                </p>
-              )}
+            )}
+
+            {/* Balance Card */}
+            <div className="relative overflow-hidden rounded-3xl p-8 mb-8 animate-fade-in-up">
+              {/* Background Gradients */}
+              <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-900 via-purple-900 to-black"></div>
+              <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+              <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+              
+              <div className="relative z-10">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                  <div>
+                    <h2 className="text-purple-200/60 font-medium mb-1 uppercase tracking-wider text-xs">Available Balance</h2>
+                    <div className="flex items-baseline gap-1">
+                        <span className="text-4xl md:text-5xl font-bold text-white tracking-tight">
+                        ₦{balance.toLocaleString("en-NG")}
+                        </span>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3 w-full md:w-auto">
+                     <button
+                        onClick={() => {
+                            if (hasBankAccount) {
+                            setShowWithdrawModal(true);
+                            } else {
+                            navigate("/create-account"); // Assuming this is the route for creating bank account
+                            }
+                        }}
+                        className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold transition-all ${
+                             balance < 1000 
+                             ? "bg-white/5 text-white/20 cursor-not-allowed" 
+                             : "bg-white text-fuchsia-900 hover:bg-fuchsia-50 shadow-lg shadow-white/10"
+                        }`}
+                        disabled={balance < 1000}
+                    >
+                        {hasBankAccount === false ? (
+                             <><FiPlus /> Add Bank</>
+                        ) : (
+                             <><FiArrowUpRight /> Withdraw</>
+                        )}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="mt-8 pt-6 border-t border-white/10 flex flex-wrap gap-6">
+                     <div className="flex items-center gap-3">
+                         <div className="p-2 rounded-lg bg-white/5 text-purple-200">
+                             <FiCreditCard />
+                         </div>
+                         <div className="text-sm">
+                             <p className="text-purple-200/50 text-xs uppercase">Status</p>
+                             <p className="text-white font-medium">
+                                 {hasBankAccount ? "Bank Linked" : "No Bank Added"}
+                             </p>
+                         </div>
+                     </div>
+                     {!hasBankAccount && (
+                         <div className="flex items-center gap-2 text-yellow-300/80 text-xs bg-yellow-500/10 px-3 py-1 rounded-full border border-yellow-500/20">
+                             <FiAlertCircle /> Action Required
+                         </div>
+                     )}
+                     {balance < 1000 && (
+                        <div className="flex items-center gap-2 text-purple-300/50 text-xs">
+                             Min. withdrawal: ₦1,000
+                        </div>
+                     )}
+                </div>
+              </div>
             </div>
 
             <WalletTransactions />

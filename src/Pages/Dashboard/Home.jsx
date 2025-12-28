@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import Header from "../../Components/Sharedd/Header";
 import WeeklyChallengeModal from "../../Components/Challenge/WeeklyChallengeModal";
 import Postcard from "../../Components/Post/Postcard";
+import { FiCamera, FiLock } from "react-icons/fi";
+import { API_URL } from "../../config";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -31,8 +33,7 @@ const Home = () => {
   const checkSubscription = async () => {
     try {
       const token = localStorage.getItem("token");
-      // You'll need to create this API endpoint or use existing user data
-      const response = await fetch("https://api.toplike.app/api/myprofile", {
+      const response = await fetch(`${API_URL}/myprofile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -49,7 +50,7 @@ const Home = () => {
   const fetchPosts = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("https://api.toplike.app/api/post/all", {
+      const response = await fetch(`${API_URL}/post/all`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -70,14 +71,10 @@ const Home = () => {
 
   const handleLikeSuccess = (likeData) => {
     if (!hasSubscribed) {
-      
-      // Show join challenge modal when trying to like without subscription
       setShowChallengeModal(true);
       return;
     }
 
-
-    // Update the specic post  in the posts array
     setPosts((prevPosts) =>
       prevPosts.map((post) =>
         post.id === likeData.postId
@@ -94,7 +91,7 @@ const Home = () => {
   const handleSubscribeSuccess = () => {
     setHasSubscribed(true);
     setShowChallengeModal(false);
-    fetchPosts(); // Refresh posts after subscription
+    fetchPosts();
   };
 
   const formatTimeAgo = (dateString) => {
@@ -114,12 +111,12 @@ const Home = () => {
 
   if (loading) {
     return (
-      <>
+      <div className="flex flex-col min-h-screen">
         <Header />
-        <div className="flex justify-center items-center min-h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+        <div className="flex-1 flex justify-center items-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-white/10 border-t-fuchsia-500 shadow-lg shadow-fuchsia-500/20"></div>
         </div>
-      </>
+      </div>
     );
   }
 
@@ -136,38 +133,36 @@ const Home = () => {
       )}
 
       {/* Main Content */}
-      <main className="flex-1 bg-gray-50 min-h-screen">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          {/* Create Post Card - Only show if subscribed */}
+      <main className="flex-1 min-h-screen px-4 pb-20 md:px-6 lg:px-8 py-6 max-w-2xl mx-auto w-full">
+          
+          {/* Create Post Prompt */}
           {hasSubscribed && (
-            <div className="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-200">
-              <div className="flex items-center space-x-4">
-                <div className="h-12 w-12 rounded-full bg-gradient-to-r from-purple-400 to-pink-500 flex items-center justify-center text-lg text-white font-bold">
-                  U
-                </div>
-                <Link
-                  to="/posts/create"
-                  className="flex-1 px-6 py-3 text-gray-600 bg-gray-100 rounded-full cursor-pointer hover:bg-gray-200 transition 
-                  duration-200"
-                >
-                  What's on your mind?
-                </Link>
+            <div className="glass-panel rounded-2xl p-4 mb-6 flex items-center gap-4 transition-transform hover:scale-[1.01]">
+              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-purple-500 to-fuchsia-600 shadow-lg shadow-purple-500/30 flex items-center justify-center text-white font-bold text-lg">
+                U
               </div>
+              <Link
+                to="/posts/create"
+                className="flex-1 px-6 py-3.5 text-purple-200/60 bg-white/5 rounded-xl cursor-pointer hover:bg-white/10 transition border border-white/5 flex items-center gap-3"
+              >
+                <FiCamera className="text-purple-400" />
+                What's on your mind?
+              </Link>
             </div>
           )}
 
-          {/* Subscription Banner for Non-Subscribers */}
+          {/* Non-Subscriber Banner */}
           {!hasSubscribed && posts.length > 0 && (
-            <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl p-4 mb-6 text-center">
-              <h3 className="font-bold text-lg mb-2">
-                Join the Weekly Challenge!
+            <div className="bg-gradient-to-r from-purple-900/80 to-fuchsia-900/80 backdrop-blur-md border border-fuchsia-500/30 rounded-2xl p-6 mb-8 text-center shadow-xl shadow-purple-900/50">
+              <h3 className="font-bold text-xl text-white mb-2">
+                Join the Weekly Challenge 🏆
               </h3>
-              <p className="mb-3">
-                Subscribe to post your own content and interact with others
+              <p className="text-purple-200/90 mb-4 text-sm">
+                Unlock posting, liking, and win cash prizes.
               </p>
               <button
                 onClick={() => setShowChallengeModal(true)}
-                className="bg-white text-purple-600 px-6 py-2 rounded-lg font-medium hover:bg-gray-100 transition"
+                className="btn-brand px-8 py-2.5 text-sm"
               >
                 Subscribe Now - ₦500
               </button>
@@ -176,32 +171,32 @@ const Home = () => {
 
           {/* Error Message */}
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
-              <p className="text-red-600">{error}</p>
+            <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 mb-6 text-center">
+              <p className="text-red-300 text-sm mb-2">{error}</p>
               <button
                 onClick={fetchPosts}
-                className="mt-2 text-red-600 hover:text-red-800 font-medium"
+                className="text-white bg-red-500/20 px-4 py-1.5 rounded-lg text-xs hover:bg-red-500/30 transition"
               >
-                Try Again
+                Retry
               </button>
             </div>
           )}
 
-          {/* Posts Feed */}
+          {/* Feed */}
           <div className="space-y-6">
             {posts.length === 0 ? (
-              <div className="text-center py-12 bg-white rounded-xl shadow-sm border border-gray-200">
-                <div className="text-gray-400 text-6xl mb-4">📷</div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
+              <div className="glass-panel rounded-2xl p-12 text-center border-dashed border-2 border-white/10">
+                <div className="text-6xl mb-4 opacity-50 grayscale">📷</div>
+                <h3 className="text-lg font-bold text-white mb-2">
                   No posts yet
                 </h3>
-                <p className="text-gray-500 mb-4">
+                <p className="text-purple-200/60 text-sm mb-6">
                   Be the first to share something amazing!
                 </p>
                 {!hasSubscribed && (
                   <button
                     onClick={() => setShowChallengeModal(true)}
-                    className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition"
+                    className="btn-brand px-6 py-2 text-sm"
                   >
                     Subscribe to Post
                   </button>
@@ -209,23 +204,25 @@ const Home = () => {
               </div>
             ) : (
               posts.map((post) => (
-                <div key={post.id} className="relative">
+                <div key={post.id} className="relative group">
                   {/* Overlay for non-subscribers */}
                   {!hasSubscribed && (
-                    <div className="absolute inset-0 bg-black bg-opacity-40 rounded-xl z-10 flex items-center justify-center">
-                      <div className="bg-white rounded-lg p-6 m-4 max-w-sm text-center">
-                        <h3 className="font-bold text-lg mb-2">
-                          Join to Interact
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] rounded-2xl z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="bg-[#1a0b2e] border border-purple-500/30 rounded-xl p-6 m-4 max-w-xs text-center shadow-2xl">
+                        <div className="mx-auto w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center mb-3 text-purple-300">
+                            <FiLock size={20} />
+                        </div>
+                        <h3 className="font-bold text-white text-lg mb-2">
+                          Locked Interaction
                         </h3>
-                        <p className="text-gray-600 mb-4">
-                          Subscribe to the weekly challenge to like and comment
-                          on posts
+                        <p className="text-purple-200/70 text-sm mb-4">
+                          Subscribe to match quality with quality.
                         </p>
                         <button
                           onClick={() => setShowChallengeModal(true)}
-                          className="bg-purple-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-purple-700 transition"
+                          className="btn-brand w-full py-2.5 text-sm shadow-none"
                         >
-                          Join Challenge - ₦500
+                          Join Challenge
                         </button>
                       </div>
                     </div>
@@ -235,13 +232,12 @@ const Home = () => {
                     post={post}
                     onLikeSuccess={handleLikeSuccess}
                     formatTimeAgo={formatTimeAgo}
-                    isInteractive={hasSubscribed} // Pass subscription status
+                    isInteractive={hasSubscribed}
                   />
                 </div>
               ))
             )}
           </div>
-        </div>
       </main>
     </>
   );

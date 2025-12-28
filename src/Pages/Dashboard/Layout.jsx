@@ -7,13 +7,18 @@ const Layout = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
-    <div className="flex flex-col min-h-screen md:flex-row">
+    <div className="flex flex-col min-h-screen md:flex-row text-white relative isolate">
+      {/* Animated Background */}
+      <div className="premium-bg"></div>
+
       {/* Sidebar */}
-      <Sidebar {...{ sidebarCollapsed, setSidebarCollapsed }} />
+      <div className="z-20">
+        <Sidebar {...{ sidebarCollapsed, setSidebarCollapsed }} />
+      </div>
 
       {/* Main Content Area */}
       <div
-        className={`flex-1 transition-all duration-300 ease-in-out pb-16 md:pb-0 ${
+        className={`flex-1 transition-all duration-300 ease-in-out pb-20 md:pb-0 z-10 ${
           sidebarCollapsed ? "md:ml-20" : "md:ml-64"
         }`}
       >
@@ -21,7 +26,9 @@ const Layout = () => {
       </div>
 
       {/* Bottom Navigation */}
-      <Bottomnav />
+      <div className="z-30 block md:hidden">
+         <Bottomnav />
+      </div>
     </div>
   );
 };
