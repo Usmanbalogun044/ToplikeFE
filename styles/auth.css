@@ -1,0 +1,55 @@
+
+  /* --- PAGE LAYOUT --- */
+  .auth-page-container {
+    @apply relative min-h-screen flex flex-col justify-center py-12 px-6 lg:px-8 bg-white animate-in fade-in slide-in-from-bottom-4 duration-500;
+  }
+
+  /* --- TEXT TYPOGRAPHY --- */
+  .auth-header {
+    @apply text-center mb-8;
+  }
+  
+  .auth-title {
+    @apply text-3xl font-bold text-brand-primary tracking-tight;
+  }
+
+  .auth-subtitle {
+    @apply text-sm text-brand-muted mt-2;
+  }
+
+  /* --- INPUT FIELDS --- */
+  /* This centralizes the input styling so you don't repeat it */
+  .input-group {
+    @apply space-y-1 mb-4;
+  }
+  
+  .input-label {
+    @apply text-sm font-medium text-brand-text block;
+  }
+  
+  .input-wrapper {
+    @apply relative;
+  }
+  
+  .input-icon {
+    @apply absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-brand-muted;
+  }
+  
+  .input-field {
+    @apply block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl leading-5 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition duration-150 ease-in-out;
+  }
+
+  /* --- BUTTONS --- */
+  .btn-primary {
+    /* Uses your Linear Gradient */
+    @apply w-full bg-hero-gradient text-white font-bold py-3.5 rounded-xl shadow-lg hover:opacity-90 hover:shadow-xl transform active:scale-[0.98] transition-all duration-200 mt-6;
+  }
+
+  .btn-google {
+    @apply w-full flex items-center justify-center gap-2 bg-white border border-gray-200 text-brand-text font-medium py-3 rounded-xl hover:bg-gray-50 transition-colors mt-4;
+  }
+
+  /* --- LINKS --- */
+  .link-primary {
+    @apply text-brand-secondary font-semibold hover:text-brand-primary hover:underline transition-colors;
+  }

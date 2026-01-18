@@ -1,65 +1,99 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { ArrowRight, ArrowLeft } from "lucide-react";
+
+export default function LandingPage() {
+  const [showSplash, setShowSplash] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowSplash(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // SPLASH SCREEN
+  if (showSplash) {
+    return (
+      <div className="h-screen w-full bg-hero-gradient flex items-center justify-center animate-in fade-out duration-700">
+        <div className="animate-pulse">
+          <Image
+            src="/logos/Variant2.svg"
+            alt="TopLike Logo"
+            width={150}
+            height={150}
+            priority
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // LANDING PAGE
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="min-h-screen w-full bg-white flex items-center justify-center p-6 animate-in fade-in zoom-in duration-500">
+      <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+
+        {/* Left: Branding */}
+        <div className="flex justify-center md:justify-start">
+          <Image
+            src="/logos/Frame 1.svg"
+            alt="TopLike Logo"
+            width={180}
+            height={180}
+            className="w-auto h-auto"
+          />
+        </div>
+
+        {/* Right: Content */}
+        <div className="space-y-6 text-center md:text-left md:border-l border-gray-300 md:pl-12">
+          <h3 className="text-4xl font-brand text-blue-600 leading-tight">
+            Where Quality Thinking Wins
+          </h3>
+
+          <p className="text-gray-500 text-lg max-w-md mx-auto md:mx-0">
+            TopLike is a weekly challenge platform for Builders, Thinkers, and Creators.
           </p>
+
+          <p className="text-gray-500 text-lg max-w-md mx-auto md:mx-0">
+            You post once.
+            <br />
+            People respond.
+          </p>
+
+          <p className="text-sm font-medium text-gray-400">
+            The best ideas rise, not the loudest ones.
+          </p>
+
+          {/* CTA SECTION */}
+          <div className="pt-10 flex w-full flex-col gap-10 md:flex-row md:justify-between md:items-center">
+
+            {/* Left CTA */}
+            <Link href="/about" className="group flex flex-col items-start gap-1">
+              <span className="text-gray-400 font-medium text-lg">
+                Learn More
+              </span>
+              <div className="flex items-center text-gray-300 transition-all duration-300 group-hover:text-gray-500 group-hover:-translate-x-2">
+                <ArrowLeft size={20} className="-mr-1" />
+                <div className="h-[1.5px] w-12 bg-current" />
+              </div>
+            </Link>
+
+            {/* Right CTA */}
+            <Link href="/auth/signup" className="group flex flex-col items-end gap-1">
+              <span className="text-blue-600 font-bold text-lg">
+                Get Started
+              </span>
+              <div className="flex items-center text-blue-600 transition-all duration-300 group-hover:translate-x-2">
+                <div className="h-[1.5px] w-12 bg-current" />
+                <ArrowRight size={20} className="-ml-1" />
+              </div>
+            </Link>
+
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }

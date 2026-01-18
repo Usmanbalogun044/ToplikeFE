@@ -1,0 +1,17 @@
+
+  :root {
+    /* --- BRAND COLORS (From your Screenshot) --- */
+    --color-primary: #4006C7;
+    --color-secondary: #2B4DEC;
+    
+    /* The Linear Gradient for Splash & Buttons */
+    --gradient-hero: linear-gradient(135deg, #4006C7 0%, #2B4DEC 100%);
+
+    /* --- TEXT COLORS --- */
+    --color-text-main: #364153;    /* "text label" */
+    --color-text-muted: #9CA3AF;   /* "inactive states" */
+    
+    /* --- UI COLORS --- */
+    --color-bg-page: #FFFFFF;
+    --color-border: #E5E7EB;
+  }
